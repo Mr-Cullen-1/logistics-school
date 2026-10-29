@@ -8,10 +8,12 @@
     "start": "next start",
     "lint": "eslint .",
     "typecheck": "tsc --noEmit",
-    "test": "node --test",
+    "test": "tsx --test tests/*.test.ts",
+    "test:auth": "tsx scripts/check-auth-flow.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
-    "db:check": "tsx scripts/check-db.ts"
+    "db:check": "tsx scripts/check-db.ts",
+    "seed:super-admin": "tsx scripts/seed-super-admin.ts"
   },
   "dependencies": {
     "@fontsource-variable/inter": "^5.3.0",
