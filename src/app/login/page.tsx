@@ -11,7 +11,7 @@ export default async function LoginPage() {
   return (
     <main className="flex min-h-screen items-center justify-center px-4 py-12">
       <div className="w-full max-w-md space-y-8">
-        <Image src="/coliseum-logo-horizontal-light.svg" alt="Coliseum Logistics School" width={260} height={64} priority className="mx-auto" />
+        <Image src="/coliseum-logo-horizontal-light.svg" alt="Coliseum Logistics School" width={260} height={63} priority className="mx-auto" style={{ height: "auto" }} />
         <Card title="Platformaga kirish" description="Administrator bergan PIN yoki o'zingiz tanlagan parol bilan kiring.">
           <LoginForm />
         </Card>
