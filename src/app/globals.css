@@ -1,14 +1,51 @@
 @import "tailwindcss";
 
-:root {
-  color-scheme: dark;
-  --background: #0d1114;
-  --foreground: #f4f1e8;
-  --accent: #b8814a;
+@theme {
+  --color-charcoal: #0d1114;
+  --color-dark-slate: #161b1f;
+  --color-bronze: #b8814a;
+  --color-gold: #d4af7c;
+  --color-ivory: #f4f1e8;
+  --color-steel: #a7a7a7;
+  --color-muted: #6b7280;
+  --color-alert: #e15757;
+  --font-sans: "Inter Variable", Arial, sans-serif;
+  --radius-cl-sm: 6px;
+  --radius-cl-md: 10px;
+  --radius-cl-lg: 16px;
+  --shadow-panel: 0 12px 40px rgb(0 0 0 / 18%);
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Inter, Arial, sans-serif;
+:root {
+  color-scheme: dark;
+  --cl-charcoal: #0d1114;
+  --cl-dark-slate: #161b1f;
+  --cl-bronze: #b8814a;
+  --cl-gold: #d4af7c;
+  --cl-ivory: #f4f1e8;
+  --cl-gray-100: #a7a7a7;
+  --cl-gray-200: #6b7280;
+  --cl-red: #e15757;
+  --cl-radius-sm: 6px;
+  --cl-radius-md: 10px;
+  --cl-radius-lg: 16px;
+  --cl-space-1: 4px;
+  --cl-space-2: 8px;
+  --cl-space-3: 16px;
+  --cl-space-4: 24px;
+  --cl-space-5: 32px;
+  --cl-space-6: 48px;
 }
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--cl-charcoal);
+  color: var(--cl-ivory);
+  font-family: "Inter Variable", Arial, sans-serif;
+}
+
+button, input { font: inherit; }
+
+::selection { background: var(--cl-bronze); color: var(--cl-charcoal); }
