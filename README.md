@@ -25,6 +25,10 @@ Telefon raqami `+998XXXXXXXXX` formatiga keltiriladi. 5 ta xato urinishdan keyin
 
 Ishlab turgan lokal server (`npm run dev -- --port 3137`) bilan `npm run test:auth` Supabase'da vaqtinchalik test foydalanuvchisi yaratib, PIN, parol almashtirish, sessiya, rol va rate limit oqimini tekshiradi; test yozuvlarini yakunda o'chiradi. Boshqa port uchun `AUTH_BASE_URL` ni belgilang.
 
+## O'quvchilar boshqaruvi
+
+Admin yoki super admin `/admin/students` sahifasida o'quvchilarni qidiradi, yangi akkaunt yaratadi, bloklaydi/faollashtiradi va PINni tiklaydi. Yangi PIN faqat o'sha amal javobida ko'rinadi; keyin bazadan olinmaydi. Har bir o'zgarish `audit_log` ga yoziladi, bloklash va PIN tiklash eski sessiyalarni bekor qiladi. Lokal server 3137-portda ishlayotganida `npm run test:students` vaqtinchalik admin va o'quvchi bilan shu oqimni Supabase'da tekshirib, test yozuvlarini o'chiradi.
+
 ## Dizayn tizimi
 
 `/design-system` sahifasida rang palitrasi, Inter shrifti, Button, Input, Card, Table, Modal va Toast namunalari bor. Ranglar va komponent uslubi `coliseum_logistics_assets/` paketidan olingan; sahifadagi kurs va dars nomlari faqat namuna.
