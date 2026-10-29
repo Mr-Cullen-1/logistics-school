@@ -1,0 +1,32 @@
+{
+  "brand": "Coliseum Logistics School",
+  "colors": {
+    "charcoal": "#0D1114",
+    "darkSlate": "#161B1F",
+    "bronze": "#B8814A",
+    "gold": "#D4AF7C",
+    "ivory": "#F4F1E8",
+    "gray100": "#A7A7A7",
+    "gray200": "#6B7280",
+    "redOptional": "#E15757"
+  },
+  "typography": {
+    "primary": "Inter, Arial, sans-serif",
+    "headingWeight": 700,
+    "sectionWeight": 600,
+    "bodyWeight": 400
+  },
+  "radius": {
+    "small": "6px",
+    "medium": "10px",
+    "large": "16px"
+  },
+  "spacing": {
+    "xs": "4px",
+    "sm": "8px",
+    "md": "16px",
+    "lg": "24px",
+    "xl": "32px",
+    "2xl": "48px"
+  }
+}

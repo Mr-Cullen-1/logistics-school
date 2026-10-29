@@ -1,0 +1,20 @@
+:root {
+  --cl-charcoal: #0D1114;
+  --cl-dark-slate: #161B1F;
+  --cl-bronze: #B8814A;
+  --cl-gold: #D4AF7C;
+  --cl-ivory: #F4F1E8;
+  --cl-gray-100: #A7A7A7;
+  --cl-gray-200: #6B7280;
+  --cl-red: #E15757;
+  --cl-font: Inter, Arial, sans-serif;
+  --cl-radius-sm: 6px;
+  --cl-radius-md: 10px;
+  --cl-radius-lg: 16px;
+  --cl-space-1: 4px;
+  --cl-space-2: 8px;
+  --cl-space-3: 16px;
+  --cl-space-4: 24px;
+  --cl-space-5: 32px;
+  --cl-space-6: 48px;
+}
