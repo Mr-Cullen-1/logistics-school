@@ -9,7 +9,12 @@ function createDatabase() {
     throw new Error("DATABASE_URL belgilanmagan. .env.example dan .env yarating.");
   }
 
-  const client = postgres(url, { max: 1, prepare: false });
+  const client = postgres(url, {
+    max: 1,
+    idle_timeout: 20,
+    prepare: false,
+    ssl: "require",
+  });
   return { db: drizzle(client, { schema }), client };
 }
 
