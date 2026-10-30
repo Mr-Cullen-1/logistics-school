@@ -12,3 +12,12 @@ export async function adminAccess(request: NextRequest) {
   }
   return { user } as const;
 }
+
+export async function superAdminAccess(request: NextRequest) {
+  const access = await adminAccess(request);
+  if (access.error) return access;
+  if (access.user.role !== "super_admin") {
+    return { error: NextResponse.json({ error: "Faqat super admin ruxsatiga ega" }, { status: 403 }) } as const;
+  }
+  return access;
+}

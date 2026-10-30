@@ -11,6 +11,7 @@
     "test": "tsx --test tests/*.test.ts",
     "test:auth": "tsx scripts/check-auth-flow.ts",
     "test:students": "tsx scripts/check-students-flow.ts",
+    "test:courses": "tsx scripts/check-courses-flow.ts",
     "db:generate": "drizzle-kit generate",
     "db:migrate": "drizzle-kit migrate",
     "db:check": "tsx scripts/check-db.ts",

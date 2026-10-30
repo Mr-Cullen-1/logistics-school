@@ -1,6 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useState, type FormEvent } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -102,6 +103,7 @@ export function StudentManager({ students, search, total }: { students: Student[
                 <TableCell>{new Date(student.createdAt).toLocaleDateString("uz-UZ")}</TableCell>
                 <TableCell>
                   <div className="flex flex-wrap gap-2">
+                    <Link href={`/admin/students/${student.id}`} className="inline-flex min-h-9 items-center rounded-[8px] border border-bronze px-3 text-sm font-semibold text-ivory hover:bg-bronze/10">Dostup</Link>
                     <Button size="small" variant="tertiary" onClick={() => setPending({ kind: "reset", student })}>PIN tiklash</Button>
                     <Button size="small" variant="tertiary" onClick={() => setPending({ kind: "status", student })}>{student.isActive ? "Bloklash" : "Faollashtirish"}</Button>
                   </div>

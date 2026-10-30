@@ -21,7 +21,7 @@ Coliseum Logistics School o'quvchilari uchun alohida ingliz tili platformasi. To
 
 ## Autentifikatsiya
 
-Telefon raqami `+998XXXXXXXXX` formatiga keltiriladi. 5 ta xato urinishdan keyin telefon yoki IP bo'yicha 15 daqiqa kirish cheklanadi. Sessiya 7 kun amal qiladi; parol almashtirilsa eski sessiyalar yaroqsiz bo'ladi. `src/proxy.ts` tezkor yo'naltirish qiladi, server sahifalari va API esa bazadagi faol holat va sessiya versiyasini tekshiradi. `admin` va `learn` hozircha keyingi bosqichlar uchun himoyalangan boshlang'ich sahifalardir.
+Telefon raqami `+998XXXXXXXXX` formatiga keltiriladi. 5 ta xato urinishdan keyin telefon yoki IP bo'yicha 15 daqiqa kirish cheklanadi. Sessiya 7 kun amal qiladi; parol almashtirilsa eski sessiyalar yaroqsiz bo'ladi. `src/proxy.ts` tezkor yo'naltirish qiladi, server sahifalari va API esa bazadagi faol holat va sessiya versiyasini tekshiradi.
 
 Ishlab turgan lokal server (`npm run dev -- --port 3137`) bilan `npm run test:auth` Supabase'da vaqtinchalik test foydalanuvchisi yaratib, PIN, parol almashtirish, sessiya, rol va rate limit oqimini tekshiradi; test yozuvlarini yakunda o'chiradi. Boshqa port uchun `AUTH_BASE_URL` ni belgilang.
 
@@ -32,3 +32,9 @@ Admin yoki super admin `/admin/students` sahifasida o'quvchilarni qidiradi, yang
 ## Dizayn tizimi
 
 `/design-system` sahifasida rang palitrasi, Inter shrifti, Button, Input, Card, Table, Modal va Toast namunalari bor. Ranglar va komponent uslubi `coliseum_logistics_assets/` paketidan olingan; sahifadagi kurs va dars nomlari faqat namuna.
+
+## Kurs, modul va dostup
+
+Super admin `/admin/courses` sahifasida kurslar va modullarni yaratadi, tahrirlaydi, tartiblaydi va nashr qiladi. Admin kurslar va modullarni ko'radi; `/admin/students/[id]` orqali o'quvchiga kurs dostupi beradi yoki bekor qiladi. Muddat ixtiyoriy; tanlangan sana Toshkent vaqti bilan shu kun oxirida tugaydi. O'quvchi `/learn` sahifasida faqat nashr qilingan va faol dostupi bor kurslarni ko'radi; `/learn/[courseId]` manzili ham serverda tekshiriladi.
+
+3137-portdagi lokal server bilan `npm run test:courses` Supabase'da vaqtinchalik akkauntlar va kurslar yaratib, rol, CRUD, tartib, muddat, bekor qilish, URL cheklovi va audit oqimini tekshiradi; test yozuvlarini yakunda o'chiradi. Boshqa port uchun `AUTH_BASE_URL` ni belgilang.
