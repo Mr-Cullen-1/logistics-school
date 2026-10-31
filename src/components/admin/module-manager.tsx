@@ -68,7 +68,7 @@ export function ModuleManager({ course, modules, canEdit }: { course: Course; mo
     }
   }
 
-  return <main className="mx-auto min-h-screen max-w-4xl px-4 py-10 sm:px-6">
+  return <div className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6">
     <Link href="/admin/courses" className="text-sm text-gold hover:underline">← Kurslar</Link>
     <div className="mt-6 mb-8"><span className="text-sm font-semibold text-gold">{course.level || "Daraja belgilanmagan"} · {course.isPublished ? "Nashr qilingan" : "Qoralama"}</span><h1 className="mt-2 text-3xl font-bold">{course.title}</h1>{course.description && <p className="mt-3 text-steel">{course.description}</p>}</div>
     <div className="mb-4 flex items-center justify-between gap-4"><h2 className="text-xl font-semibold">Modullar</h2>{canEdit && <Button onClick={() => openEditor()}>+ Modul qo‘shish</Button>}</div>
@@ -88,5 +88,5 @@ export function ModuleManager({ course, modules, canEdit }: { course: Course; mo
       <p className="text-steel">Darslari bor modul o‘chirilmaydi.</p><div className="mt-6 flex justify-end gap-3"><Button variant="tertiary" disabled={busy} onClick={() => setDeleting(null)}>Bekor qilish</Button><Button disabled={busy} onClick={() => deleting && mutate(`/api/admin/modules/${deleting.id}`, "DELETE")}>O‘chirish</Button></div>
     </Modal>
     <Toast open={!!toast} message={toast} onClose={() => setToast("")} />
-  </main>;
+  </div>;
 }

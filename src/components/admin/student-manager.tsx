@@ -32,6 +32,12 @@ export function StudentManager({ students, search, total }: { students: Student[
   const [pending, setPending] = useState<PendingAction | null>(null);
   const [toast, setToast] = useState("");
 
+  function searchStudents(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const value = String(new FormData(event.currentTarget).get("search") || "").trim();
+    router.push(value ? `/admin/students?${new URLSearchParams({ search: value })}` : "/admin/students");
+  }
+
   async function createStudent(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError("");
@@ -81,7 +87,7 @@ export function StudentManager({ students, search, total }: { students: Student[
   return (
     <>
       <div className="mb-5 flex flex-wrap items-end justify-between gap-4">
-        <form method="get" action="/admin/students" className="flex w-full max-w-lg flex-wrap items-end gap-3 sm:flex-nowrap">
+        <form action="/admin/students" onSubmit={searchStudents} className="flex w-full max-w-lg flex-wrap items-end gap-3 sm:flex-nowrap">
           <div className="min-w-48 flex-1"><Input label="Ism yoki telefon" name="search" defaultValue={search} placeholder="O‘quvchini qidirish" /></div>
           <Button type="submit" variant="secondary">Qidirish</Button>
         </form>

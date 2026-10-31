@@ -60,7 +60,7 @@ export function AccessManager({ student, courses, grants, asOf }: { student: Stu
     }
   }
 
-  return <main className="mx-auto min-h-screen max-w-4xl px-4 py-10 sm:px-6">
+  return <div className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6">
     <Link href="/admin/students" className="text-sm text-gold hover:underline">← O‘quvchilar</Link>
     <div className="mt-6 mb-8"><h1 className="text-3xl font-bold">{student.fullName}</h1><p className="mt-2 text-steel">{student.phone} · Kurs dostuplari</p></div>
     <Card title="Kursga dostup berish" description="Muddat ixtiyoriy. Sana tanlansa, dostup Toshkent vaqti bo‘yicha shu kun oxirigacha amal qiladi.">
@@ -83,5 +83,5 @@ export function AccessManager({ student, courses, grants, asOf }: { student: Stu
       <p className="text-steel">O‘quvchi bu kursga darhol kira olmaydi.</p><div className="mt-6 flex justify-end gap-3"><Button variant="tertiary" disabled={busy} onClick={() => setRevoke(null)}>Orqaga</Button><Button disabled={busy} onClick={revokeAccess}>Bekor qilish</Button></div>
     </Modal>
     <Toast open={!!toast} message={toast} onClose={() => setToast("")} />
-  </main>;
+  </div>;
 }

@@ -37,7 +37,7 @@ export default async function StudentsPage({ searchParams }: { searchParams: Pro
   const pageUrl = (number: number) => `/admin/students?${new URLSearchParams({ ...(search ? { search } : {}), page: String(number) })}`;
 
   return (
-    <main className="mx-auto min-h-screen max-w-6xl px-4 py-10 sm:px-6">
+    <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
       <Link href="/admin" className="text-sm text-gold hover:underline">← Boshqaruv paneli</Link>
       <div className="mt-6 mb-8">
         <h1 className="text-3xl font-bold tracking-tight">O‘quvchilar</h1>
@@ -51,6 +51,6 @@ export default async function StudentsPage({ searchParams }: { searchParams: Pro
           {page < pages ? <Link href={pageUrl(page + 1)} className="text-gold hover:underline">Keyingi →</Link> : <span />}
         </nav>
       )}
-    </main>
+    </div>
   );
 }
