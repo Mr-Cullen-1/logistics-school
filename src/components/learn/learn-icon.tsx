@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 
-export type LearnIconName = "dashboard" | "courses" | "lessons" | "assignments" | "exams" | "certificates" | "progress" | "messages" | "schedule" | "resources" | "community" | "search" | "bell" | "arrow" | "play" | "check" | "target";
+export type LearnIconName = "dashboard" | "courses" | "lessons" | "assignments" | "exams" | "certificates" | "progress" | "messages" | "schedule" | "resources" | "community" | "search" | "bell" | "arrow" | "play" | "check" | "target" | "profile" | "trophy";
 
 export function LearnIcon({ name, size = 20 }: { name: LearnIconName; size?: number }) {
   const paths: Record<LearnIconName, ReactNode> = {
@@ -21,6 +21,8 @@ export function LearnIcon({ name, size = 20 }: { name: LearnIconName; size?: num
     play: <path d="m8 5 11 7-11 7V5Z" />,
     check: <path d="m4 12 5 5L20 6" />,
     target: <><circle cx="12" cy="12" r="9" /><circle cx="12" cy="12" r="5" /><circle cx="12" cy="12" r="1" /></>,
+    profile: <><circle cx="12" cy="8" r="4" /><path d="M4 21v-2a8 8 0 0 1 16 0v2" /></>,
+    trophy: <><path d="M7 3h10v8a5 5 0 0 1-10 0V3ZM7 6H4v3a4 4 0 0 0 4 4m9-7h3v3a4 4 0 0 1-4 4m-4 3v3m-4 2h8" /></>,
   };
   return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">{paths[name]}</svg>;
 }

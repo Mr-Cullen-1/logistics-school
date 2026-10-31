@@ -1,5 +1,6 @@
 import {
   boolean,
+  date,
   index,
   integer,
   jsonb,
@@ -27,6 +28,14 @@ export const users = pgTable("users", {
   sessionVersion: integer("session_version").notNull().default(1),
   lastLoginAt: timestamp("last_login_at", { withTimezone: true }),
   createdAt: timestamp("created_at", { withTimezone: true }).notNull().defaultNow(),
+});
+
+export const studentProfiles = pgTable("student_profiles", {
+  studentId: uuid("student_id").primaryKey().references(() => users.id, { onDelete: "cascade" }),
+  avatarData: text("avatar_data"),
+  locale: varchar("locale", { length: 2 }).notNull().default("uz"),
+  goalTitle: varchar("goal_title", { length: 160 }),
+  goalDate: date("goal_date"),
 });
 
 export const courses = pgTable("courses", {
