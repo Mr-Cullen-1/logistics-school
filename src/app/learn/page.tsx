@@ -34,6 +34,7 @@ export default async function LearnPage() {
   const locale = studentProfile?.locale === "ru" || studentProfile?.locale === "en" ? studentProfile.locale : "uz";
   const t = getLearnText(locale).dashboard;
   const soon = getLearnText(locale).nav.soon;
+  const [intro] = await db.select({ id: lessons.id, courseId: modules.courseId }).from(lessons).innerJoin(modules, eq(lessons.moduleId, modules.id)).where(and(eq(lessons.code, "INTRO"), eq(lessons.status, "published"))).limit(1);
 
   const lessonRows = available.length ? await db.select({
     id: lessons.id,
@@ -78,6 +79,7 @@ export default async function LearnPage() {
       <Link href="#weekly-progress" className={styles.stat}><span className={styles.statIcon}><LearnIcon name="progress" size={26} /></span><span><strong>{overall}%</strong><small>{t.overallProgress}</small></span><span className={styles.statArrow}>›</span></Link>
       <div className={`${styles.stat} ${styles.statDisabled}`} aria-disabled="true"><span className={styles.statIcon}><LearnIcon name="certificates" size={26} /></span><span><strong>—</strong><small>{t.certificates} · {soon}</small></span></div>
     </section>
+    {intro && <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4"><strong>English for Logistics: The Why</strong><p className="mt-1 text-sm text-stone-600">Bepul kirish darsi</p><Link className="mt-2 inline-block text-sm font-semibold text-amber-900 underline" href={`/learn/${intro.courseId}/${intro.id}`}>Intro darsini ochish →</Link></div>}
 
     <div className={styles.dashboardGrid}>
       <section id="my-courses" className={`${styles.panel} ${styles.coursesPanel}`} aria-labelledby="my-courses-title">

@@ -21,7 +21,7 @@ Bu hujjat yuklangan ikki namunaga (`Dars01.jsx` va `D01_01.jsx`) asoslangan. Ula
 
 Muhim xulosa: **bir dars = 1 Learn fayl + N ta Practice fayl (har biri 1 topshiriq)**. Bizning rejamizdagi "10 ta practice" shunga mos: 10 ta alohida fayl.
 
-Sandbox uchun e'tibor: Learn fayl `document.documentElement`, `new Audio` va `speechSynthesis` dan foydalanadi, shuning uchun iframe ichida to'liq `document` bo'lishi kerak (bizning rejadagi `srcdoc` iframe buni beradi). Audio `src` orqali yuklanadi, `fetch` emas, demak CSP da `media-src` ruxsat berilishi kerak.
+Sandbox uchun e'tibor: matematikadan olingan Learn namunasi `document.documentElement`, `new Audio` va `speechSynthesis` dan foydalanadi. Ingliz kursi ovozsiz: audio bilan bog'liq kod ko'chirilmaydi, validator bunday API'larni rad etadi va iframe CSP `media-src 'none'` qo'yadi.
 
 ---
 
@@ -31,7 +31,7 @@ Namunalardagi qoida: **lokal import yo'q, hamma narsa faylning ichida** (README:
 
 | | A. Standalone (hozirgidek) | B. Kit (tavsiya) |
 |---|---|---|
-| Fayl | Hammasi ichida, `react` va `react-dom` dan boshqa import yo'q | `@coliseum/kit` dan import qilinadi (mexanikalar, stil, audio, UI) |
+| Fayl | Hammasi ichida, `react` va `react-dom` dan boshqa import yo'q | `@coliseum/kit` dan import qilinadi (mexanikalar, stil, UI) |
 | Hajm | Learn 300–400 KB, Practice ~60 KB | Learn ~20–40 KB, Practice ~3–8 KB |
 | Platforma | Soddaroq | Kitni iframe runtime ichiga o'zi joylaydi |
 | Xato tuzatish | Bitta xato 353 faylda takrorlanadi (namunada "MATCH-FIX har darsda takrorlanadi ATAYLAB" deyilgan) | Kitni bir marta tuzatamiz, hamma fayl yangilanadi |
@@ -41,6 +41,8 @@ Namunalardagi qoida: **lokal import yo'q, hamma narsa faylning ichida** (README:
 **Tavsiya: B (Kit) asosiy, A ham qabul qilinadi.** Platforma ikkalasini ham kompilyatsiya qiladi: importlar ro'yxati (`react`, `react-dom`, `@coliseum/kit`) ruxsat etilgan. Mavjud generator skriptlaringiz (`build-grade4-*.mjs`) standalone chiqaradi, ularni o'zgartirmasdan ham yuklash mumkin bo'ladi.
 
 ---
+
+> **Ingliz kursida ovoz yo'q.** Quyidagi shartnomada audio va tovush bilan bog'liq propslar (`audioBase`, `ttsApiBase`, `voiceGender`, `correctSoundUrl`, `wrongSoundUrl`) olib tashlangan.
 
 ## 3. Fayl nomlari va turlari
 
@@ -61,7 +63,7 @@ export const meta = {
   type: "learn",            // "learn" | "practice"
   lessonCode: "M1L01",
   seq: 0,                   // learn=0, practice=1..10
-  mechanic: "ORDER",        // faqat practice: MC | GAP | TYPE | MATCH | ORDER | LISTEN-MC | ...
+  mechanic: "ORDER",        // faqat practice: MC | GAP | TYPE | MATCH | ORDER | READ-MC | ...
   skillTags: ["sentence_order", "wh_questions"],
 };
 ```
@@ -78,10 +80,6 @@ Namunalardagi fayllarda `meta` yo'q, shuning uchun u **majburiy emas**, lekin ya
 export default function Lesson({
   lang,              // 'uz' | 'ru' | 'en'. Berilmasa preview rejimi (tilni almashtirgich ko'rinadi)
   studentName,       // salomlashish uchun
-  audioBase,         // platforma audio papkasi, masalan "/audio/M1L01/" (yangi)
-  ttsApiBase,        // eski nom, bo'sh bo'lishi mumkin (moslik uchun)
-  voiceGender,       // 'f' | 'm'
-  correctSoundUrl, wrongSoundUrl,
   onFinished,        // (payload) => void
 }) { ... }
 ```
@@ -107,7 +105,7 @@ Platforma shuni `lesson_progress.learn_payload` ga saqlaydi. **Faqat `onFinished
 
 ### 4.3. Ichida nima bo'lishi kerak (ingliz kursi)
 
-Standart oqim `COURSE.md` 2-bo'limda (11 ekran): Mission, Listen, Notice, Pattern, Vocabulary, Guided check, Build, Shadowing, Role-play, Rapid test, Summary.
+Standart oqim `COURSE.md` 2-bo'limda (11 ekran): Mission, Read, Notice, Pattern, Vocabulary, Guided check, Build, Say it aloud, Role-play, Rapid test, Summary.
 
 Namunadan olinadigan yaxshi yechimlar:
 - Har noto'g'ri variantning **o'z izohi** bor (javobni aytmaydi, nimani tekshirishni ko'rsatadi).
@@ -117,8 +115,8 @@ Namunadan olinadigan yaxshi yechimlar:
 
 Bizda o'zgaradi:
 - **Ingliz kontenti til almashmaydi**; faqat tushuntirishlar `lang` bo'yicha. Struktura: `{ en: "...", uz: "...", ru: "..." }` (kerakli tillar bilan cheklanadi).
-- TTS o'rniga **oldindan yozilgan audio** (`audioBase` + fayl nomi), topilmasa `speechSynthesis` (`en-US`) zaxira.
-- Mikrofon yo'q (A varianti). Shadowing o'zini baholash bilan, ballsiz.
+- **Ovoz yo'q**: audio, TTS, ovozli sharh va tovush effektlari ishlatilmaydi. Namunadagi `Audio`/`speechSynthesis` kodi bizning fayllarga ko'chirilmaydi.
+- Mikrofon yo'q (A varianti). "Say it aloud": matnni ovoz chiqarib o'qish, o'zini baholash, ballsiz.
 
 ---
 
@@ -133,8 +131,7 @@ export default function Practice({
   onReady,         // (boolean) => void: "Tekshirish" tugmasi faol bo'lishi mumkinmi?
   registerCheck,   // (fn) => void: platforma tugmasi bosilganda chaqiriladigan funksiyani ro'yxatdan o'tkazish
   onSubmit,        // ({questionText, correct, meta}) => void: har tekshiruv natijasi
-  playCorrect, playWrong,   // ovozli signal
-  audioBase,       // listening topshiriqlar uchun
+  playCorrect, playWrong,   // ingliz kursida chaqirilmaydi/bo'sh funksiya (ovoz yo'q); moslik uchun qoladi
 }) { ... }
 ```
 
@@ -150,7 +147,7 @@ Practice fayl yuklanadi
    │        └─► registerCheck(fn) da berilgan fn() ishlaydi
    │
    ├─ Practice ichida tekshiruv
-   │        ├─ playCorrect() yoki playWrong()
+   │        ├─ (ovozli signal yo'q: faqat vizual holat)
    │        └─► onSubmit({ questionText, correct, meta })
    │
    └─ to'g'ri bo'lsa → platforma "Keyingisi"; noto'g'ri bo'lsa → izoh ko'rinadi, qayta urinish
@@ -184,16 +181,17 @@ Bitta topshiriq uchun: sarlavha (`M1L01 · Task 4`), shart, mexanika, xato varia
    ▼  3-daraja: Xavfsizlik siyosati (statik)
    │   taqiqlar: fetch, XMLHttpRequest, WebSocket, eval, new Function, import(),
    │   localStorage/sessionStorage, document.cookie, window.parent/top/open,
-   │   <script> yaratish, tashqi domen URL lari (ruxsat etilgan audio manbasidan tashqari)
-   ▼  4-daraja: Smoke render
-   │   server tomonida `react-dom/server` bilan standart propslar bilan chizib ko'rish
-   │   (vm + timeout). Learn: standart props; Practice: stub funksiyalar
-   │   xato bo'lsa → aniq xabar bilan rad
+   │   <script> yaratish, tashqi domen URL lari; **audio/ovoz API lari** (`Audio`, `speechSynthesis`, `AudioContext`, `<audio>`, `<video>`) ingliz platformasida taqiqlanadi
    ▼
 Bazaga: source + compiled_js + size + hash + version, status = draft
+   ▼  4-daraja: Browser smoke
+   │   super admin real sandbox iframe'da har faylni ochadi
+   │   render muvaffaqiyatli bo'lsa preview tasdiqlanadi; xato/timeout bo'lsa nashr bloklanadi
    ▼
-Super admin: real sandbox iframe da preview → "Nashr"
+Super admin: preview + dars oqimini ko'rib chiqish → "Nashr"
 ```
+
+JSX server jarayonida bajarilmaydi. Browser smoke boshlang'ich renderni tekshiradi; barcha tugma va javoblarning to'g'riligini real dars QA tekshiruvi tasdiqlaydi.
 
 Har darajada xato aniq aytiladi: fayl nomi, qator, sababi ("5-qator: `fetch` taqiqlangan").
 
@@ -227,8 +225,8 @@ Funksiyalarni (`onReady`, `registerCheck`, `onSubmit`) `iframe` chegarasidan to'
 
 - `require('react')`, `require('react-dom')`, `require('@coliseum/kit')` runtime ichidagi nusxalarni qaytaradi; boshqa modul so'ralsa xato.
 - `allow-same-origin` **yo'q**: dars kodi platforma cookie va tokeniga yetmaydi.
-- CSP: `default-src 'none'`; `script-src 'unsafe-inline'` (runtime o'zi chiqaradi); `media-src` faqat platforma audio manbasi; `connect-src 'none'`; `img-src` platforma va `data:`.
-- Audio fayllari: `audioBase + "key.mp3"`.
+- CSP: `default-src 'none'`; `script-src` platforma domeni va `blob:`; `media-src 'none'`; `font-src` faqat platforma domeni (Geist shrifti); `connect-src 'none'`; `img-src` platforma va `data:`.
+- Audio fayllari yo'q: kursda ovoz ishlatilmaydi.
 
 ### 6.4. Practice o'tkazish interfeysi (platforma)
 
@@ -286,7 +284,7 @@ Yuklagan ikkala namuna platformaning birinchi **sinov to'plami** bo'ladi:
 
 | Fayl | Kutiladigan natija |
 |---|---|
-| `Dars01.jsx` | 1–4 darajadan o'tadi (385 KB < 1.5 MB). `document.documentElement` va `Audio` sandbox da ishlaydi |
+| `Dars01.jsx` | Matematika namunasi `Audio`/`speechSynthesis` ishlatadi, shuning uchun ingliz platformasida **3-darajada rad etilishi kutiladi** (385 KB < 1.5 MB) |
 | `D01_01.jsx` | O'tadi. `onReady`, `registerCheck`, `onSubmit` postMessage orqali ishlaydi, "Tekshirish" platformada |
 | Sintetik yomon fayllar | `fetch(...)` bor, tashqi import bor, default export yo'q, juda katta: har biri aniq xabar bilan rad etiladi |
 

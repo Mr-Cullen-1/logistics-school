@@ -74,6 +74,8 @@ O'quvchi: /learn ────────┘ faqat ochilgan kurslar
                   └► "Tugatdim" → progress saqlanadi
 ```
 
+**Intro istisnosi:** super admin `/admin/intro` da `INTRO.learn.jsx` ni yaratadi va nashr qiladi. Nashr qilingan Intro login qilgan barcha o'quvchilarga `/learn` da kurslardan oldin ko'rinadi; enrollment, kurs dostupi va kursning nashr holati talab qilinmaydi. Login, admin bergan PIN va majburiy parol almashtirish qoidalari o'zgarmaydi. Oddiy kurs va darslar yuqoridagi dostup qoidasida qoladi.
+
 ### 3.3. JSX yuklash pipeline (super admin)
 
 Ikki tur fayl: **Learn** (`M1L01.learn.jsx`) va **Practice** (`M1L01.p01.jsx` ... `p10`). To'liq shartnoma: `JSX_CONTRACT.md`.
@@ -84,13 +86,14 @@ Ikki tur fayl: **Learn** (`M1L01.learn.jsx`) va **Practice** (`M1L01.p01.jsx` ..
    ▼ 1) Nom va tur: qolipga mos, dars kodi mavjud
    ▼ 2) Sintaksis: Sucrase (JSX → JS, imports → CommonJS); default export; importlar ⊆ {react, react-dom, @coliseum/kit}
    ▼ 3) Xavfsizlik siyosati: fetch, XHR, WebSocket, eval, new Function, import(), storage, cookie, window.parent/top taqiqlangan
-   ▼ 4) Smoke render: react-dom/server bilan vm + timeout ichida chizib ko'rish
-   │
+   ▼ Bazaga: source + compiled_js + hash + version (draft)
    ▼
-Bazaga: source + compiled_js + hash + version (draft)
+   4) Browser smoke: har draft sandbox iframe'da chiziladi; render xatosi bo'lsa tasdiq bo'lmaydi
    ▼
-Preview (sandbox iframe) → dars to'liq bo'lsa (1 Learn + kamida 10 Practice) → "Nashr"
+Preview tasdiqlangach va dars to'liq bo'lsa (1 Learn + kamida 10 Practice) → "Nashr"
 ```
+
+JSX Next server jarayonida `vm` bilan bajarilmaydi. Preview tasdig'i super admin brauzeridagi smoke tekshiruvini bildiradi; darsning to'liq funksional sinovi alohida o'tkaziladi.
 
 ---
 
@@ -176,6 +179,7 @@ audit_log
 - `/admin/students/[id]` — dostuplar, progress, kirish tarixi
 - `/admin/enrollments` — dostup berish/olish (ommaviy ham)
 - `/admin/courses` — ko'rish (super admin tahrirlaydi)
+- `/admin/intro` — Intro yaratish, ko'rish va fayllarini boshqarishga o'tish (tahrir faqat super admin)
 
 ### Faqat super admin
 - `/admin/courses/new`, `/admin/courses/[id]` — kurs/modul boshqaruvi, tartib (drag & drop)
@@ -195,14 +199,15 @@ Batafsil: `JSX_CONTRACT.md`. Qisqacha:
 1. **Sandbox iframe**: `sandbox="allow-scripts"`, `allow-same-origin` **yo'q**. Dars kodi cookie, token va platforma DOM'iga kira olmaydi.
 2. Iframe ichida bizning **runtime**: React, react-dom, `@coliseum/kit` va fayl funksiyalarini (`onReady`, `registerCheck`, `onSubmit`, `onFinished`) `postMessage` ko'prigi orqali platformaga ulaydi.
 3. **Ikki tur fayl**:
-   - **Learn**: `export default function Lesson({lang, studentName, audioBase, onFinished})`; tugaganda `onFinished(payload)`.
-   - **Practice** (bitta topshiriq): `export default function Practice({lang, mode, onReady, registerCheck, onSubmit, playCorrect, playWrong, audioBase})`; **"Tekshirish" tugmasini platforma beradi**.
-4. CSP: `connect-src 'none'`, `media-src` faqat platforma audio manbasi, `img-src` platforma va `data:`.
-5. Hajm chegarasi: Learn 1.5 MB, Practice 300 KB (namunalar 385 KB va 60 KB).
-6. Faqat super admin yuklaydi, har yuklash `audit_log` ga yoziladi.
+   - **Learn**: `export default function Lesson({lang, studentName, onFinished})`; tugaganda `onFinished(payload)`.
+   - **Practice** (bitta topshiriq): `export default function Practice({lang, mode, onReady, registerCheck, onSubmit, playCorrect, playWrong})`; **"Tekshirish" tugmasini platforma beradi**.
+4. CSP: `connect-src 'none'`, `media-src 'none'`, `img-src` platforma va `data:`.
+5. **Ovoz yo'q**: audio API lari (`Audio`, `speechSynthesis`, `AudioContext`) ingliz platformasida taqiqlangan.
+6. Hajm chegarasi: Learn 1.5 MB, Practice 300 KB (namunalar 385 KB va 60 KB).
+7. Faqat super admin yuklaydi, har yuklash `audit_log` ga yoziladi.
 
 ### `@coliseum/kit` (tavsiya, qaror kutilmoqda)
-Mexanikalar (MC, GAP, TYPE, MATCH, ORDER, LISTEN, REPLY, SORT, FIX, FORM, SCENE), audio pleyer, stil tokenlari, xato izohi komponenti. Kit bo'lsa fayllar 10 baravar kichik bo'ladi; standalone (hammasi ichida) fayllar ham qabul qilinadi.
+Mexanikalar (MC, GAP, TYPE, MATCH, ORDER, READ, REPLY, SORT, FIX, FORM, SCENE), stil tokenlari, xato izohi komponenti. Kit bo'lsa fayllar 10 baravar kichik bo'ladi; standalone (hammasi ichida) fayllar ham qabul qilinadi.
 
 ---
 
@@ -210,7 +215,8 @@ Mexanikalar (MC, GAP, TYPE, MATCH, ORDER, LISTEN, REPLY, SORT, FIX, FORM, SCENE)
 
 1-bosqichda saytdan (yoki uning repo'sidan) quyidagilarni chiqarib olamiz va `tailwind.config` + CSS variables'ga qo'yamiz:
 
-- Ranglar: fon (`#0D1114` charcoal), bronza aksent, ivory matn
+- Ranglar (saytdan olingan): fon `#0d1114`, sirt `#171b1e` / `#1d2226`, bronza `#c19a63` (`#e0c28c`), ivory `#f3efe7`, matn `#f5f3ee`, ikkinchi matn `#a7aaad`, jimroq `#73777a`, chiziq `#ffffff14`
+- Shrift: Geist (sans) va Geist Mono; tugma radiusi 12 px, kartalar chegara bilan, soyasiz (to'liq jadval: INTRO_ETALON.md A5)
 - Shrift oilasi, o'lchamlar, og'irliklar
 - Tugma, karta, input, spacing, border-radius, soya uslublari
 - Logotip va favicon
@@ -230,7 +236,7 @@ Platforma sahifalari: qoramtir fon, bronza aksentli tugmalar, ortiqcha glow va n
 - Bloklangan o'quvchi darhol chiqib ketadi
 - Har bir so'rovda rol va dostup serverda tekshiriladi (o'quvchi boshqa o'quvchi yoki ochilmagan kurs ma'lumotini ola olmaydi)
 - Secrets faqat `.env` (git'ga qo'shilmaydi)
-- Darslar API'si faqat dostupi bor o'quvchiga `compiled_js` beradi
+- Oddiy darslar API'si faqat kurs dostupi bor o'quvchiga `compiled_js` beradi; nashrdagi Intro faqat login qilgan o'quvchilarga dostupsiz beriladi
 
 ---
 
@@ -308,7 +314,7 @@ Har bosqich alohida sessiya/commit. Har birining oxirida tekshiruv bor.
 - **Tekshiruv:** progress to'g'ri hisoblanadi, "Tugatdim" saqlanadi
 
 ### 7-bosqich. Bloklar kutubxonasi
-- Vocabulary, Dialogue, Audio, Quiz, FillBlank, Match, Tip, CompleteButton
+- Vocabulary, Dialogue (matnli), Quiz, FillBlank, Match, Tip, CompleteButton (audio yo'q)
 - Super admin uchun "blok namunalari" sahifasi (dars yozishga qo'llanma)
 - **Tekshiruv:** barcha bloklar mobil va desktop'da ishlaydi
 

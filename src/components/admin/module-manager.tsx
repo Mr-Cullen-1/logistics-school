@@ -12,8 +12,9 @@ import { Toast } from "@/components/ui/toast";
 
 type Module = { id: string; title: string; order: number };
 type Course = { id: string; title: string; description: string | null; level: string | null; isPublished: boolean };
+type Lesson = { id: string; moduleId: string; code: string | null; title: string; status: "draft" | "published" };
 
-export function ModuleManager({ course, modules, canEdit }: { course: Course; modules: Module[]; canEdit: boolean }) {
+export function ModuleManager({ course, modules, lessons, canEdit }: { course: Course; modules: Module[]; lessons: Lesson[]; canEdit: boolean }) {
   const router = useRouter();
   const [editing, setEditing] = useState<Module | "new" | null>(null);
   const [deleting, setDeleting] = useState<Module | null>(null);
@@ -21,6 +22,9 @@ export function ModuleManager({ course, modules, canEdit }: { course: Course; mo
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
   const [toast, setToast] = useState("");
+  const [lessonModule, setLessonModule] = useState<Module | null>(null);
+  const [lessonCode, setLessonCode] = useState("");
+  const [lessonTitle, setLessonTitle] = useState("");
 
   function openEditor(module?: Module) {
     setEditing(module || "new");
@@ -68,6 +72,23 @@ export function ModuleManager({ course, modules, canEdit }: { course: Course; mo
     }
   }
 
+  async function createLesson(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!lessonModule) return;
+    setBusy(true);
+    setError("");
+    try {
+      const response = await fetch("/api/admin/lessons", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ moduleId: lessonModule.id, code: lessonCode.toUpperCase().trim(), title: lessonTitle }) });
+      const result = await response.json();
+      if (!response.ok) { setError(result.error || "Dars yaratilmadi"); return; }
+      setLessonModule(null);
+      setLessonCode("");
+      setLessonTitle("");
+      router.refresh();
+    } catch { setError("Ulanishda xatolik yuz berdi"); }
+    finally { setBusy(false); }
+  }
+
   return <div className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6">
     <Link href="/admin/courses" className="text-sm text-gold hover:underline">← Kurslar</Link>
     <div className="mt-6 mb-8"><span className="text-sm font-semibold text-gold">{course.level || "Daraja belgilanmagan"} · {course.isPublished ? "Nashr qilingan" : "Qoralama"}</span><h1 className="mt-2 text-3xl font-bold">{course.title}</h1>{course.description && <p className="mt-3 text-steel">{course.description}</p>}</div>
@@ -79,6 +100,9 @@ export function ModuleManager({ course, modules, canEdit }: { course: Course; mo
         <Button size="small" variant="tertiary" disabled={busy || index === modules.length - 1} onClick={() => mutate(`/api/admin/modules/${module.id}/move`, "POST", { direction: "down" })} aria-label={`${module.title} pastga`}>↓</Button>
         <Button size="small" variant="tertiary" onClick={() => setDeleting(module)}>O‘chirish</Button>
       </div>}</div>
+      <div className="mt-4 border-t border-white/10 pt-4"><div className="mb-2 flex items-center justify-between"><strong className="text-sm">Darslar</strong>{canEdit && <Button size="small" variant="tertiary" onClick={() => { setLessonModule(module); setError(""); }}>+ Dars</Button>}</div>
+        {lessons.filter((lesson) => lesson.moduleId === module.id).length ? <ul className="space-y-2">{lessons.filter((lesson) => lesson.moduleId === module.id).map((lesson) => <li key={lesson.id}><Link className="text-sm text-gold hover:underline" href={`/admin/lessons/${lesson.id}`}>{lesson.code || "Kod belgilanmagan"} · {lesson.title} <span className="text-steel">({lesson.status === "published" ? "nashr" : "draft"})</span></Link></li>)}</ul> : <p className="text-sm text-steel">Darslar hali yo‘q.</p>}
+      </div>
     </Card>)}</div> : <Card title="Modullar hali yo‘q" description="Kurs uchun birinchi modulni qo‘shing." />}
 
     <Modal open={!!editing} onClose={() => { if (!busy) setEditing(null); }} title={editing === "new" ? "Yangi modul" : "Modulni tahrirlash"}>
@@ -86,6 +110,9 @@ export function ModuleManager({ course, modules, canEdit }: { course: Course; mo
     </Modal>
     <Modal open={!!deleting} onClose={() => { if (!busy) setDeleting(null); }} title="Modulni o‘chirish" description={deleting?.title}>
       <p className="text-steel">Darslari bor modul o‘chirilmaydi.</p><div className="mt-6 flex justify-end gap-3"><Button variant="tertiary" disabled={busy} onClick={() => setDeleting(null)}>Bekor qilish</Button><Button disabled={busy} onClick={() => deleting && mutate(`/api/admin/modules/${deleting.id}`, "DELETE")}>O‘chirish</Button></div>
+    </Modal>
+    <Modal open={!!lessonModule} onClose={() => { if (!busy) setLessonModule(null); }} title="Yangi dars" description={lessonModule?.title}>
+      <form onSubmit={createLesson} className="space-y-4"><Input label="Dars kodi (masalan M1L01 yoki INTRO)" value={lessonCode} onChange={(event) => setLessonCode(event.target.value)} required /><Input label="Dars nomi" value={lessonTitle} onChange={(event) => setLessonTitle(event.target.value)} required />{error && <p role="alert" className="text-sm text-alert">{error}</p>}<Button type="submit" disabled={busy}>Yaratish</Button></form>
     </Modal>
     <Toast open={!!toast} message={toast} onClose={() => setToast("")} />
   </div>;

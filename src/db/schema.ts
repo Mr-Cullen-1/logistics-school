@@ -65,6 +65,7 @@ export const lessons = pgTable(
     id: uuid("id").defaultRandom().primaryKey(),
     moduleId: uuid("module_id").notNull().references(() => modules.id, { onDelete: "cascade" }),
     title: text("title").notNull(),
+    code: varchar("code", { length: 12 }),
     order: integer("order").notNull().default(0),
     jsxSource: text("jsx_source").notNull(),
     compiledJs: text("compiled_js").notNull(),
@@ -74,8 +75,47 @@ export const lessons = pgTable(
     updatedBy: uuid("updated_by").references(() => users.id, { onDelete: "set null" }),
     updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
   },
-  (table) => [index("lessons_module_id_idx").on(table.moduleId)],
+  (table) => [index("lessons_module_id_idx").on(table.moduleId), uniqueIndex("lessons_module_code_idx").on(table.moduleId, table.code)],
 );
+
+export const lessonFiles = pgTable("lesson_files", {
+  id: uuid("id").defaultRandom().primaryKey(),
+  lessonId: uuid("lesson_id").notNull().references(() => lessons.id, { onDelete: "cascade" }),
+  kind: varchar("kind", { length: 8 }).notNull(),
+  seq: integer("seq").notNull(),
+  mechanic: varchar("mechanic", { length: 24 }),
+  source: text("source").notNull(),
+  compiledJs: text("compiled_js").notNull(),
+  sizeBytes: integer("size_bytes").notNull(),
+  sha256: varchar("sha256", { length: 64 }).notNull(),
+  version: integer("version").notNull(),
+  status: lessonStatus("status").notNull().default("draft"),
+  isCurrent: boolean("is_current").notNull().default(false),
+  uploadedBy: uuid("uploaded_by").references(() => users.id, { onDelete: "set null" }),
+  uploadedAt: timestamp("uploaded_at", { withTimezone: true }).notNull().defaultNow(),
+}, (table) => [
+  uniqueIndex("lesson_files_slot_version_idx").on(table.lessonId, table.kind, table.seq, table.version),
+  index("lesson_files_lesson_idx").on(table.lessonId),
+]);
+
+export const lessonProgress = pgTable("lesson_progress", {
+  studentId: uuid("student_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  lessonId: uuid("lesson_id").notNull().references(() => lessons.id, { onDelete: "cascade" }),
+  learnDoneAt: timestamp("learn_done_at", { withTimezone: true }),
+  learnPayload: jsonb("learn_payload"),
+  practiceDoneAt: timestamp("practice_done_at", { withTimezone: true }),
+}, (table) => [primaryKey({ columns: [table.studentId, table.lessonId] })]);
+
+export const practiceAttempts = pgTable("practice_attempts", {
+  studentId: uuid("student_id").notNull().references(() => users.id, { onDelete: "cascade" }),
+  lessonId: uuid("lesson_id").notNull().references(() => lessons.id, { onDelete: "cascade" }),
+  seq: integer("seq").notNull(),
+  attempts: integer("attempts").notNull().default(0),
+  correct: boolean("correct").notNull().default(false),
+  firstTryCorrect: boolean("first_try_correct").notNull().default(false),
+  durationMs: integer("duration_ms").notNull().default(0),
+  updatedAt: timestamp("updated_at", { withTimezone: true }).notNull().defaultNow(),
+}, (table) => [primaryKey({ columns: [table.studentId, table.lessonId, table.seq] })]);
 
 export const enrollments = pgTable(
   "enrollments",

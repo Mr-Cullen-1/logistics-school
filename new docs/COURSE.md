@@ -13,10 +13,10 @@ JSX fayl qoidalari alohida hujjatda: `JSX_CONTRACT.md`.
 | Daraja | B1 (kirish testi + Module 1 ni "tez takrorlash + speaking" ruhida) | Tasdiqlangan |
 | Module 1 | Present Perfect va First Conditional qo'shilgan, Present Simple/Continuous bitta darsda | Tasdiqlangan |
 | Reading | Faqat Module 3 da, amaliy vazifaga bog'langan holda | Tasdiqlangan |
-| Listening | Har darsda kamida 1 ta dialog audio | Tasdiqlangan |
-| Intro | 1 ta qisqa dars (5–7 daqiqa), hamma ko'ra oladi (demo) | Tasdiqlangan |
+| Ovoz | **Kursda ovoz umuman yo'q**: audio, ovozli sharh (ozvucka), TTS va tovush effektlari ishlatilmaydi. Tinglab tushunish o'rniga matnli dialog (chat, SMS, qo'ng'iroq transkripti, email) | Tasdiqlangan |
+| Intro | 1 ta qisqa dars (5–7 daqiqa), login qilgan barcha o'quvchilar kurs dostupsiz ko'ra oladi (demo) | Tasdiqlangan |
 | Checkpoint | Har modulning 8-darsi oxirida | Tasdiqlangan |
-| Speaking mashqi | **A varianti**: tanlovli role-play (branching) + shadowing (audioga ergashib takrorlash). Mikrofon yozuvi (B) keyingi versiyada | Standart qilib olindi, o'zgartirish mumkin |
+| Speaking mashqi | **A varianti**: matnli tanlovli role-play (branching) + "Say it aloud" (matn ko'rsatiladi, o'quvchi ovoz chiqarib o'qiydi va o'zini baholaydi; ovoz yozilmaydi). Mikrofon yozuvi (B) keyingi versiyada | Standart qilib olindi, o'zgartirish mumkin |
 | Interfeys tili | `lang`: `uz` (standart), `ru`, `en`. Ingliz kontenti o'zgarmaydi, tushuntirish tili almashadi | Taklif |
 | Practice soni | Har darsda **10 ta** (Intro: practice yo'q) | Tasdiqlangan |
 
@@ -45,13 +45,13 @@ Barcha darslar bir xil skeletda quriladi, o'quvchi har safar nima kutishni bilad
 | № | Ekran | Mazmun |
 |---:|---|---|
 | 1 | **Mission** | Real logistika vaziyati (masalan, broker qo'ng'irog'i). "Bugun nimani uddalaymiz?" |
-| 2 | **Listen** | 20–40 soniyalik dialog audio. Transkript va o'zbekcha tarjima yashirin (o'quvchi ochadi) |
+| 2 | **Read** | Qisqa matnli dialog (chat/SMS yoki qo'ng'iroq transkripti). O'zbekcha tarjima yashirin (o'quvchi ochadi) |
 | 3 | **Notice** | Dialogdagi maqsadli iboralar belgilanadi, o'quvchi o'zi topadi |
 | 4 | **Pattern** | Qoida/qolip qisqa animatsiya bilan. Tushuntirish `lang` tilida, misollar ingliz tilida |
-| 5 | **Vocabulary** | 6–8 so'z kartochkasi: audio, misol gap, rasm/ikonka |
+| 5 | **Vocabulary** | 6–8 so'z kartochkasi: ma'nosi, misol gap, rasm/ikonka |
 | 6 | **Guided check** | 2–3 yengil savol, har xato variantning o'z izohi bor |
 | 7 | **Build** | So'z/jumla tuzish (order mexanikasi) |
-| 8 | **Shadowing** | Audio eshitadi, takrorlaydi, o'zini baholaydi (ballsiz) |
+| 8 | **Say it aloud** | Matn ko'rsatiladi, o'quvchi ovoz chiqarib o'qiydi, o'zini baholaydi (ballsiz, ovoz yozilmaydi) |
 | 9 | **Role-play** | Branching dialog: o'quvchi javob variantini tanlaydi, suhbat davom etadi |
 | 10 | **Rapid test** | 4 ta tezkor savol, natija `onFinished` payloadiga tushadi (o'tish chegarasi 60%) |
 | 11 | **Summary** | Phrase bank (darsning 5–8 ta eng kerakli ibora) + mukofot |
@@ -73,8 +73,8 @@ Har dars uchun **10 ta alohida fayl** (`M1L01.p01.jsx` ... `p10`). Har fayl = **
 | TYPE | Yozib javob | Qabul qilinadigan variantlar ro'yxati (katta-kichik harf, bo'shliq va tinish normalizatsiyasi) |
 | MATCH | Juftlashtirish | Rangli juftlar, xatoni tuzatish yo'li bor |
 | ORDER | So'z/jumla tartiblash | So'zlarni bosib gap tuzish |
-| LISTEN-MC | Tinglab tanlash | Audio, so'ng variantlar |
-| LISTEN-TYPE | Tinglab yozish | Raqam, ism, manzil, ID diktanti |
+| READ-MC | Matn o'qib tanlash | Qisqa chat/SMS/voicemail transkripti yoki hujjat parchasi, so'ng variantlar |
+| READ-TYPE | Matndan topib yozish | Matndan raqam, ism, manzil, ID, vaqtni topib yozish (shartga qarab tanlab olish) |
 | REPLY | Eng mos javobni tanlash | Dialogdagi keyingi gap |
 | SORT | Guruhlarga ajratish | Masalan, hujjatlar / pul atamalari |
 | FIX | Xatoni topish | Gapdagi xatoni tanlab tuzatish |
@@ -84,13 +84,13 @@ Har dars uchun **10 ta alohida fayl** (`M1L01.p01.jsx` ... `p10`). Har fayl = **
 ### 3.2. Har 10 talik to'plam uchun majburiy talablar
 
 1. Kamida **5 xil mexanika**.
-2. Kamida **2 ta Listening** topshiriq (LISTEN-MC yoki LISTEN-TYPE).
+2. Kamida **2 ta o'qib-tushunish** topshiriq (READ-MC yoki READ-TYPE).
 3. Kamida **1 ta FIX** (xatoni tahlil qilish).
 4. **P10 doim SCENE**: darsning butun materiali bitta vaziyatda.
 5. Qiyinlik zinapoyasi: P1–P3 tanish (recognition), P4–P6 boshqariladigan (controlled), P7–P9 erkinroq, P10 transfer.
 6. Darsning Learn faylidagi gaplar so'zma-so'z takrorlanmaydi, yangi misollar ishlatiladi.
 7. Har xato javobga javobni aytmaydigan, nimani tekshirishni ko'rsatadigan izoh yoziladi.
-8. Ovozsiz o'tkazib bo'lmaydigan joylar uchun transkript tugmasi bor (kar/eshitish qiyin o'quvchilar uchun).
+8. **Ovoz yo'q**: hech qanday audio, ovozli sharh yoki tovush effekti ishlatilmaydi (to'g'ri/xato signali ham faqat vizual).
 
 ---
 
@@ -102,7 +102,7 @@ Har dars uchun **10 ta alohida fayl** (`M1L01.p01.jsx` ... `p10`). Har fayl = **
 | Ekran | Mazmun |
 |---|---|
 | Mission | Tungi 2:00, yuk kechikdi, broker qo'ng'iroq qilmoqda. Ingliz tilini bilmasangiz nima bo'ladi? |
-| Listen | 3 ta qisqa audio: dispatcher–driver, broker qo'ng'irog'i, email. "Bular real vaziyatlar" |
+| Read | 3 ta qisqa matn: dispatcher–driver chati, broker qo'ng'irog'i transkripti, email. "Bular real vaziyatlar" |
 | Who | Siz kim bilan gaplashasiz: broker, driver, shipper, receiver, dispatcher (kartochkalar) |
 | What | 6 ta vaziyat: load olish, pickup/delivery, kechikish, rate, hujjat, muammo |
 | Path | Kurs xaritasi: 4 modul va har birining natijasi |
@@ -125,13 +125,13 @@ Maqsad: B1 o'quvchining mavjud grammatikasini speaking uchun **tez, aniq va ishl
 |---:|---|---|
 | 1 | MC | Kim kim? "Who arranges the truck for a load?" (broker/dispatcher/receiver rollari) |
 | 2 | MATCH | 6 ta lug'at ↔ inglizcha ta'rif |
-| 3 | LISTEN-MC | Dispatcher nima so'rayapti: address, time yoki weight? |
+| 3 | READ-MC | Dispatcher nima so'rayapti: address, time yoki weight? |
 | 4 | GAP | "The driver ___ the load at the dock." (picks / pick / picking) |
 | 5 | ORDER | So'zlardan darak gap: "needs / The / address / driver / the" |
 | 6 | ORDER | So'zlardan savol: "Where / the / is / pickup / ?" |
 | 7 | FIX | "Where the delivery is?" → to'g'ri savol tartibini tanlab tuzatish |
 | 8 | SORT | 8 ta gap: Darak / Savol (tinish belgisi va tartib bo'yicha) |
-| 9 | LISTEN-TYPE | Eshitgan yuk og'irligi va manzil raqamini yozing |
+| 9 | READ-TYPE | Xabar matnidan yuk og'irligi va manzil raqamini topib yozing |
 | 10 | SCENE | Broker bilan 3 qadam: kerakli 3 ta savolni to'g'ri tuzib, load ma'lumotini to'liq oling |
 
 ### M1L02 — Present Simple and Continuous
@@ -144,13 +144,13 @@ Maqsad: B1 o'quvchining mavjud grammatikasini speaking uchun **tez, aniq va ishl
 |---:|---|---|
 | 1 | MC | "He ___ at the dock now." Simple yoki Continuous? |
 | 2 | MATCH | Vaqt belgisi ↔ zamon (usually, now, every day, at the moment) |
-| 3 | LISTEN-MC | Haydovchi odatiy ishni aytayaptimi yoki hozirgi holatnimi? |
+| 3 | READ-MC | Haydovchi odatiy ishni aytayaptimi yoki hozirgi holatnimi? |
 | 4 | GAP | do/does: "___ the receiver open on Sundays?" |
 | 5 | GAP | -s qo'shish: "The dispatcher ___ (check) every truck." |
 | 6 | ORDER | "is / The / driver / unloading / right now" |
 | 7 | FIX | "She is usually works at night." to'g'rilash |
 | 8 | SORT | 8 gap: Odat / Hozir |
-| 9 | LISTEN-TYPE | Eshitgan holatni yozing: "The driver is ___ ." (loading/waiting/parking) |
+| 9 | READ-TYPE | Xabar matnidan holatni topib yozing: "The driver is ___ ." (loading/waiting/parking) |
 | 10 | SCENE | Brokerga "bugun odatda va hozir nima qilayotganingiz"ni 3 qadamda tushuntiring |
 
 ### M1L03 — Past Simple for Updates
@@ -163,13 +163,13 @@ Maqsad: B1 o'quvchining mavjud grammatikasini speaking uchun **tez, aniq va ishl
 |---:|---|---|
 | 1 | MC | "The truck ___ at 7 AM." (arrive/arrived/arriving) |
 | 2 | MATCH | Noto'g'ri fe'l 3-shakli: go/went, get/got, send/sent, leave/left, take/took, bring/brought |
-| 3 | LISTEN-MC | Yuk qachon topshirildi? Vaqtni tanlang |
+| 3 | READ-MC | Yuk qachon topshirildi? Vaqtni tanlang |
 | 4 | GAP | did/didn't: "He ___ pick up the load yesterday." |
 | 5 | ORDER | "delivered / We / the / load / at / 3 PM" |
 | 6 | TYPE | Fe'lni o'tgan zamonga o'tkazib yozing: leave, send, get, take |
 | 7 | FIX | "The driver didn't arrived on time." |
 | 8 | REPLY | "Did you get the POD?" ga eng mos javob |
-| 9 | LISTEN-TYPE | Eshitgan vaqt va yetkazish joyini yozing |
+| 9 | READ-TYPE | Xabar matnidan vaqt va yetkazish joyini topib yozing |
 | 10 | SCENE | Dispatcherga bugungi kun hisoboti: 3 ta voqeani o'tgan zamonda aytish |
 
 ### M1L04 — Present Perfect for Status Updates
@@ -182,13 +182,13 @@ Maqsad: B1 o'quvchining mavjud grammatikasini speaking uchun **tez, aniq va ishl
 |---:|---|---|
 | 1 | MC | "I ___ the BOL." (have sent / sent / sending) |
 | 2 | MATCH | yet / already / just / still ↔ ma'nosi va o'rni |
-| 3 | LISTEN-MC | Broker nimani so'rayapti? Yuk yetib keldimi yoki hujjat yuborildimi? |
+| 3 | READ-MC | Broker nimani so'rayapti? Yuk yetib keldimi yoki hujjat yuborildimi? |
 | 4 | GAP | have/has: "The driver ___ not arrived yet." |
 | 5 | GAP | already/yet: "Have you confirmed the rate ___ ?" |
 | 6 | ORDER | "just / has / The / left / driver" |
 | 7 | FIX | "I have sent it yesterday." (Present Perfect + aniq vaqt xatosi) |
 | 8 | SORT | 8 gap: Present Perfect / Past Simple (tanlov sababi bilan) |
-| 9 | LISTEN-TYPE | "Has the truck ___ ?" Yo'qolgan so'zni yozing |
+| 9 | READ-TYPE | "Has the truck ___ ?" Yo'qolgan so'zni yozing |
 | 10 | SCENE | Broker 3 ta holat savolini beradi, siz hozirgi holatni to'g'ri zamon bilan aytasiz |
 
 ### M1L05 — Future: will, going to, arrangements
@@ -201,13 +201,13 @@ Maqsad: B1 o'quvchining mavjud grammatikasini speaking uchun **tez, aniq va ishl
 |---:|---|---|
 | 1 | MC | "I ___ call you back in 10 minutes." (will / am going to / call) |
 | 2 | MATCH | Vaziyat ↔ shakl (va'da, reja, kelishuv) |
-| 3 | LISTEN-MC | Haydovchi qachon yetib boradi? ETA ni tanlang |
+| 3 | READ-MC | Haydovchi qachon yetib boradi? ETA ni tanlang |
 | 4 | GAP | "He ___ be late because of traffic." |
 | 5 | GAP | "We ___ delivering at 9 tomorrow." (are) |
 | 6 | ORDER | "will / I / send / the / rate confirmation / now" |
 | 7 | FIX | "I will to call you later." |
 | 8 | REPLY | "Can you pick up at 6 AM?" ga mos javob (will/going to) |
-| 9 | LISTEN-TYPE | Eshitgan sana va vaqtni yozing |
+| 9 | READ-TYPE | Xabar matnidan sana va vaqtni topib yozing |
 | 10 | SCENE | Pickupni qayta rejalashtiring: so'rang, kelishing, tasdiqlang |
 
 ### M1L06 — Modals and Polite Requests
@@ -220,13 +220,13 @@ Maqsad: B1 o'quvchining mavjud grammatikasini speaking uchun **tez, aniq va ishl
 |---:|---|---|
 | 1 | MC | Eng muloyim variantni tanlang: "Send me the rate!" / "Could you send me the rate, please?" |
 | 2 | MATCH | Modal ↔ ma'nosi (majburiyat, ruxsat, maslahat, imkoniyat) |
-| 3 | LISTEN-MC | Gap muloyimmi yoki qo'polmi? |
+| 3 | READ-MC | Gap muloyimmi yoki qo'polmi? |
 | 4 | GAP | "You ___ send the BOL before delivery." (have to / can / could) |
 | 5 | GAP | "___ you repeat that, please?" |
 | 6 | ORDER | "Could / you / the / spell / name / please / ?" |
 | 7 | FIX | "You must to arrive at 8." |
 | 8 | REPLY | "Can you hold for a minute?" ga mos javob |
-| 9 | LISTEN-TYPE | Eshitgan muloyim so'rovdagi yo'qolgan so'zni yozing: "___ you send it again?" |
+| 9 | READ-TYPE | Xabar matnidan muloyim so'rovdagi yo'qolgan so'zni topib yozing: "___ you send it again?" |
 | 10 | SCENE | Qo'ng'iroqda 3 ta muloyim so'rov bilan kerakli ma'lumotni oling |
 
 ### M1L07 — First Conditional for Negotiation
@@ -239,13 +239,13 @@ Maqsad: B1 o'quvchining mavjud grammatikasini speaking uchun **tez, aniq va ishl
 |---:|---|---|
 | 1 | MC | "If you ___ $2,400, I can book it." (offer / will offer / offered) |
 | 2 | MATCH | Atama ↔ ta'rif (deadhead, flat rate, lumper, accessorial) |
-| 3 | LISTEN-MC | Broker qanday shart qo'ydi? |
+| 3 | READ-MC | Broker qanday shart qo'ydi? |
 | 4 | GAP | "If it ___, we will reschedule." (rains) |
 | 5 | GAP | "I can't book it ___ the rate goes up." (unless) |
 | 6 | ORDER | "If / you / can / pay / I / will / take / it" |
 | 7 | FIX | "If you will pay more, I take it." |
 | 8 | REPLY | "That's too low." ga shartli javob |
-| 9 | LISTEN-TYPE | Eshitgan summa va shartni yozing |
+| 9 | READ-TYPE | Xabar matnidan summa va shartni topib yozing |
 | 10 | SCENE | Rate bo'yicha 3 raund: taklif, shart, kelishuv |
 
 ### M1L08 — Core Logistics Vocabulary + Checkpoint 1
@@ -257,13 +257,13 @@ Maqsad: B1 o'quvchining mavjud grammatikasini speaking uchun **tez, aniq va ishl
 |---:|---|---|
 | 1 | MATCH | 6 ta atama ↔ ta'rif (equipment) |
 | 2 | MATCH | 6 ta hujjat ↔ vazifasi |
-| 3 | LISTEN-MC | Ovozdan atamani aniqlash: "dry van" / "reefer" / "flatbed" |
+| 3 | READ-MC | Ta'rifdan atamani aniqlash: "dry van" / "reefer" / "flatbed" |
 | 4 | SORT | 12 atama: Equipment / Documents / Money / People |
 | 5 | GAP | Atama bilan gapni to'ldirish (carrier, shipper, receiver) |
 | 6 | MC | "Which document proves delivery?" (POD / RC / invoice) |
 | 7 | FIX | Atama noto'g'ri ishlatilgan gapni topish |
 | 8 | TYPE | Rasm/ta'rifdan atamani yozing (spelling ham tekshiriladi) |
-| 9 | LISTEN-TYPE | Eshitgan atamani to'g'ri yozing (5 ta) |
+| 9 | READ-TYPE | Xabar matnidan atamani to'g'ri topib yozing (5 ta) |
 | 10 | SCENE | Atamalar bilan 3 qadamli yuk tavsifi (kim, nima, qayerga) |
 
 ---
@@ -282,13 +282,13 @@ Maqsad: sodda kundalik ish muloqoti: tanishish, so'rash, raqamlarni tushunish, t
 |---:|---|---|
 | 1 | MC | Qo'ng'iroqni boshlash uchun eng professional gap |
 | 2 | MATCH | Lavozim ↔ vazifa (dispatcher, broker, carrier rep, safety officer) |
-| 3 | LISTEN-MC | Gapiruvchi kim va qaysi kompaniyadan? |
+| 3 | READ-MC | Gapiruvchi kim va qaysi kompaniyadan? |
 | 4 | GAP | "I ___ as a dispatcher for Coliseum Logistics." |
 | 5 | ORDER | "been / I've / in / logistics / for / two years" |
 | 6 | TYPE | O'zingizni tanishtiring: 3 ta bo'sh joyni (ism, lavozim, kompaniya) yozing |
 | 7 | FIX | "I am working dispatcher since 2 years." |
 | 8 | REPLY | "Nice to meet you. What do you do?" ga mos javob |
-| 9 | LISTEN-TYPE | Eshitgan ism va kompaniyani yozing |
+| 9 | READ-TYPE | Xabar matnidan ism va kompaniyani topib yozing |
 | 10 | SCENE | Yangi brokerga o'zingizni 3 qadamda tanishtiring va kelishuvga olib keling |
 
 ### M2L02 — Asking for Information
@@ -301,17 +301,17 @@ Maqsad: sodda kundalik ish muloqoti: tanishish, so'rash, raqamlarni tushunish, t
 |---:|---|---|
 | 1 | MC | Qaysi savol bilvosita va muloyim? |
 | 2 | MATCH | To'g'ridan-to'g'ri savol ↔ muloyim shakli |
-| 3 | LISTEN-MC | Shipper nimani so'rayapti? |
+| 3 | READ-MC | Shipper nimani so'rayapti? |
 | 4 | GAP | "Could you tell me what time the receiver ___ ?" (opens) |
 | 5 | ORDER | "Do / you / when / know / delivery / the / is / ?" |
 | 6 | TYPE | "Where is the dock?" ni muloyim shaklga o'tkazing |
 | 7 | FIX | "Could you tell me where is the pickup?" (so'z tartibi) |
 | 8 | REPLY | Tushunmadingiz: eng mos aniqlashtiruvchi gap |
-| 9 | LISTEN-TYPE | Eshitgan manzildagi ko'cha raqamini yozing |
+| 9 | READ-TYPE | Xabar matnidan manzildagi ko'cha raqamini topib yozing |
 | 10 | SCENE | Shipper bilan 3 ta bilvosita savol berib, talablarni yig'ing |
 
 ### M2L03 — Numbers, Dates and Times
-**Maqsad:** raqam, pul, og'irlik, sana va vaqtni eshitib va aytib to'g'ri ishlatish.
+**Maqsad:** raqam, pul, og'irlik, sana va vaqtni o'qib va aytib to'g'ri ishlatish.
 **Til:** 13/30, 15/50 farqi; $2,350; 42,000 lbs; sana (October 29th); vaqt (8 AM, quarter past, between 8 and 10).
 **Lug'at:** miles, pounds, per mile, window, noon, midnight, a.m./p.m.
 **Dialog:** miles, rate va vaqt oynasi muhokamasi.
@@ -320,13 +320,13 @@ Maqsad: sodda kundalik ish muloqoti: tanishish, so'rash, raqamlarni tushunish, t
 |---:|---|---|
 | 1 | MC | Qaysi raqam aytildi: thirteen yoki thirty? (matnli) |
 | 2 | MATCH | Yozilgan raqam ↔ o'qilishi ($2,350 ↔ two thousand three hundred fifty dollars) |
-| 3 | LISTEN-MC | Eshitgan vaqtni tanlang: 8:15 / 8:50 / 8:30 |
+| 3 | READ-MC | Xabardan vaqtni tanlang: 8:15 / 8:50 / 8:30 |
 | 4 | GAP | "The window is ___ 8 and 10." |
 | 5 | TYPE | Raqamni so'z bilan yozing: 1,450 |
 | 6 | ORDER | "the / is / October / delivery / 29th / on" |
 | 7 | FIX | "We deliver at the 3 PM in October 5." |
 | 8 | SORT | 8 ta ifoda: Pul / Og'irlik / Vaqt / Sana |
-| 9 | LISTEN-TYPE | 3 ta raqamni yozing (rate, miles, weight) |
+| 9 | READ-TYPE | 3 ta raqamni yozing (rate, miles, weight) |
 | 10 | SCENE | Rate, miles va vaqt oynasini aniqlab, to'g'ri raqamlarni qaytarib tasdiqlang |
 
 ### M2L04 — Spelling and Confirming Details
@@ -339,13 +339,13 @@ Maqsad: sodda kundalik ish muloqoti: tanishish, so'rash, raqamlarni tushunish, t
 |---:|---|---|
 | 1 | MATCH | Harf ↔ NATO so'zi (A–Alpha, B–Bravo, C–Charlie, D–Delta, ...) |
 | 2 | MC | "Is that B as in ___ ?" |
-| 3 | LISTEN-MC | Eshitgan NATO so'zlari qaysi harflar? |
-| 4 | LISTEN-TYPE | Harflab aytilgan referens raqamini yozing (masalan, KT-4821) |
+| 3 | READ-MC | Xabardagi NATO so'zlari qaysi harflar? |
+| 4 | READ-TYPE | Harflab yozilgan (NATO) referens raqamini yozing (masalan, KT-4821) |
 | 5 | GAP | "Let me ___ that: your MC number is…" |
 | 6 | TYPE | O'z ismingizni NATO alifbosi bilan yozing (kamida 3 harf) |
 | 7 | FIX | "That is M like Mike?" → "as in" |
 | 8 | ORDER | "Is / that / as / in / Delta / D / ?" |
-| 9 | REPLY | Noto'g'ri eshitilgan harfga mos tuzatish gapi |
+| 9 | REPLY | Noto'g'ri tushunilgan harfga mos tuzatish gapi |
 | 10 | SCENE | Ism, ID va telefon raqamini 3 qadamda tasdiqlash |
 
 ### M2L05 — Making and Answering Phone Calls
@@ -358,13 +358,13 @@ Maqsad: sodda kundalik ish muloqoti: tanishish, so'rash, raqamlarni tushunish, t
 |---:|---|---|
 | 1 | MC | Qo'ng'iroqni yopish uchun eng mos gap |
 | 2 | MATCH | Vaziyat ↔ ibora (kutdirish, ulash, xabar qoldirish) |
-| 3 | LISTEN-MC | Qo'ng'iroq natijasi: ulandi, xabar qoldirildi yoki band? |
+| 3 | READ-MC | Qo'ng'iroq natijasi: ulandi, xabar qoldirildi yoki band? |
 | 4 | GAP | "I'll ___ you to Mr. Brown." (transfer) |
 | 5 | ORDER | "Could / speak / slower / you / a / little / ?" |
 | 6 | FIX | "I am not catch your name." |
 | 7 | REPLY | "He's not available. Can I take a message?" ga javob |
 | 8 | SORT | 8 ibora: Ochish / O'rtada / Yopish |
-| 9 | LISTEN-TYPE | Voicemail dan telefon raqami va ismni yozing |
+| 9 | READ-TYPE | Voicemail transkriptidan telefon raqami va ismni yozing |
 | 10 | SCENE | Noto'g'ri odamga tushdingiz: kerakli odamga ulaning va xabar qoldiring |
 
 ### M2L06 — Filling Out Forms
@@ -377,13 +377,13 @@ Maqsad: sodda kundalik ish muloqoti: tanishish, so'rash, raqamlarni tushunish, t
 |---:|---|---|
 | 1 | MATCH | Qisqartma ↔ to'liq shakli (PU, DEL, FCFS, TBD, ETA, N/A) |
 | 2 | MC | "Consignee" kim? |
-| 3 | LISTEN-MC | Haydovchi qaysi maydon uchun ma'lumot aytayapti? |
+| 3 | READ-MC | Haydovchi qaysi maydon uchun ma'lumot aytayapti? |
 | 4 | FORM | Berilgan 6 ta ma'lumotdan BOL maydonlarini to'ldiring |
 | 5 | GAP | Anketadagi bo'shliqlar: "Date of ___ : 10/29" |
 | 6 | TYPE | Gap ichidagi yo'qolgan atamani yozing (Qty, Wt) |
 | 7 | FIX | Formadagi xato maydonni topish (noto'g'ri sana yoki raqam) |
 | 8 | SORT | 10 ma'lumot qaysi maydonga tegishli: Shipper / Consignee / Commodity |
-| 9 | LISTEN-TYPE | Eshitgan ma'lumotni formaga yozing (PO raqami) |
+| 9 | READ-TYPE | Xabar matnidan ma'lumotni formaga topib yozing (PO raqami) |
 | 10 | SCENE | Haydovchi anketasini 3 qadamda to'ldirish va xatosini tuzatish |
 
 ### M2L07 — Writing Simple Work Emails
@@ -400,9 +400,9 @@ Maqsad: sodda kundalik ish muloqoti: tanishish, so'rash, raqamlarni tushunish, t
 | 4 | GAP | "___ find attached the BOL." (Please) |
 | 5 | TYPE | Muloyim so'rov gapini yozing: "send / rate confirmation" |
 | 6 | FIX | Email'dagi qo'pol/noto'g'ri gapni tuzatish |
-| 7 | LISTEN-TYPE | Eshitgan qisqa xabardan email mavzusini (subject) yozing |
+| 7 | READ-TYPE | Xabar matnidan qisqa xabardan email mavzusini (subject) topib yozing |
 | 8 | REPLY | Brokerning savoliga email javobi qismini tanlash |
-| 9 | LISTEN-MC | Audio xabarni eshitib, unga mos email mavzusini tanlash |
+| 9 | READ-MC | Xabar matnini o'qib, unga mos email mavzusini tanlash |
 | 10 | SCENE | Email'ni 3 qadamda yig'ing: mavzu, asosiy matn, yakun |
 
 ### M2L08 — Confirming Information in Writing + Checkpoint 2
@@ -415,8 +415,8 @@ Maqsad: sodda kundalik ish muloqoti: tanishish, so'rash, raqamlarni tushunish, t
 |---:|---|---|
 | 1 | MC | "As discussed" qachon ishlatiladi? |
 | 2 | MATCH | Qo'ng'iroq ma'lumotlari ↔ email satrlari |
-| 3 | LISTEN-MC | Qo'ng'iroqdagi kelishuvni to'g'ri aks ettirgan xulosani tanlang |
-| 4 | LISTEN-TYPE | Eshitgan pickup vaqti va rate ni yozing |
+| 3 | READ-MC | Qo'ng'iroqdagi kelishuvni to'g'ri aks ettirgan xulosani tanlang |
+| 4 | READ-TYPE | Xabar matnidan pickup vaqti va rate ni topib yozing |
 | 5 | GAP | "Just to ___ , pickup is Friday at 8." |
 | 6 | ORDER | Tasdiqlash email'i satrlarini tartiblash |
 | 7 | FIX | Email'dagi noto'g'ri raqam yoki sanani topish |
@@ -441,12 +441,12 @@ Maqsad: ishga oid hujjat va vaziyatlarni **o'qish, tushunish, savol berish va yo
 | 1 | MATCH | Qisqartma ↔ ma'nosi |
 | 2 | MC | E'londan: yuk qayerdan qayerga? |
 | 3 | MC | E'londan: qanday equipment kerak? |
-| 4 | LISTEN-MC | Broker e'lonni o'qiydi: qaysi load haqida? |
+| 4 | READ-MC | Broker e'loni matni: qaysi load haqida? |
 | 5 | SORT | Ma'lumotlarni guruhlash: Joy / Pul / Yuk / Vaqt |
 | 6 | TYPE | E'londan rate per mile ni hisoblab yozing |
 | 7 | FIX | Load haqidagi xulosadagi xatoni topish |
 | 8 | GAP | E'lon matnidagi bo'sh joylarni to'ldirish |
-| 9 | LISTEN-TYPE | Eshitgan load raqami va masofani yozing |
+| 9 | READ-TYPE | Xabar matnidan load raqami va masofani topib yozing |
 | 10 | SCENE | 3 ta e'londan eng mosini tanlang va brokerga 2 ta aniqlashtiruvchi savol bering |
 
 ### M3L02 — Reading Rate Confirmations
@@ -460,12 +460,12 @@ Maqsad: ishga oid hujjat va vaziyatlarni **o'qish, tushunish, savol berish va yo
 | 1 | MATCH | Atama ↔ ma'nosi (TONU, Net 30, accessorial, line haul) |
 | 2 | MC | Detention qachon boshlanadi? (hujjatdan) |
 | 3 | MC | To'lov muddati qancha? |
-| 4 | LISTEN-MC | Brokerning rate con haqidagi izohini eshitib, mos bandni tanlang |
+| 4 | READ-MC | Brokerning rate con haqidagi izohini o'qib, mos bandni tanlang |
 | 5 | SORT | Bandlar: Pul / Majburiyat / Vaqt / Hujjat |
 | 6 | TYPE | Hujjatdan umumiy summani (line haul + fuel) hisoblab yozing |
 | 7 | FIX | Hujjat bilan mos kelmaydigan gapni topish |
 | 8 | GAP | Rate con gapidagi yo'qolgan atamani to'ldirish |
-| 9 | LISTEN-TYPE | Eshitgan check call vaqtini yozing |
+| 9 | READ-TYPE | Xabar matnidan check call vaqtini topib yozing |
 | 10 | SCENE | Rate con'da noaniq band bor: brokerdan 2 ta savol bilan aniqlashtiring |
 
 ### M3L03 — Pickup and Delivery Details
@@ -478,13 +478,13 @@ Maqsad: ishga oid hujjat va vaziyatlarni **o'qish, tushunish, savol berish va yo
 |---:|---|---|
 | 1 | MATCH | Atama ↔ ma'nosi (FCFS, appointment, seal, lumper) |
 | 2 | MC | Instruktsiyadan: qachon yetib kelish kerak? |
-| 3 | LISTEN-MC | Receiver ish vaqti qachon? |
+| 3 | READ-MC | Receiver ish vaqti qachon? |
 | 4 | ORDER | Check-in qadamlarini tartiblash |
 | 5 | GAP | "Report to door ___ and give the PU number." |
 | 6 | SORT | Ma'lumotlar: Pickup / Delivery / Ikkalasi uchun |
 | 7 | FIX | Instruktsiyani noto'g'ri tushungan xulosani topish |
 | 8 | TYPE | Seal va PU raqamlarini matndan topib yozing |
-| 9 | LISTEN-TYPE | Eshitgan dock raqami va vaqtni yozing |
+| 9 | READ-TYPE | Xabar matnidan dock raqami va vaqtni topib yozing |
 | 10 | SCENE | Yetib keldingiz, ish vaqti tugagan: 3 qadamda muammoni hal qiling |
 
 ### M3L04 — Asking for Updates
@@ -497,13 +497,13 @@ Maqsad: ishga oid hujjat va vaziyatlarni **o'qish, tushunish, savol berish va yo
 |---:|---|---|
 | 1 | MC | Holatni so'rash uchun eng mos savol |
 | 2 | MATCH | So'rov ↔ mos javob |
-| 3 | LISTEN-MC | Haydovchining holati: yuklangan, yo'lda yoki kutmoqda? |
+| 3 | READ-MC | Haydovchining holati: yuklangan, yo'lda yoki kutmoqda? |
 | 4 | GAP | "I'm 30 minutes ___ ." (out) |
 | 5 | ORDER | "have / Have / loaded / you / been / yet / ?" |
 | 6 | TYPE | Qisqa SMS yozing: "ETA 4 PM, no issues" (to'liq gap shaklida) |
 | 7 | FIX | "Where you are now?" |
 | 8 | REPLY | "What's your ETA?" ga eng aniq javob |
-| 9 | LISTEN-TYPE | Eshitgan ETA va joy nomini yozing |
+| 9 | READ-TYPE | Xabar matnidan ETA va joy nomini topib yozing |
 | 10 | SCENE | Check call: 3 ta savol va aniq javoblar |
 
 ### M3L05 — Explaining Delays and Problems
@@ -516,13 +516,13 @@ Maqsad: ishga oid hujjat va vaziyatlarni **o'qish, tushunish, savol berish va yo
 |---:|---|---|
 | 1 | MC | "___ the snow, we're running late." (Due to / Because / So) |
 | 2 | MATCH | Sabab ↔ mos ibora |
-| 3 | LISTEN-MC | Kechikish sababi va yangi ETA nima? |
+| 3 | READ-MC | Kechikish sababi va yangi ETA nima? |
 | 4 | GAP | "We were ___ up at the shipper for two hours." |
 | 5 | ORDER | "I / for / apologize / the / delay" |
 | 6 | TYPE | Kechikish sababini bir gapda yozing (because bilan) |
 | 7 | FIX | "Because of the truck broke down, we are late." |
 | 8 | SORT | 8 gap: Sabab / Natija / Uzr / Va'da |
-| 9 | LISTEN-TYPE | Eshitgan sabab va yangi vaqtni yozing |
+| 9 | READ-TYPE | Xabar matnidan sabab va yangi vaqtni topib yozing |
 | 10 | SCENE | Brokerga kechikishni tushuntiring: sabab, yangi ETA, yechim |
 
 ### M3L06 — Writing Professional Updates
@@ -539,9 +539,9 @@ Maqsad: ishga oid hujjat va vaziyatlarni **o'qish, tushunish, savol berish va yo
 | 4 | GAP | Xabardagi bo'shliqlarni to'ldirish |
 | 5 | TYPE | Berilgan ma'lumotdan 2 gaplik update yozing |
 | 6 | FIX | Xabardagi qo'pol yoki keraksiz gapni topib almashtirish |
-| 7 | LISTEN-TYPE | Eshitgan holatdan yangi ETA va sababni yozing |
+| 7 | READ-TYPE | Xabar matnidan holatdan yangi ETA va sababni topib yozing |
 | 8 | REPLY | Brokerning savoliga yozma javobni tanlash |
-| 9 | LISTEN-MC | Audio holatdan mos yozma xabarni tanlash |
+| 9 | READ-MC | Holat matnidan mos yozma xabarni tanlash |
 | 10 | SCENE | Muammodan so'ng 3 qadamda xabarni yig'ish va yuborish |
 
 ### M3L07 — Clarifying Instructions
@@ -554,13 +554,13 @@ Maqsad: ishga oid hujjat va vaziyatlarni **o'qish, tushunish, savol berish va yo
 |---:|---|---|
 | 1 | MC | Aniqlashtirish uchun eng mos gap |
 | 2 | MATCH | Vaziyat ↔ ibora |
-| 3 | LISTEN-MC | Ko'rsatma: nima qilish kerak? |
+| 3 | READ-MC | Ko'rsatma: nima qilish kerak? |
 | 4 | GAP | "Just to ___ sure, I need to call first?" |
 | 5 | ORDER | "So / need / I / to / go / door / to / 5" |
 | 6 | TYPE | Ko'rsatmani o'z so'zingiz bilan qaytaring (paraphrase) |
 | 7 | FIX | Noto'g'ri tushungan xulosani topish |
 | 8 | REPLY | Noaniq ko'rsatmadan keyingi eng yaxshi savol |
-| 9 | LISTEN-TYPE | Eshitgan ko'rsatmadagi raqam va vaqtni yozing |
+| 9 | READ-TYPE | Xabar matnidan ko'rsatmadagi raqam va vaqtni topib yozing |
 | 10 | SCENE | Murakkab ko'rsatma: 3 qadamda aniqlashtirish va tasdiqlash |
 
 ### M3L08 — Handling Workplace Scenarios + Checkpoint 3
@@ -572,13 +572,13 @@ Maqsad: ishga oid hujjat va vaziyatlarni **o'qish, tushunish, savol berish va yo
 |---:|---|---|
 | 1 | MC | Stsenariy: BOL yo'q. Birinchi qadam? |
 | 2 | MATCH | Muammo ↔ to'g'ri harakat |
-| 3 | LISTEN-MC | Muammo audiosi: nima yuz berdi? |
+| 3 | READ-MC | Muammo xabari: nima yuz berdi? |
 | 4 | SORT | Harakatlar: Darhol / Keyinroq / Kerak emas |
 | 5 | TYPE | Muammo haqida qisqa xabar yozing |
 | 6 | FIX | Muammoni noto'g'ri hal qilgan javobni topish |
 | 7 | GAP | Hujjatdan topilgan ma'lumot bilan gapni to'ldirish |
 | 8 | REPLY | Brokerning javobiga mos keyingi gap |
-| 9 | LISTEN-TYPE | Eshitgan yangi manzilni yozing |
+| 9 | READ-TYPE | Xabar matnidan yangi manzilni topib yozing |
 | 10 | SCENE | O'qish → so'rash → yozma tasdiqlash: to'liq 3 qadamli stsenariy |
 
 ---
@@ -597,13 +597,13 @@ Maqsad: tez, aniq va professional logistika muloqoti. Yangi grammatika yo'q, mav
 |---:|---|---|
 | 1 | MC | Qo'ng'iroqni boshlash uchun eng professional gap |
 | 2 | MATCH | Broker iborasi ↔ ma'nosi (covered, available, tendering) |
-| 3 | LISTEN-MC | Tez nutq: yuk hali bormi? |
-| 4 | LISTEN-MC | Broker nima talab qilmoqda: MC raqami, sug'urta yoki hujjat? |
+| 3 | READ-MC | Brokerning tez yozilgan xabari (qisqartmalar bilan): yuk hali bormi? |
+| 4 | READ-MC | Broker nima talab qilmoqda: MC raqami, sug'urta yoki hujjat? |
 | 5 | GAP | "I'm calling ___ your load from Dallas to Atlanta." |
 | 6 | ORDER | "Is / still / it / available / the / load / ?" |
 | 7 | FIX | Noto'g'ri yoki qo'pol so'rovni tuzatish |
 | 8 | REPLY | "It's still open, what's your MC?" ga javob |
-| 9 | LISTEN-TYPE | Eshitgan lane (shahar–shahar) va rate ni yozing |
+| 9 | READ-TYPE | Xabar matnidan lane (shahar–shahar) va rate ni topib yozing |
 | 10 | SCENE | Brokerga qo'ng'iroq: 3 qadamda load haqida to'liq ma'lumot oling |
 
 ### M4L02 — Load Booking Conversations
@@ -616,13 +616,13 @@ Maqsad: tez, aniq va professional logistika muloqoti. Yangi grammatika yo'q, mav
 |---:|---|---|
 | 1 | MC | Yukni olishga rozilik bildirish gapi |
 | 2 | MATCH | Bosqich ↔ gap (taklif, rozilik, tasdiq, hujjat) |
-| 3 | LISTEN-MC | Broker nimani tasdiqladi? |
+| 3 | READ-MC | Broker nimani tasdiqladi? |
 | 4 | ORDER | Booking bosqichlarini tartiblash |
 | 5 | GAP | "I ___ cover that load." |
 | 6 | TYPE | Rate con yuborishni so'rang (muloyim gap) |
 | 7 | FIX | Muloyim emas yoki noto'g'ri band qilish gapini tuzatish |
 | 8 | REPLY | "Can you send driver info?" ga javob |
-| 9 | LISTEN-TYPE | Eshitgan email va PU vaqtini yozing |
+| 9 | READ-TYPE | Xabar matnidan email va PU vaqtini topib yozing |
 | 10 | SCENE | Yukni to'liq band qiling: taklif, shartlar, hujjatlar |
 
 ### M4L03 — Rate Negotiation
@@ -635,13 +635,13 @@ Maqsad: tez, aniq va professional logistika muloqoti. Yangi grammatika yo'q, mav
 |---:|---|---|
 | 1 | MC | Eng professional qarshi taklif qaysi? |
 | 2 | MATCH | Taktika ↔ ibora (taklif, dalil, murosa, yakun) |
-| 3 | LISTEN-MC | Broker taklifi: summa va shart nima? |
+| 3 | READ-MC | Broker taklifi: summa va shart nima? |
 | 4 | GAP | "The best I can ___ is $2,600." |
 | 5 | ORDER | "meet / you / Can / me / at / $2,700 / ?" |
 | 6 | TYPE | Dalil bilan rad etish gapini yozing (deadhead/fuel) |
 | 7 | FIX | Qo'pol yoki keraksiz kuchli gapni professional shaklga o'tkazish |
 | 8 | REPLY | "That's all I have." ga javob |
-| 9 | LISTEN-TYPE | Eshitgan oxirgi summani yozing |
+| 9 | READ-TYPE | Xabar matnidan oxirgi summani topib yozing |
 | 10 | SCENE | 3 raundli muzokara: boshlang'ich, qarshi taklif, kelishuv |
 
 ### M4L04 — Communicating with Drivers
@@ -654,13 +654,13 @@ Maqsad: tez, aniq va professional logistika muloqoti. Yangi grammatika yo'q, mav
 |---:|---|---|
 | 1 | MC | Eng aniq ko'rsatma qaysi? |
 | 2 | MATCH | Ko'rsatma ↔ maqsad |
-| 3 | LISTEN-MC | Haydovchi nima haqida xabar bermoqda? |
+| 3 | READ-MC | Haydovchi nima haqida xabar bermoqda? |
 | 4 | GAP | "___ forget to get the POD." (Don't) |
 | 5 | ORDER | "me / Call / you / when / get / there" |
 | 6 | TYPE | Haydovchiga 2 ta qisqa ko'rsatma yozing |
 | 7 | FIX | Noaniq yoki uzun ko'rsatmani aniqlashtirish |
 | 8 | REPLY | Haydovchi: "I'm out of hours." ga javob |
-| 9 | LISTEN-TYPE | Eshitgan joy va qolgan soatlarni yozing |
+| 9 | READ-TYPE | Xabar matnidan joy va qolgan soatlarni topib yozing |
 | 10 | SCENE | Yo'lda muammo: ko'rsatma, tasdiq, keyingi qadam |
 
 ### M4L05 — Pickup and Delivery Coordination
@@ -673,13 +673,13 @@ Maqsad: tez, aniq va professional logistika muloqoti. Yangi grammatika yo'q, mav
 |---:|---|---|
 | 1 | MC | Appointment ni o'zgartirish uchun mos so'rov |
 | 2 | MATCH | Vaziyat ↔ ibora |
-| 3 | LISTEN-MC | Shipper yangi vaqtni nima dedi? |
+| 3 | READ-MC | Shipper yangi vaqtni nima dedi? |
 | 4 | GAP | "Can we ___ the appointment to 10 AM?" |
 | 5 | ORDER | "Please / the / time / confirm / new" |
 | 6 | TYPE | Yangi vaqtni tasdiqlovchi gap yozing |
 | 7 | FIX | Noto'g'ri vaqt/sana bilan tasdiqni tuzatish |
 | 8 | REPLY | "We can only take him at 2 PM." ga javob |
-| 9 | LISTEN-TYPE | Eshitgan eshik raqami va vaqtni yozing |
+| 9 | READ-TYPE | Xabar matnidan eshik raqami va vaqtni topib yozing |
 | 10 | SCENE | Shipper va receiver bilan ikki appointment ni kelishish |
 
 ### M4L06 — Handling Delays and Emergencies
@@ -692,13 +692,13 @@ Maqsad: tez, aniq va professional logistika muloqoti. Yangi grammatika yo'q, mav
 |---:|---|---|
 | 1 | MC | Favqulodda xabarni boshlash uchun eng mos gap |
 | 2 | MATCH | Vaziyat ↔ birinchi qadam |
-| 3 | LISTEN-MC | Haydovchi: nima yuz berdi va u xavfsizmi? |
+| 3 | READ-MC | Haydovchi: nima yuz berdi va u xavfsizmi? |
 | 4 | ORDER | Xabar tuzilmasini tartiblash: situation → action → update |
 | 5 | GAP | "Here's what we're ___ ." (doing) |
 | 6 | TYPE | 2 gaplik favqulodda xabar yozing |
 | 7 | FIX | Vahimali yoki noaniq xabarni professional shaklga o'tkazish |
 | 8 | REPLY | Broker: "Can you still make it?" ga javob |
-| 9 | LISTEN-TYPE | Eshitgan joy va tow vaqtini yozing |
+| 9 | READ-TYPE | Xabar matnidan joy va tow vaqtini topib yozing |
 | 10 | SCENE | Breakdown: brokerga, haydovchiga va receiverga 3 xil xabar |
 
 ### M4L07 — Resolving Disputes Professionally
@@ -711,13 +711,13 @@ Maqsad: tez, aniq va professional logistika muloqoti. Yangi grammatika yo'q, mav
 |---:|---|---|
 | 1 | MC | Bahsda eng professional boshlanish |
 | 2 | MATCH | Ibora ↔ vazifa (tushunish, dalil, taklif, yakun) |
-| 3 | LISTEN-MC | Broker nimaga e'tiroz bildirmoqda? |
+| 3 | READ-MC | Broker nimaga e'tiroz bildirmoqda? |
 | 4 | GAP | "According ___ the rate con, detention starts after 2 hours." |
 | 5 | ORDER | "Let's / a / find / solution" |
 | 6 | TYPE | Dalil bilan javob yozing: hujjatga tayanib |
 | 7 | FIX | Hujumkor gapni professional shaklga o'tkazish |
 | 8 | REPLY | "We don't pay detention." ga javob |
-| 9 | LISTEN-TYPE | Eshitgan summa va vaqtni yozing |
+| 9 | READ-TYPE | Xabar matnidan summa va vaqtni topib yozing |
 | 10 | SCENE | Detention bahsi: tushuntirish, dalil, murosa |
 
 ### M4L08 — Full Logistics Communication Simulation + Final Assessment
@@ -733,8 +733,8 @@ Maqsad: tez, aniq va professional logistika muloqoti. Yangi grammatika yo'q, mav
 | 4 | SCENE | 4-qism: kechikish haqida xabar |
 | 5 | SCENE | 5-qism: bahs va murosa |
 | 6 | TYPE | Yakuniy tasdiqlovchi email yozing |
-| 7 | LISTEN-MC | Aralash audio: 3 ta vaziyatni aniqlash |
-| 8 | LISTEN-TYPE | Aralash audio: raqam, ism va vaqt diktanti |
+| 7 | READ-MC | Aralash xabarlar: 3 ta vaziyatni aniqlash |
+| 8 | READ-TYPE | Aralash xabarlar: raqam, ism va vaqt topib yozishi |
 | 9 | FIX | 5 ta mintaqaviy xatoni topish va tuzatish |
 | 10 | SCENE | Yakuniy: to'liq muloqot zanjiri (boshidan oxirigacha) |
 
@@ -742,7 +742,7 @@ Maqsad: tez, aniq va professional logistika muloqoti. Yangi grammatika yo'q, mav
 
 ## 9. Keyingi qadamlar (kontent ishlab chiqarish)
 
-1. Har dars uchun dialog audio skriptlari (Intro + 32 dars, jami taxminan 40–60 ta audio).
+1. Har dars uchun matnli dialog skriptlari (Intro + 32 dars, jami taxminan 40–60 ta, audiosiz).
 2. Phrase bank (har darsning 5–8 ta iborasi) va lug'at ro'yxati (jami ~250 atama).
 3. Birinchi namunaviy dars (tavsiya: `M1L01`) to'liq tayyorlanadi: 1 Learn + 10 Practice.
 4. Kirish testi (placement) va 3 ta checkpoint testining savol banki.

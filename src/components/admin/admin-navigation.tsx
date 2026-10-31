@@ -22,6 +22,7 @@ export function AdminNavigation() {
   const items = [
     { href: "/admin", label: "Boshqaruv paneli", icon: "dashboard", active: pathname === "/admin" },
     { href: "/admin/students", label: "O‘quvchilar", icon: "students", active: pathname.startsWith("/admin/students") },
+    { href: "/admin/intro", label: "Intro darsi", icon: "book", active: pathname.startsWith("/admin/intro") },
     { href: "/admin/courses", label: "Kurslar", icon: "courses", active: pathname.startsWith("/admin/courses") },
     { href: "/admin#growth", label: "O‘sish", icon: "growth", active: false },
     { href: "/admin#recent-activity", label: "So‘nggi amallar", icon: "activity", active: false },
