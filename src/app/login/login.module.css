@@ -1,0 +1,113 @@
+.stage {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  min-height: 100svh;
+  place-items: center;
+  overflow: hidden;
+  padding: 48px 20px;
+  background:
+    radial-gradient(ellipse 50% 55% at 50% -14%, rgb(184 129 74 / 27%), transparent 76%),
+    radial-gradient(ellipse 35% 45% at -6% 54%, rgb(212 175 124 / 15%), transparent 76%),
+    radial-gradient(ellipse 37% 42% at 104% 68%, rgb(184 129 74 / 20%), transparent 77%),
+    #0d1114;
+}
+
+.stage::before,
+.stage::after {
+  position: absolute;
+  z-index: -1;
+  width: min(58vw, 750px);
+  aspect-ratio: 1;
+  border: 1px solid rgb(212 175 124 / 10%);
+  border-radius: 50%;
+  content: "";
+  pointer-events: none;
+}
+
+.stage::before { top: -34%; left: -22%; box-shadow: 0 0 100px rgb(184 129 74 / 12%), inset 0 0 80px rgb(212 175 124 / 4%); }
+.stage::after { right: -26%; bottom: -48%; box-shadow: 0 0 120px rgb(184 129 74 / 15%), inset 0 0 80px rgb(212 175 124 / 4%); }
+
+.ambient { position: absolute; z-index: -1; inset: 0; overflow: hidden; pointer-events: none; }
+.waves { position: absolute; inset: 0; width: 100%; height: 100%; opacity: .9; }
+
+.orb {
+  position: absolute;
+  width: var(--size);
+  height: var(--size);
+  border: 1px solid rgb(244 241 232 / 32%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 32% 27%, rgb(244 241 232 / 43%), rgb(212 175 124 / 17%) 29%, rgb(184 129 74 / 5%) 62%, transparent 74%);
+  box-shadow: inset -8px -11px 18px rgb(13 17 20 / 55%), 0 0 22px rgb(212 175 124 / 19%);
+}
+.orbOne { --size: 67px; top: 22%; left: 19%; }
+.orbTwo { --size: 38px; top: 16%; right: 23%; }
+.orbThree { --size: 92px; right: 12%; bottom: 12%; }
+.orbFour { --size: 29px; left: 12%; bottom: 22%; }
+.orbFive { --size: 19px; right: 9%; top: 33%; }
+
+.panel {
+  position: relative;
+  width: min(100%, 458px);
+  padding: 42px 42px 44px;
+  border: 1px solid rgb(244 241 232 / 42%);
+  border-radius: 26px;
+  background: linear-gradient(133deg, rgb(244 241 232 / 14%), rgb(22 27 31 / 66%) 43%, rgb(22 27 31 / 79%));
+  box-shadow: 0 28px 80px rgb(0 0 0 / 42%), 0 0 52px rgb(184 129 74 / 19%), inset 0 1px 0 rgb(244 241 232 / 28%), inset 0 -1px 0 rgb(212 175 124 / 21%);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.panel::before {
+  position: absolute;
+  inset: -1px;
+  z-index: -1;
+  border-radius: inherit;
+  background: radial-gradient(circle at 50% 0, rgb(212 175 124 / 16%), transparent 58%);
+  content: "";
+  pointer-events: none;
+}
+
+.logo { display: block; width: 222px; max-width: 75%; margin: 0 auto 34px; }
+.heading { margin-bottom: 32px; text-align: center; }
+.heading h1 { color: #f4f1e8; font-size: clamp(2rem, 5vw, 2.6rem); font-weight: 700; letter-spacing: -.045em; line-height: 1.1; text-shadow: 0 0 22px rgb(212 175 124 / 30%); }
+.heading p { max-width: 33ch; margin: 12px auto 0; color: #a7a7a7; font-size: .9rem; line-height: 1.6; }
+
+.formWrap :global(form) { display: grid; gap: 19px; }
+.formWrap :global(form > div) { margin: 0; }
+.formWrap :global(label) { display: block; margin-bottom: 9px; color: #f4f1e8; font-size: .82rem; font-weight: 600; letter-spacing: .02em; }
+.formWrap :global(input) {
+  height: 54px;
+  border: 1px solid rgb(244 241 232 / 65%);
+  border-radius: 999px;
+  background: rgb(13 17 20 / 43%);
+  padding: 0 19px;
+  color: #f4f1e8;
+  box-shadow: inset 0 1px 0 rgb(244 241 232 / 7%), 0 0 0 1px rgb(212 175 124 / 7%);
+}
+.formWrap :global(input::placeholder) { color: #a7a7a7; }
+.formWrap :global(input:focus) { border-color: #d4af7c; box-shadow: 0 0 0 3px rgb(212 175 124 / 21%), 0 0 23px rgb(212 175 124 / 19%); }
+.formWrap :global(button[type="submit"]) {
+  position: relative;
+  height: 55px;
+  margin-top: 7px;
+  border-color: #d4af7c;
+  border-radius: 999px;
+  background: #d4af7c;
+  color: #0d1114;
+  box-shadow: 0 6px 25px rgb(212 175 124 / 32%), 0 0 34px rgb(212 175 124 / 18%);
+  font-size: .95rem;
+  font-weight: 800;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+}
+.formWrap :global(button[type="submit"]:hover) { background: #b8814a; border-color: #b8814a; }
+
+@media (max-width: 560px) {
+  .stage { padding: 28px 16px; }
+  .panel { padding: 36px 25px 38px; border-radius: 23px; }
+  .logo { width: 205px; margin-bottom: 30px; }
+  .heading { margin-bottom: 27px; }
+  .orbOne { left: -7%; }
+  .orbThree { right: -10%; }
+}
