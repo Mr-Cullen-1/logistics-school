@@ -2,27 +2,21 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 import { LearnIcon, type LearnIconName } from "@/components/learn/learn-icon";
 import { getLearnText, type LearnLocale } from "@/lib/learn/translations";
 import styles from "@/app/learn/learn.module.css";
 
-const items: { key: keyof ReturnType<typeof getLearnText>["nav"]; icon: LearnIconName; href?: string }[] = [
-  { key: "dashboard", icon: "dashboard", href: "/learn" },
-  { key: "courses", icon: "courses", href: "/learn#my-courses" },
-  { key: "lessons", icon: "lessons" },
-  { key: "exams", icon: "exams" },
-  { key: "certificates", icon: "certificates" },
-  { key: "progress", icon: "progress", href: "/learn#weekly-progress" },
-  { key: "resources", icon: "resources" },
-  { key: "achievements", icon: "trophy", href: "/learn/profile#achievements" },
-  { key: "profile", icon: "profile", href: "/learn/profile" },
-];
+type NavKey = keyof ReturnType<typeof getLearnText>["nav"];
+type NavItem = { key: NavKey; icon: LearnIconName; href?: string };
+type Group = "courses" | "progress";
 
-export function LearnNavigation({ locale }: { locale: LearnLocale }) {
+export function LearnNavigation({ locale, introHref }: { locale: LearnLocale; introHref: string | null }) {
   const t = getLearnText(locale);
   const pathname = usePathname();
+  const [open, setOpen] = useState<Record<Group, boolean>>({ courses: false, progress: false });
+
   useEffect(() => {
     const frame = requestAnimationFrame(() => {
       const section = window.location.hash.slice(1);
@@ -31,16 +25,41 @@ export function LearnNavigation({ locale }: { locale: LearnLocale }) {
     });
     return () => cancelAnimationFrame(frame);
   }, [pathname]);
-  return <nav className={styles.nav} aria-label={t.nav.profile}>
-    {items.map((item) => {
-      const active = item.key === "dashboard" ? pathname === "/learn" : item.key === "courses" ? pathname.startsWith("/learn/") && pathname !== "/learn/profile" : item.key === "profile" && pathname === "/learn/profile";
-      const content = <><LearnIcon name={item.icon} size={19} /><span>{t.nav[item.key]}</span>{!item.href && <small>{t.nav.soon}</small>}</>;
-      return item.href
-        ? <Link key={item.key} href={item.href} className={active ? styles.navActive : undefined} aria-current={active ? "page" : undefined} onClick={() => {
-          if (item.href?.startsWith(`${pathname}#`)) requestAnimationFrame(() => document.getElementById(item.href!.split("#")[1])?.scrollIntoView({ block: "start" }));
-          else if (item.href === pathname) requestAnimationFrame(() => document.getElementById("learn-content")?.scrollTo({ top: 0 }));
-        }}>{content}</Link>
-        : <span key={item.key} className={styles.navDisabled} aria-disabled="true">{content}</span>;
-    })}
+
+  function navigate(href: string) {
+    if (href.startsWith(`${pathname}#`)) requestAnimationFrame(() => document.getElementById(href.split("#")[1])?.scrollIntoView({ block: "start" }));
+    else if (href === pathname) requestAnimationFrame(() => document.getElementById("learn-content")?.scrollTo({ top: 0 }));
+  }
+
+  function item({ key, icon, href }: NavItem) {
+    const active = key === "dashboard" ? pathname === "/learn" : key === "profile" && pathname === "/learn/profile";
+    const content = <><LearnIcon name={icon} size={18} /><span>{t.nav[key]}</span>{!href && <small>{t.nav.soon}</small>}</>;
+    return href
+      ? <Link key={key} href={href} className={active ? styles.navActive : undefined} aria-current={active ? "page" : undefined} onClick={() => navigate(href)}>{content}</Link>
+      : <span key={key} className={styles.navDisabled} aria-disabled="true">{content}</span>;
+  }
+
+  function group(key: Group, icon: LearnIconName, children: NavItem[]) {
+    return <div className={styles.navGroup} key={key}>
+      <button type="button" className={styles.navToggle} aria-expanded={open[key]} aria-controls={`learn-nav-${key}`} onClick={() => setOpen((current) => ({ ...current, [key]: !current[key] }))}>
+        <LearnIcon name={icon} size={19} /><span>{t.nav[key]}</span><span className={`${styles.navChevron} ${open[key] ? styles.navChevronOpen : ""}`} aria-hidden="true" />
+      </button>
+      <div id={`learn-nav-${key}`} className={styles.navSubitems} hidden={!open[key]}>{children.map(item)}</div>
+    </div>;
+  }
+
+  return <nav className={styles.nav} aria-label={locale === "ru" ? "Навигация студента" : locale === "en" ? "Student navigation" : "O‘quvchi navigatsiyasi"}>
+    {item({ key: "dashboard", icon: "dashboard", href: "/learn" })}
+    {group("courses", "courses", [
+      { key: "intro", icon: "play", href: introHref || undefined },
+      { key: "lessons", icon: "lessons" },
+      { key: "exams", icon: "exams" },
+      { key: "resources", icon: "resources" },
+    ])}
+    {group("progress", "progress", [
+      { key: "certificates", icon: "certificates" },
+      { key: "achievements", icon: "trophy", href: "/learn/profile#achievements" },
+    ])}
+    {item({ key: "profile", icon: "profile", href: "/learn/profile" })}
   </nav>;
 }

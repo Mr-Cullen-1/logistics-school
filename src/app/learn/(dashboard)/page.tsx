@@ -7,7 +7,7 @@ import { courses, enrollments, lessons, modules, progress, studentProfiles } fro
 import { requireReadyUser } from "@/lib/auth/current-user";
 import { activeCourseAccess } from "@/lib/courses/access";
 import { getLearnText } from "@/lib/learn/translations";
-import styles from "./learn.module.css";
+import styles from "../learn.module.css";
 
 function tashkentDay(date: Date) {
   const parts = Object.fromEntries(new Intl.DateTimeFormat("en-US", { timeZone: "Asia/Tashkent", year: "numeric", month: "2-digit", day: "2-digit" }).formatToParts(date).map((part) => [part.type, part.value]));
@@ -34,7 +34,7 @@ export default async function LearnPage() {
   const locale = studentProfile?.locale === "ru" || studentProfile?.locale === "en" ? studentProfile.locale : "uz";
   const t = getLearnText(locale).dashboard;
   const soon = getLearnText(locale).nav.soon;
-  const [intro] = await db.select({ id: lessons.id, courseId: modules.courseId }).from(lessons).innerJoin(modules, eq(lessons.moduleId, modules.id)).where(and(eq(lessons.code, "INTRO"), eq(lessons.status, "published"))).limit(1);
+  const [intro] = await db.select({ id: lessons.id, title: lessons.title, courseId: modules.courseId, completedAt: progress.completedAt }).from(lessons).innerJoin(modules, eq(lessons.moduleId, modules.id)).leftJoin(progress, and(eq(progress.lessonId, lessons.id), eq(progress.studentId, user.id))).where(and(eq(lessons.code, "INTRO"), eq(lessons.status, "published"))).limit(1);
 
   const lessonRows = available.length ? await db.select({
     id: lessons.id,
@@ -67,9 +67,8 @@ export default async function LearnPage() {
       <div className={styles.heroText}><p className={styles.heroEyebrow}>{t.eyebrow}</p><h1 id="welcome-title">{greeting}, {firstName}! <span aria-hidden="true">👋</span></h1><p>{t.subtitle}</p><blockquote>“{t.quote}”</blockquote></div>
       <div className={styles.heroCourse}>
         <span className={styles.heroCourseLabel}><LearnIcon name="courses" size={17} /> {t.continue}</span>
-        <strong>{featured?.title || t.noCourses}</strong>
-        {featured && <><div className={styles.progressLine}><span style={{ width: `${featured.percent}%` }} /></div><span className={styles.heroPercent}>{featured.percent}%</span><Link href={`/learn/${featured.id}`} className={styles.goldButton}>{t.openCourse} <LearnIcon name="arrow" size={17} /></Link></>}
-        {!featured && <p>{t.noCoursesHelp}</p>}
+        <strong>{intro?.title || featured?.title || t.noCourses}</strong>
+        {intro ? <><p>{locale === "ru" ? "Бесплатный вводный урок · открыт всем студентам" : locale === "en" ? "Free introduction · open to every student" : "Bepul kirish darsi · barcha o‘quvchilar uchun ochiq"}</p><Link href={`/learn/${intro.courseId}/${intro.id}`} className={`${styles.goldButton} ${styles.heroIntroButton}`}>{intro.completedAt ? (locale === "ru" ? "Смотреть снова" : locale === "en" ? "Watch again" : "Qayta ko‘rish") : (locale === "ru" ? "Открыть урок" : locale === "en" ? "Open Intro" : "Intro darsini ochish")} <LearnIcon name="arrow" size={17} /></Link></> : featured ? <><div className={styles.progressLine}><span style={{ width: `${featured.percent}%` }} /></div><span className={styles.heroPercent}>{featured.percent}%</span><Link href={`/learn/${featured.id}`} className={styles.goldButton}>{t.openCourse} <LearnIcon name="arrow" size={17} /></Link></> : <p>{t.noCoursesHelp}</p>}
       </div>
     </section>
 
@@ -79,8 +78,6 @@ export default async function LearnPage() {
       <Link href="#weekly-progress" className={styles.stat}><span className={styles.statIcon}><LearnIcon name="progress" size={26} /></span><span><strong>{overall}%</strong><small>{t.overallProgress}</small></span><span className={styles.statArrow}>›</span></Link>
       <div className={`${styles.stat} ${styles.statDisabled}`} aria-disabled="true"><span className={styles.statIcon}><LearnIcon name="certificates" size={26} /></span><span><strong>—</strong><small>{t.certificates} · {soon}</small></span></div>
     </section>
-    {intro && <div className="mb-4 rounded-xl border border-amber-200 bg-amber-50 px-5 py-4"><strong>English for Logistics: The Why</strong><p className="mt-1 text-sm text-stone-600">Bepul kirish darsi</p><Link className="mt-2 inline-block text-sm font-semibold text-amber-900 underline" href={`/learn/${intro.courseId}/${intro.id}`}>Intro darsini ochish →</Link></div>}
-
     <div className={styles.dashboardGrid}>
       <section id="my-courses" className={`${styles.panel} ${styles.coursesPanel}`} aria-labelledby="my-courses-title">
         <div className={styles.panelHeader}><h2 id="my-courses-title">{t.myCourses}</h2><span>{courseCards.length} {t.courseCount}</span></div>

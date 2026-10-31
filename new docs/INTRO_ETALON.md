@@ -40,7 +40,7 @@ Intro darsi mazmuni bo'yicha alohida, lekin **ekran tuzilishi va qoidalari** bo'
 | Kirish | **Login qilgan barcha o'quvchilarga ochiq**: admin kurs dostupi bermagan bo'lsa ham Intro ko'rinadi. Login/PIN/parol qoidasi o'zgarmaydi; progress o'quvchida saqlanadi |
 | Tillar | `uz` (asosiy), `ru`, `en` (tasdiqlangan: Intro uchun `ru` majburiy) |
 | Maqsad | O'quvchi (1) ingliz tili nima uchun kerakligini, (2) kim bilan gaplashishini, (3) qaysi vaziyatlarda ishlatilishini, (4) kurs yo'lini tushunadi va (5) o'z maqsadini tanlaydi |
-| Natija | O'quvchi "Birinchi darsni boshlash"ga tayyor; admin esa o'quvchining maqsad va qiyinchiliklarini ko'ra oladi |
+| Natija | O'quvchi Intro natijasini va o'z tanlovlarini ko'radi; keyingi dars faqat admin kursga dostup berganda ochiladi |
 
 ## A3. Ekranlar bo'yicha ssenariy
 
@@ -162,7 +162,7 @@ Formati: **Maqsad → Ekranda → Harakat → Feedback → Davom etish sharti**.
 
 **Maqsad:** o'quvchiga 4 bosqichli yo'lni ko'rsatish.
 
-**Ekranda:** yuqoridan pastga yo'l xaritasi: `Intro (siz shu yerdasiz)` → 4 modul. Har modul bosilsa ochiladi.
+**Ekranda:** `Intro (siz shu yerdasiz)` → 4 modul yo'li. Modullar 2×2 tartibda, yumaloq qirrali to'rtburchak kartalarda to'liq ochiq ko'rinadi; ularni bosish talab qilinmaydi.
 
 | Modul | Nimani qila olasiz | Ingliz misol |
 |---|---|---|
@@ -171,7 +171,7 @@ Formati: **Maqsad → Ekranda → Harakat → Feedback → Davom etish sharti**.
 | 3 · Workplace Communication | Load va hujjatlarni o'qib, vaziyatni tushuntirasiz | *We were held up at the shipper.* |
 | 4 · Professional Logistics English | Broker bilan professional muloqot | *If you can do $2,700, I can book it.* |
 
-**Davom etish sharti:** 4 ta modul ochilgan.
+**Davom etish sharti:** yo'q (axborot ekrani).
 
 ### 7-ekran. Goals: "Maqsadingiz nima?"
 
@@ -201,6 +201,8 @@ Formati: **Maqsad → Ekranda → Harakat → Feedback → Davom etish sharti**.
 | 2. Practice | 10 ta qisqa topshiriq. Har biri alohida, "Tekshirish" tugmasi bilan |
 | 3. Keyingi dars | Admin ochgan keyingi darsga o'tasiz |
 
+Uch qadam roadmap chizig'i bo'ylab bittadan animatsiya bilan ochiladi. Harakatni kamaytirish (`prefers-reduced-motion`) sozlamasida hammasi darhol ko'rinadi.
+
 Eslatmalar:
 - *Xato qilish normal. Izohni o'qing, qayta urinib ko'ring.*
 - *Kursda ovoz yo'q. Iboralarni o'zingiz ovoz chiqarib o'qing.*
@@ -208,15 +210,19 @@ Eslatmalar:
 
 **Davom etish sharti:** yo'q (axborot ekrani).
 
-### 9-ekran. Finish: "Siz tayyorsiz"
+### 9-ekran. Result: "Endi yo'lni bilasiz"
 
 **Maqsad:** yakunlash va harakatga chaqirish.
 
 **Ekranda:**
-- Sarlavha: **Boshlaymiz**
+- Sarlavha: **Endi yo'lni bilasiz**
+- Yashil natija kartasi: 5 ta juftlash va bitta `all-in` savolidan birinchi urinishda to'g'ri javob berilganlari (`N / 6`); bu Intro uchun o'tish bali emas.
 - Xulosa: *Siz tanlagan maqsadlar:* [goals ro'yxati]; *Eng qiyin vaziyatlar:* [struggles ro'yxati]
+- Uchta asosiy xulosa va `TAYANDI / KEYINGI` bloklari.
 - Bitta "I can" jumla: *In 32 lessons, I'll be able to handle real logistics calls.* (*32 darsdan keyin real logistika qo'ng'iroqlarini uddalay olaman.*)
-- Asosiy tugma: **Birinchi darsni boshlash**
+- Intro ichidagi yakunlash tugmasi: **Darsni yakunlash**.
+
+Natija kartalari ketma-ket animatsiya bilan ochiladi. Platformaning saqlashdan keyingi yakun ekranida **Qayta ko'rish**, **Chiqish** va **Darslarni boshlash** doim ko'rinadi; keyingi darsga dostup bo'lmasa oxirgi tugma o'chiq.
 
 **Harakat:** tugma bosilganda `onFinished(payload)` bir marta chaqiriladi.
 
@@ -250,29 +256,35 @@ Qiymatlar `coliseumlogistics-seven.vercel.app` saytidan brauzerda o'qib olindi (
 
 | Token | HEX / qiymat | Qo'llanishi |
 |---|---|---|
-| `--background` | `#0d1114` | Asosiy fon |
-| `--surface` | `#171b1e` | Kartochka, pufak fon |
-| `--surface-elevated` | `#1d2226` | Ko'tarilgan qatlam |
+| `--background` | `#f3efe7` | Och ivory asosiy fon |
+| `--surface` | `#fffaf2` | Kartochka, pufak fon |
+| `--surface-elevated` | `#f9eddb` | Ko'tarilgan qatlam |
 | `--bronze` | `#c19a63` | Aksent, asosiy tugma fon |
 | `--bronze-light` | `#e0c28c` | Yengil aksent, hover |
-| `--ivory` | `#f3efe7` | Och sirt/matn |
-| `--foreground` | `#f5f3ee` | Asosiy matn va sarlavha |
-| `--text-secondary` | `#a7aaad` | Ikkinchi darajali matn |
-| `--text-muted` | `#73777a` | Eng jimroq matn |
+| `--ivory` | `#f3efe7` | Och brend tus |
+| `--foreground` | `#1b2429` | Asosiy matn va sarlavha |
+| `--text-secondary` | `#59636a` | Ikkinchi darajali matn |
+| `--text-muted` | `#657077` | Eng jimroq matn |
 | `--line` | `#ffffff14` | Chiziq/chegara (~8% oq) |
 | Shrift | **Geist** (sans), Geist Mono (kod) | Hamma matn |
-| h1 / h2 | 600 vazn, ~45 px / ~38 px (katta ekranda), h1 `letter-spacing` −0.02em | Sarlavhalar |
-| Asosiy matn | 16 px; paragraf ~18 px, qator balandligi ~1.6 | |
-| Tugma | fon `#c19a63`, matn `#0d1114`, radius 12 px, vazn 600 | "Apply for Training" |
-| Karta | fon ~`#171b1e`, radius 12 px, chegara `0.8px solid rgba(255,255,255,.08)`, soyasiz | |
+| h1 / h2 | ixcham, moslashuvchan 17–30 px; vazn 700 | Dars sarlavhalari |
+| Asosiy matn | viewportga mos 12–19 px | |
+| Tugma | och bronza fon, to'q matn, yumaloq qirra | Orqaga / Davom etish |
+| Karta | oq 67–76% shaffof fon, 8 px blur, nozik chegara va yengil soya | |
 
 Qo'llash qoidalari:
+- Platforma dars ekranini sidebar/navbarsiz viewportga sig'diradi. Yuqoridagi bitta yumaloq shisha card'da `← Chiqish`, ixcham mavzu, `Learn · Kirish darsi` va joriy progress bir qatorda turadi; Coliseum/kurs nomi takrorlanmaydi.
+- Birinchi ekrandagi `02:00 · FastLoad` kichik yozuvi asosiy matn blokidan ajralib, kontent card'ining yuqorisida turadi. Past bo'yli gorizontal viewportda savol va variantlar ikki ustunli maketga moslashadi.
+- Darsning asosiy kontenti navigatsiya paneli kabi shisha card'da, Orqaga/Keyingi tugmalari shu card ichida, ingichka ajratuvchi chiziq ostida turadi. Main card och oq 67% shaffof fon va 8 px blur ishlatadi. Kontent referensdagi kabi card markazida ixcham en bilan joylashadi.
+- Javob feedback'i kontent card'ining pastida alohida, kontrastli card'da chiqadi. Variantlar orasidagi bo'shliq ixcham (6–9 px).
+- Katta ekranlarda feedback/hint kontent card'ining pastida, footer chizig'i va tugmalardan ajralgan holda turadi; matni 14–16 px va yuqori kontrastli. Mobil maket avvalgi zich joylashuvni saqlaydi. Ochilgan kartalarning ✓ belgisi o'ng chetda turadi.
+- Intro va keyingi JSX darslar 320×568, 360×640, 667×375 va desktop viewportlarda kontentni ichki scrollingiz ko'rsatishi kerak; har bir ekran shu o'lchamlarda tekshiriladi.
 - Ingliz matn: `--foreground`, qalin (600). O'zbekcha/ruscha tushuntirish: `--text-secondary`.
 - Asosiy tugma bronza, ikkinchi darajali tugma chegarali (`--line`).
 - To'g'ri/xato holati uchun alohida `--success` va `--warn` (saytda yo'q, dars uchun qo'shiladi) va har doim belgi (✓ / !) bilan.
-- Glow va neon yo'q, soyalar yo'q, chegara bilan ajratiladi (saytdagi kabi).
-- Animatsiya kam; hammasi `prefers-reduced-motion` da o'chadi.
-- Kontrast: `#f5f3ee` `#0d1114` ustida juda yuqori; `--text-muted` (`#73777a`) faqat ikkinchi darajali yozuvlarda (kichik matnda kontrast pastroq bo'lishi mumkin, shuning uchun asosiy ma'noni tashimaydi).
+- Glow va neon yo'q; cardlar nozik chegara va yengil soya bilan ajratiladi.
+- Har bir ekranning o'z harakati bor: telefon paneli, 3D ochiladigan kartalar, ikki tomondan kiradigan juftliklar, tanlov kartalari, rate javobi, modul yo'li, maqsadlar, ketma-ket roadmap va natija kartalari. To'g'ri/xato holatlari alohida vizual harakat oladi. `admin-truck-hero.jpg`, `student-course-office.jpg` va `student-course-classroom.jpg` mavjud assetlari ishlatiladi; ovoz yo'q. `prefers-reduced-motion` da animatsiyalar o'chadi.
+- Kontrast: asosiy matn `#1b2429` och ivory sirt ustida; hint va tanlangan variantlar brend bronza, yashil va iliq xato tuslarida aniq o'qiladi.
 
 **Shrift haqida:** sandbox iframe'da tashqi manbaga chiqib bo'lmaydi, shuning uchun **Geist shriftini iframe runtime o'zi** platforma domenidan (`font-src` platforma origin) yuklaydi. Dars fayllari faqat `font-family: var(--font-sans)` ishlatadi (zaxira: `system-ui`).
 
@@ -299,7 +311,7 @@ Ingliz iboralar o'zgarmaydi, faqat tushuntirish va tarjimalar. O'zbekcha va ingl
 | 6 | Title: **Путь курса**. Intro (вы здесь) → 1 · English Foundations: *Быстро строите фразы и вопросы* · 2 · Everyday Communication: *Знакомство, телефон, формы, короткие письма* · 3 · Workplace Communication: *Читаете документы и объясняете ситуацию* · 4 · Professional Logistics English: *Профессиональный разговор с брокером* |
 | 7 | **Что вы хотите уметь к концу курса?** Понимаю данные по грузу · Уверенно говорю с брокерами · Пишу профессиональные письма · Веду переговоры о ставке · Решаю проблемы по телефону |
 | 8 | **Как проходит урок.** 1. Learn — изучаете тему. 2. Practice — 10 коротких заданий с кнопкой «Проверить». 3. Следующий урок — открывает админ. Заметки: *Ошибаться нормально. Прочитайте пояснение и попробуйте снова.* · *В курсе нет звука. Произносите фразы вслух сами.* · *Уроки открывает администратор. Закрытый урок не виден.* |
-| 9 | **Начинаем.** *Ваши цели:* … *Самые трудные ситуации:* … *In 32 lessons, I'll be able to handle real logistics calls.* (*Через 32 урока я смогу вести реальные логистические звонки.*) Tugma: **Начать первый урок** |
+| 9 | **Теперь вы знаете путь.** Birinchi urinish ko'rsatkichi, *Ваши цели*, *Самые трудные ситуации*, 3 xulosa va *In 32 lessons, I'll be able to handle real logistics calls.* Ichki tugma: **Завершить урок**. Platforma yakunida qayta ko'rish, chiqish va ruxsat bo'lsa birinchi darsga o'tish. |
 
 Ruscha va inglizcha tushuntirishlarning to'liq `CONTENT` yozuvi 1-qadamda (B11) amalga oshiriladi; so'zlar soni (40 gacha) uch tilda ham tekshiriladi.
 
@@ -327,11 +339,9 @@ INTRO.learn.jsx
  2. TOKENS + STYLES            // CSS o'zgaruvchilar, komponent stillari, media so'rovlar
  3. CONTENT                    // barcha matnlar: { uz, en, ru? }, inglizcha iboralar oddiy string
  4. helpers                    // tx(text, lang), normalizeLang, canContinue(gate), clamp
- 5. atom komponentlar          // Bubble, TranslateToggle, Feedback, ProgressDots, NavBar
- 6. mexanikalar                // FlipCards, MatchPairs, SingleChoice, MultiPick, Accordion
- 7. ekranlar                   // Screen1Mission ... Screen9Finish
- 8. SCREENS massivi            // ekranlar ro'yxati, tartib shu yerda
- 9. default export Lesson      // holat, navigatsiya, payload, onFinished
+ 5. mexanikalar                // FlipCards, MatchPairs, SingleChoice, MultiPick
+ 6. ekranlar                   // 9 ekran, shu jumladan statik kurs yo'li va animatsion natija
+ 7. default export Lesson      // holat, navigatsiya, onProgress, payload, onFinished
 ```
 
 ## B3. Komponent daraxti
@@ -340,10 +350,11 @@ INTRO.learn.jsx
 Lesson
  ├─ <style>{STYLES}</style>
  ├─ LangSwitch               (faqat `lang` berilmaganda, preview rejimi)
- ├─ ProgressDots             (1/9 ... 9/9)
- ├─ ScreenHost               (key = current ekran)
- │    └─ ScreenN             (har ekran o'z gate'ini `onGate(boolean)` bilan bildiradi)
- └─ NavBar                   [Orqaga]  [Davom etish]  (Davom etish gate bo'yicha faol)
+ └─ ScreenHost               (asosiy shisha kontent card'i)
+      ├─ ScreenN             (har ekran o'z gate'ini bildiradi)
+      └─ Footer              [Orqaga]  [Davom etish]  (card ichida)
+
+Platforma hosti: [← Chiqish] [Mavzu] [Learn · Kirish darsi] [ProgressDots 1/9 ... 9/9]
 
 Mexanikalar (ekranlar ichida):
   S1  SingleChoice + Bubble + TranslateToggle + Feedback
@@ -351,10 +362,10 @@ Mexanikalar (ekranlar ichida):
   S3  MatchPairs (5 juftlik, rang va belgi bilan)
   S4  MultiPick (max 3) + Feedback (kursdagi o'rni)
   S5  Bubble + SingleChoice + Feedback
-  S6  Accordion (4 modul)
+  S6  StaticRoadmap (2×2, 4 modul)
   S7  MultiPick (max 3)
-  S8  Steps (statik)
-  S9  Summary + CTA
+  S8  AnimatedSteps (bittadan ochiladi)
+   S9  AnimatedResult (N/6, tanlovlar, uch xulosa, keyingi bosqich) + Finish
 ```
 
 ## B4. Holat va navigatsiya
@@ -405,11 +416,12 @@ Qoidalar:
 
 ## B6. Stil va moslashuv
 
-- **CSS o'zgaruvchilar** `:root` o'rniga `.intro-root` ichida e'lon qilinadi (iframe ichida ham, platformada ham toza ishlaydi): `--background:#0d1114`, `--surface:#171b1e`, `--surface-elevated:#1d2226`, `--bronze:#c19a63`, `--bronze-light:#e0c28c`, `--ivory:#f3efe7`, `--foreground:#f5f3ee`, `--text-secondary:#a7aaad`, `--text-muted:#73777a`, `--line:#ffffff14`, `--success`, `--warn`, `--radius:12px`, `--font-sans` (A5).
+- **CSS o'zgaruvchilar** `:root` o'rniga `.intro-root` ichida e'lon qilinadi: `--background:#f3efe7`, `--surface:#fffaf2`, `--surface-elevated:#f9eddb`, `--bronze:#c19a63`, `--bronze-light:#e0c28c`, `--ivory:#f3efe7`, `--foreground:#1b2429`, `--text-secondary:#59636a`, `--line:#876f5540`, `--success`, `--warn`, `--radius:12px`, `--font-sans`.
 - Skrollsiz maket: `100dvh` ichida flex ustun; ekran balandligi kichik bo'lsa (`max-height: 760px`, `700px`) faqat bo'sh joy qisqaradi, bosiladigan joy 44 px dan kichraymaydi (namunadagi NOSCROLL usuli).
 - `document.documentElement` va `window.resize` ishlatilmaydi (namunadagi mobil zoom hiylasi o'rniga `clamp()` va media so'rovlar).
 - Chat pufagi va kartochkalar uchun yagona stil; rang bilan birga belgi (●■◆★▲) ishlatiladi.
 - `prefers-reduced-motion`: animatsiya va aylanish o'chadi.
+- Desktop feedback card pastda footerdan ajraladi; ochilgan kartadagi belgi o'ng tomonda. Ekran animatsiyalari va 3D o'tishlar kontentga xos, `prefers-reduced-motion` da to'xtaydi.
 
 ## B7. Qulaylik (a11y)
 
@@ -452,7 +464,7 @@ Qoidalar:
 
 1. `CONTENT` ni to'liq yozish (uz va en), keyin so'zlar sonini tekshirish.
 2. Atom komponentlar va stil (tokenlar, NOSCROLL qoidalari).
-3. Mexanikalar: SingleChoice, FlipCards, MatchPairs, MultiPick, Accordion.
+3. Mexanikalar: SingleChoice, FlipCards, MatchPairs, MultiPick va statik kurs yo'li.
 4. 9 ekranni yig'ish va gate'larni ulash.
 5. Payload va `onFinished`.
 6. Sandbox'da sinash (360×640 va 1280×720), klaviatura va a11y tekshiruvi.

@@ -1,5 +1,7 @@
 # Coliseum English Platform — To'liq reja
 
+> Bu boshlang'ich arxitektura rejasi. Hozirgi JSX dars talablari va Intro istisnosi [`new docs/PLAN.md`](new%20docs/PLAN.md), [`new docs/INTRO_ETALON.md`](new%20docs/INTRO_ETALON.md) va [README.md](README.md) da yangilangan. Amaldagi admin yaratish route'i `/admin/admins`; Intro barcha login qilgan o'quvchilarga kurs dostupsiz ochiladi, qolgan darslar admin bergan kurs dostupi bilan ochiladi.
+
 Maqsad: Coliseum Logistics School o'quvchilari uchun ingliz tili kursi platformasi.
 Landing sayt (coliseumlogistics-seven.vercel.app) alohida qoladi, platforma **alohida loyiha va alohida domen**da quriladi.
 

@@ -8,7 +8,7 @@ import { courses, enrollments, lessons, modules, progress, studentProfiles } fro
 import { requireReadyUser } from "@/lib/auth/current-user";
 import { activeCourseAccess } from "@/lib/courses/access";
 import { getLearnText } from "@/lib/learn/translations";
-import styles from "../learn.module.css";
+import styles from "../../learn.module.css";
 
 export default async function CoursePage({ params }: { params: Promise<{ courseId: string }> }) {
   const user = await requireReadyUser();

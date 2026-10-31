@@ -6,16 +6,20 @@ import { HelpCard } from "@/components/learn/help-card";
 import { LearnIcon } from "@/components/learn/learn-icon";
 import { LearnNavigation } from "@/components/learn/learn-navigation";
 import { getDatabase } from "@/db";
-import { studentProfiles } from "@/db/schema";
+import { lessons, modules, studentProfiles } from "@/db/schema";
 import { requireReadyUser } from "@/lib/auth/current-user";
 import { getLearnText, type LearnLocale } from "@/lib/learn/translations";
-import { eq } from "drizzle-orm";
-import styles from "./learn.module.css";
+import { and, eq } from "drizzle-orm";
+import styles from "../learn.module.css";
 
 export default async function LearnLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const user = await requireReadyUser();
   if (user.role !== "student") redirect("/admin");
-  const [studentProfile] = await getDatabase().select({ avatarData: studentProfiles.avatarData, locale: studentProfiles.locale }).from(studentProfiles).where(eq(studentProfiles.studentId, user.id)).limit(1);
+  const db = getDatabase();
+  const [[studentProfile], [intro]] = await Promise.all([
+    db.select({ avatarData: studentProfiles.avatarData, locale: studentProfiles.locale }).from(studentProfiles).where(eq(studentProfiles.studentId, user.id)).limit(1),
+    db.select({ id: lessons.id, courseId: modules.courseId }).from(lessons).innerJoin(modules, eq(lessons.moduleId, modules.id)).where(and(eq(lessons.code, "INTRO"), eq(lessons.status, "published"))).limit(1),
+  ]);
   const locale = (studentProfile?.locale === "ru" || studentProfile?.locale === "en" ? studentProfile.locale : "uz") as LearnLocale;
   const t = getLearnText(locale);
   const initials = user.fullName.trim().split(/\s+/).slice(0, 2).map((part) => part[0]?.toUpperCase()).join("");
@@ -23,7 +27,7 @@ export default async function LearnLayout({ children }: Readonly<{ children: Rea
   return <div className={styles.shell}>
     <aside className={styles.sidebar} aria-label="O‘quvchi navigatsiyasi">
       <Link href="/learn" className={styles.brand}><Image src="/coliseum-logo-horizontal-light.svg" alt="Coliseum Logistics School" width={218} height={53} style={{ height: "auto" }} priority /></Link>
-      <LearnNavigation locale={locale} />
+      <LearnNavigation locale={locale} introHref={intro ? `/learn/${intro.courseId}/${intro.id}` : null} />
       <HelpCard locale={locale} />
     </aside>
     <div className={styles.workspace}>

@@ -1,6 +1,6 @@
 # Coliseum English Platform
 
-Coliseum Logistics School o'quvchilari uchun alohida ingliz tili platformasi. To'liq bosqichlar va qarorlar [PLAN.md](PLAN.md) da.
+Coliseum Logistics School o'quvchilari uchun alohida ingliz tili platformasi. Boshlang'ich reja [PLAN.md](PLAN.md) da, amaldagi JSX platforma talablari [`new docs/PLAN.md`](new%20docs/PLAN.md) va [`new docs/INTRO_ETALON.md`](new%20docs/INTRO_ETALON.md) da.
 
 ## Lokal ishga tushirish
 
@@ -40,3 +40,13 @@ Super admin `/admin/admins` sahifasida admin akkaunt yaratadi. Tizim 6 xonali PI
 Super admin `/admin/courses` sahifasida kurslar va modullarni yaratadi, tahrirlaydi, tartiblaydi va nashr qiladi. Admin kurslar va modullarni ko'radi; `/admin/students/[id]` orqali o'quvchiga kurs dostupi beradi yoki bekor qiladi. Muddat ixtiyoriy; tanlangan sana Toshkent vaqti bilan shu kun oxirida tugaydi. O'quvchi `/learn` sahifasida faqat nashr qilingan va faol dostupi bor kurslarni ko'radi; `/learn/[courseId]` manzili ham serverda tekshiriladi.
 
 3137-portdagi lokal server bilan `npm run test:courses` Supabase'da vaqtinchalik akkauntlar va kurslar yaratib, rol, CRUD, tartib, muddat, bekor qilish, URL cheklovi va audit oqimini tekshiradi; test yozuvlarini yakunda o'chiradi. Boshqa port uchun `AUTH_BASE_URL` ni belgilang.
+
+## Intro va dars interfeysi
+
+`/` to'g'ridan-to'g'ri `/login` ga yo'naltiradi. Login/PIN/parol qoidalari saqlanadi. Super admin `/admin/intro` da Intro darsini yaratadi, so'ng `/admin/lessons/[id]` da `jsx-lessons/intro/INTRO.learn.jsx` faylini tanlab draft yuklaydi, Preview orqali ko'radi va nashr qiladi. Fayl tanlash maydoni va tanlangan fayllar soni ajratib ko'rsatiladi. Lokal JSX faylni tahrirlashning o'zi bazadagi nashr qilingan versiyani yangilamaydi.
+
+Nashrdagi Intro login qilgan barcha o'quvchilarga kurs dostupsiz ochiladi. Boshqa darslar faqat admin bergan faol kurs dostupi va nashr holati bilan ochiladi. O'quvchi darsni sidebar/navbarsiz to'liq ekran rejimida ko'radi; Intro 9 ekranli, ovozsiz va `uz/ru/en` tillarida. Natijada qayta ko'rish, chiqish va keyingi darsni boshlash amallari ko'rinadi; keyingi dars ochilmagan bo'lsa boshlash tugmasi o'chiq turadi.
+
+O'quvchi sidebarida **Kurslar** (Intro, Darslar, Imtihonlar, Resurslar) va **Progress** (Sertifikatlarim, Yutuqlarim) yig'iladigan guruhlari, alohida **Mening profilim** bor. Hali tayyor bo'lmagan bo'limlar `Tez orada` holatida. FAQ kartasi 3 savolli modalni va `@coliseumlogistics` Telegram havolasini ochadi. Admin va o'quvchi panellarida asosiy kontent ichki sahifada almashadi, sidebar/navbar joyida qoladi.
+
+Intro manbasi va joylashuvi: [`jsx-lessons/README.md`](jsx-lessons/README.md). Lokal iframe sinovi: `npm run dev` bilan birga `node_modules\.bin\tsx.cmd scripts/check-intro-lesson.ts` (Windows).

@@ -40,6 +40,7 @@ export function mount(Component: React.ComponentType<LessonProps>, kind: "learn"
   if (!Component) { send("error", "Default export topilmadi"); return; }
   const bridge = kind === "learn" ? {
     onFinished: (payload: unknown) => send("finished", payload),
+    onProgress: (payload: unknown) => send("progress", payload),
   } : {
     onReady: (value: boolean) => send("ready", !!value),
     registerCheck: (callback: () => void) => { check = callback; },

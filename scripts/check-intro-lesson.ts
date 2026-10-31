@@ -23,7 +23,7 @@ async function main() {
       const nonce = crypto.randomUUID();
       const frame = document.createElement("iframe");
       frame.setAttribute("sandbox", "allow-scripts");
-      frame.style.cssText = "position:fixed;inset:0;z-index:9999;display:block;width:100vw;height:100dvh;border:0";
+      frame.style.cssText = "position:fixed;top:56px;left:0;z-index:9999;display:block;width:100vw;height:calc(100dvh - 56px);border:0";
       frame.srcdoc = html;
       window.addEventListener("message", (event) => {
         if (event.source !== frame.contentWindow || event.data?.nonce !== nonce) return;
@@ -37,6 +37,16 @@ async function main() {
     assert.ok(initialMessages.some((message) => message.type === "mounted"), JSON.stringify(initialMessages));
     const frame = page.frameLocator("iframe");
     const next = frame.locator(".intro-primary");
+    async function settleViewport() {
+      await frame.locator(".intro-root").evaluate(() => new Promise<void>((resolve) => requestAnimationFrame(() => requestAnimationFrame(() => resolve()))));
+    }
+    async function introHeadingFits(size: string) {
+      const bounds = await frame.locator(".intro-first-kicker").evaluate((heading) => ({
+        headingBottom: heading.getBoundingClientRect().bottom,
+        titleTop: heading.parentElement?.querySelector(".intro-title")?.getBoundingClientRect().top ?? 0,
+      }));
+      assert.ok(bounds.titleTop >= bounds.headingBottom + 4, `Intro heading overlaps title at ${size}: ${JSON.stringify(bounds)}`);
+    }
     await frame.locator(".intro-lang").selectOption("ru");
     assert.equal(await frame.locator("h1").textContent(), "Звонит телефон");
     await frame.locator(".intro-lang").selectOption("en");
@@ -44,22 +54,63 @@ async function main() {
     await frame.locator(".intro-lang").selectOption("uz");
 
     async function layout(screen: number) {
+      if (screen === 1) await introHeadingFits("360×640");
       const metrics = await frame.locator(".intro-root").evaluate((root) => ({
         scrollHeight: root.scrollHeight, clientHeight: root.clientHeight,
+        bodyScroll: root.querySelector(".intro-body")?.scrollHeight, bodyClient: root.querySelector(".intro-body")?.clientHeight,
         buttons: [...root.querySelectorAll("button")].filter((button) => !button.hidden).map((button) => ({ text: button.textContent, height: button.getBoundingClientRect().height })),
       }));
-      assert.ok(metrics.scrollHeight <= metrics.clientHeight + 1, `Screen ${screen} overflows at 360×640: ${metrics.scrollHeight}/${metrics.clientHeight}`);
+      assert.ok(metrics.scrollHeight <= metrics.clientHeight + 1, `Screen ${screen} overflows: ${metrics.scrollHeight}/${metrics.clientHeight}`);
+      assert.ok((metrics.bodyScroll || 0) <= (metrics.bodyClient || 0) + 1, `Screen ${screen} hides content: ${metrics.bodyScroll}/${metrics.bodyClient}`);
       assert.ok(metrics.buttons.every((button) => button.height >= 43.5), `Screen ${screen} has a touch target below 44px`);
+      await page.setViewportSize({ width: 320, height: 568 });
+      await settleViewport();
+      if (screen === 1) await introHeadingFits("320×568");
+      const compact = await frame.locator(".intro-body").evaluate((body) => ({ scroll: body.scrollHeight, client: body.clientHeight }));
+      assert.ok(compact.scroll <= compact.client + 1, `Screen ${screen} hides content at 320×568: ${compact.scroll}/${compact.client}`);
+      await page.setViewportSize({ width: 667, height: 375 });
+      await settleViewport();
+      if (screen === 1) await introHeadingFits("667×375");
+      const landscape = await frame.locator(".intro-body").evaluate((body) => ({ scroll: body.scrollHeight, client: body.clientHeight }));
+      assert.ok(landscape.scroll <= landscape.client + 1, `Screen ${screen} hides content at 667×375: ${landscape.scroll}/${landscape.client}`);
+      await page.setViewportSize({ width: 1280, height: 720 });
+      await settleViewport();
+      await frame.locator(".intro-screen").evaluate(() => new Promise<void>((resolve) => setTimeout(resolve, 1800)));
+      const desktopContent = await frame.locator(".intro-screen").evaluate((content) => ({ scroll: content.scrollHeight, client: content.clientHeight }));
+      assert.ok(desktopContent.scroll <= desktopContent.client + 1, `Screen ${screen} hides content at 1280×720: ${desktopContent.scroll}/${desktopContent.client}`);
+      await page.setViewportSize({ width: 360, height: 640 });
+      await settleViewport();
     }
 
     assert.equal(await next.isDisabled(), true);
     await layout(1);
     await frame.locator(".intro-list .intro-choice").first().click();
+    await layout(1);
+    if (process.env.INTRO_SCREENSHOT_FIRST) await frame.locator(".intro-root").screenshot({ path: process.env.INTRO_SCREENSHOT_FIRST });
+    if (process.env.INTRO_SCREENSHOT_DESKTOP) {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await frame.locator(".intro-root").screenshot({ path: process.env.INTRO_SCREENSHOT_DESKTOP });
+      await page.setViewportSize({ width: 360, height: 640 });
+    }
     await next.click();
     assert.equal(await next.isDisabled(), true);
     for (const button of await frame.locator(".intro-list .intro-choice").all()) await button.click();
     await layout(2);
+    await page.setViewportSize({ width: 1440, height: 900 });
+    const flippedCard = await frame.locator(".intro-card-button").first().evaluate((card) => ({
+      cardRight: card.getBoundingClientRect().right,
+      markRight: card.lastElementChild?.getBoundingClientRect().right ?? 0,
+    }));
+    assert.ok(flippedCard.markRight > flippedCard.cardRight - 50, "Opened-card checkmark must stay on the right");
+    const hint = await frame.locator(".intro-feedback").evaluate((node) => ({
+      bottom: node.getBoundingClientRect().bottom,
+      footerTop: document.querySelector(".intro-foot")?.getBoundingClientRect().top ?? 0,
+    }));
+    assert.ok(hint.footerTop - hint.bottom >= 8, "Desktop hint must be separate from footer buttons");
+    await page.setViewportSize({ width: 360, height: 640 });
     await next.click();
+    await frame.locator(".intro-role-column").first().waitFor({ state: "visible" });
+    assert.equal(await frame.locator("h1").textContent(), "Siz kim bilan gaplashasiz?");
     const phrase = frame.locator(".intro-role-column").first().locator("button");
     const role = frame.locator(".intro-role-column").last().locator("button");
     await phrase.nth(0).click(); await role.nth(0).click(); await role.nth(1).click();
@@ -75,7 +126,8 @@ async function main() {
     await frame.locator(".intro-list .intro-choice").nth(0).click();
     await layout(5);
     await next.click();
-    for (const button of await frame.locator(".intro-list .intro-choice").all()) await button.click();
+    assert.equal(await frame.locator(".intro-roadmap-card").count(), 4);
+    assert.equal(await frame.locator(".intro-roadmap button").count(), 0);
     await layout(6);
     await next.click();
     await frame.locator(".intro-list .intro-choice").nth(0).click();
@@ -84,7 +136,17 @@ async function main() {
     await layout(8);
     await next.click();
     await layout(9);
-    if (process.env.INTRO_SCREENSHOT) await frame.locator(".intro-root").screenshot({ path: process.env.INTRO_SCREENSHOT });
+    if (process.env.INTRO_SCREENSHOT) {
+      await frame.locator(".intro-result-next").evaluate(() => new Promise<void>((resolve) => setTimeout(resolve, 850)));
+      await frame.locator(".intro-root").screenshot({ path: process.env.INTRO_SCREENSHOT });
+    }
+    assert.equal(await frame.locator(".intro-takeaways li").count(), 3);
+    if (process.env.INTRO_SCREENSHOT_RESULT_DESKTOP) {
+      await page.setViewportSize({ width: 1440, height: 900 });
+      await frame.locator(".intro-result-next").evaluate(() => new Promise<void>((resolve) => setTimeout(resolve, 850)));
+      await frame.locator(".intro-root").screenshot({ path: process.env.INTRO_SCREENSHOT_RESULT_DESKTOP });
+      await page.setViewportSize({ width: 360, height: 640 });
+    }
     await frame.locator(".intro-secondary").press("Enter");
     await next.press("Enter");
     assert.equal(await frame.locator(".intro-summary li").count(), 2, "Back navigation must keep answers");

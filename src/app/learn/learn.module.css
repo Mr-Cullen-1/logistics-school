@@ -6,13 +6,21 @@
 .nav a,.navDisabled { display:flex; align-items:center; gap:13px; min-height:44px; padding:0 14px; border-radius:9px; color:#f1f1ef; font-size:.84rem; white-space:nowrap; }
 .nav a:hover { background:rgb(212 175 124 / 13%); color:#e9bb7c; }
 .nav a.navActive { background:linear-gradient(105deg,#f0cd92,#a77c47); color:#17140f; box-shadow:inset 0 1px 0 rgb(255 255 255 / 38%); font-weight:700; }
+.navGroup { display:grid; gap:2px; min-width:0; }
+.navToggle { display:flex; align-items:center; gap:13px; width:100%; min-height:44px; padding:0 14px; border:0; border-radius:9px; background:transparent; color:#f1f1ef; font:inherit; font-size:.84rem; text-align:left; cursor:pointer; }
+.navToggle:hover,.navToggle[aria-expanded="true"] { background:rgb(212 175 124 / 13%); color:#e9bb7c; }
+.navToggle:focus-visible { outline:2px solid #f0cd92; outline-offset:-2px; }
+.navChevron { width:7px; height:7px; margin-left:auto; border-right:1.5px solid currentColor; border-bottom:1.5px solid currentColor; transform:rotate(-45deg); transition:transform .18s ease; }
+.navChevronOpen { transform:rotate(45deg); }
+.navSubitems { display:grid; gap:2px; min-width:0; margin-left:23px; padding-left:10px; border-left:1px solid rgb(212 175 124 / 35%); }
+.navSubitems[hidden] { display:none; }
+.navSubitems a,.navSubitems .navDisabled { gap:10px; min-height:40px; padding:0 9px; font-size:.78rem; }
+.navSubitems .navDisabled small { font-size:.58rem; }
 .navDisabled { color:#a2abb0; cursor:not-allowed; }
 .navDisabled small { margin-left:auto; color:#d1ad78; font-size:.61rem; }
-.helpCard { flex:none; margin:18px 10px 0; overflow:hidden; border:1px solid rgb(212 175 124 / 20%); border-radius:12px; background:#111a1e; }
-.helpImage { height:90px; background:linear-gradient(0deg,#111a1e 2%,transparent 85%),url('/admin-truck-hero.jpg') center 53% / cover; }
-.helpBody { padding:0 17px 16px; }
-.helpBody h2 { margin:0 0 6px; font-size:.93rem; }
-.helpBody p { margin:0 0 12px; color:#c6c6c6; font-size:.73rem; line-height:1.5; }
+.helpCard { flex:none; height:156px; margin:18px 10px 0; overflow:hidden; border:1px solid rgb(212 175 124 / 25%); border-radius:12px; background:linear-gradient(180deg,rgb(8 17 22 / 12%),rgb(8 17 22 / 88%)),url('/admin-truck-hero.jpg') center 53% / cover; }
+.helpBody { display:flex; flex-direction:column; justify-content:space-between; height:100%; padding:13px 16px 15px; }
+.helpBody h2 { margin:0; color:#fff; font-size:.93rem; text-shadow:0 1px 5px #0009; }
 .helpBody button { display:flex; align-items:center; justify-content:center; gap:8px; width:100%; min-height:39px; padding:8px; border:0; border-radius:8px; background:linear-gradient(105deg,#f0cd92,#c99356); color:#171510; font-size:.73rem; font-weight:700; cursor:pointer; }
 .helpBody button:hover { filter:brightness(1.07); }
 .faqList { display:grid; gap:10px; }
@@ -46,13 +54,14 @@
 .hero blockquote { margin:26px 0 0; color:#d2d3d3; font-size:.78rem; font-style:italic; }
 .heroCourse { position:relative; z-index:1; display:grid; grid-template-columns:minmax(0,1fr) auto; gap:8px 12px; width:340px; flex:none; padding:16px 18px; border:1px solid rgb(255 255 255 / 16%); border-radius:12px; background:rgb(8 17 22 / 85%); backdrop-filter:blur(8px); }
 .heroCourseLabel { display:flex; grid-column:1/-1; align-items:center; gap:7px; color:#e6c38f; font-size:.7rem; }
-.heroCourse strong { grid-column:1/-1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:.93rem; }
+.heroCourse strong { grid-column:1/-1; font-size:.93rem; line-height:1.35; }
 .heroCourse p { grid-column:1/-1; margin:2px 0; color:#d5d7d8; font-size:.7rem; line-height:1.45; }
 .progressLine,.courseProgress { display:block; height:10px; overflow:hidden; border-radius:99px; background:rgb(255 255 255 / 11%); }
 .progressLine span,.courseProgress span { display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg,#f0cd92,#be8950); }
 .heroPercent { align-self:center; font-size:.74rem; font-weight:700; }
 .goldButton { display:flex; grid-column:1/-1; align-items:center; justify-content:center; gap:9px; min-height:36px; margin-top:3px; border-radius:8px; background:linear-gradient(105deg,#f0cd92,#c99356); color:#171510; font-size:.73rem; font-weight:750; }
 .goldButton:hover { filter:brightness(1.06); }
+.heroIntroButton { justify-self:end; padding:0 16px; }
 .stats { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; margin:15px 0; }
 .stat { display:flex; align-items:center; gap:15px; min-width:0; min-height:78px; padding:13px 16px; border:1px solid #e9e8e5; border-radius:12px; background:#fff; box-shadow:0 3px 15px rgb(20 18 16 / 3%); }
 a.stat:hover { border-color:#d4af7c; box-shadow:0 5px 18px rgb(100 70 30 / 9%); }
@@ -165,3 +174,14 @@ a.stat:hover { border-color:#d4af7c; box-shadow:0 5px 18px rgb(100 70 30 / 9%); 
 @media (max-width:520px) { .topActions { gap:0; } .profilePage { padding:20px 13px 36px; } .profilePanel { padding:17px; } .badgeGrid { grid-template-columns:1fr; } }
 @media (max-width:600px) { .hero { display:block; } .hero::before { width:100%; background-position:64% center; opacity:.4; mask-image:linear-gradient(to right,transparent,#000 85%); } .heroText > p:not(.heroEyebrow) { max-width:31ch; } .hero blockquote { margin-top:13px; } .heroCourse { width:100%; max-width:350px; margin-top:20px; } .courseGrid { grid-template-columns:1fr; } .activityList { grid-template-columns:1fr; } .activityList li { border-right:0; border-bottom:1px solid #eee; } .activityList li:last-child { border-bottom:0; } .stat { gap:9px; padding:10px; } .statIcon { width:38px; height:38px; } .statIcon svg { width:21px; height:21px; } .stat strong { font-size:1.17rem; } .stat small { font-size:.61rem; } .courseDetail { padding:20px 14px 38px; } }
 @media (max-height:700px) and (min-width:761px) { .helpCard { display:none; } }
+@media (max-width:760px) {
+  .helpCard { display:block; height:46px; border:1px solid rgb(212 175 124 / 25%); background:linear-gradient(90deg,rgb(8 17 22 / 72%),rgb(8 17 22 / 90%)),url('/admin-truck-hero.jpg') center 53% / cover; }
+  .helpBody { flex-direction:row; align-items:center; gap:12px; padding:5px 7px 5px 12px; }
+  .helpBody h2 { display:block; flex:none; }
+  .helpBody button { width:auto; min-height:34px; margin-left:auto; padding-inline:12px; }
+  .nav { align-items:flex-start; max-height:205px; overflow-y:auto; }
+  .navGroup { flex:none; min-width:160px; }
+  .navToggle { gap:8px; min-height:38px; padding:0 10px; font-size:.72rem; }
+  .navSubitems { margin-left:15px; padding-left:7px; }
+  .navSubitems a,.navSubitems .navDisabled { min-height:38px; padding:0 7px; font-size:.7rem; }
+}

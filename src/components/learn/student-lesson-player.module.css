@@ -1,0 +1,36 @@
+.player { display:flex; flex-direction:column; gap:8px; width:100%; max-width:1600px; height:100%; min-height:0; margin:auto; }
+.navigation { display:flex; align-items:center; gap:clamp(8px,1.4vw,24px); flex:none; min-height:56px; padding:7px clamp(9px,1vw,16px); border:1px solid #ffffffc9; border-radius:14px; background:rgb(255 255 255 / 67%); backdrop-filter:blur(8px); color:#1b2429; box-shadow:0 8px 30px #47372215, inset 0 1px #fff; font-size:.82rem; }
+.exit { flex:none; padding:7px 10px; border:1px solid #987a5950; border-radius:8px; color:#82562a; font-weight:650; white-space:nowrap; }
+.exit:hover { background:#e8d5b75c; }
+.title { flex:1; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:inherit; font-weight:650; }
+.stage { flex:none; color:#82562a; white-space:nowrap; font-weight:600; }
+.stage span { margin:0 3px; color:#778086; }
+.progress { display:flex; align-items:center; gap:8px; flex:none; }
+.progressDots { display:flex; gap:4px; }
+.progressDots span { width:clamp(7px,.8vw,12px); height:5px; border-radius:99px; background:#b9b8b2; }
+.progressDots .activeDot { background:#a9773b; }
+.progress small { color:#334047; font-size:inherit; white-space:nowrap; }
+.frameSlot { flex:1; min-height:0; overflow:hidden; }
+.practiceActions { display:flex; justify-content:flex-end; flex:none; }
+.practiceActions button,.primaryAction { padding:10px 18px; border:0; border-radius:10px; background:linear-gradient(115deg,#e0c28c,#c59759); color:#15120e; font-size:.82rem; font-weight:700; }
+.practiceActions button:disabled { opacity:.5; cursor:not-allowed; }
+.message { flex:none; margin:0; color:#82562a; font-size:.78rem; }
+.status { margin:auto; color:#334047; }
+.result { display:flex; flex:1; min-height:0; flex-direction:column; align-items:center; justify-content:center; max-width:660px; width:100%; margin:auto; padding:clamp(20px,5vh,48px); border:1px solid #ffffffc9; border-radius:20px; background:rgb(255 255 255 / 67%); backdrop-filter:blur(8px); box-shadow:0 10px 36px #47372215; text-align:center; animation:resultIn .65s both; }
+.resultMark { display:grid; place-items:center; width:clamp(52px,10vh,76px); height:clamp(52px,10vh,76px); margin-bottom:12px; border:2px solid #b58a55; border-radius:50%; background:#e8d5b75c; color:#82562a; font-size:2rem; animation:markIn .7s .2s both; }
+.resultLabel { margin:0 0 6px; color:#82562a; font-size:.72rem; font-weight:750; letter-spacing:.12em; }
+.result h1 { margin:0; color:#1b2429; font-size:clamp(1.4rem,4vh,2rem); }
+.result > p:not(.resultLabel) { max-width:40ch; margin:12px 0 0; color:#59636a; font-size:clamp(.8rem,2vh,.95rem); line-height:1.5; }
+.resultActions { display:flex; flex-wrap:wrap; justify-content:center; gap:10px; width:100%; margin-top:clamp(16px,4vh,30px); padding-top:16px; border-top:1px solid #bd966770; }
+.resultActions a,.resultActions button { display:inline-flex; align-items:center; justify-content:center; min-height:44px; text-decoration:none; cursor:pointer; }
+.resultActions button:disabled { opacity:.48; cursor:not-allowed; }
+.secondaryAction { padding:10px 18px; border:1px solid #987a5950; border-radius:10px; background:rgb(255 255 255 / 72%); color:#293137; font-size:.82rem; font-weight:650; }
+.resultNote { width:100%; margin-top:20px; padding:14px 16px; border:1px solid #987a5950; border-left:4px solid #b58a55; border-radius:12px; background:#f8eddd; text-align:left; }
+.resultNote strong { display:block; margin-bottom:5px; color:#82562a; font-size:.68rem; letter-spacing:.08em; }
+.resultNote span { color:#293137; font-size:.86rem; line-height:1.45; }
+.result .lockedNote { margin-top:10px!important; color:#82562a!important; font-size:.78rem!important; }
+@keyframes resultIn { from { opacity:0; transform:translateY(18px) scale(.97); } to { opacity:1; transform:none; } }
+@keyframes markIn { from { opacity:0; transform:scale(.55) rotate(-25deg); } to { opacity:1; transform:none; } }
+@media(max-width:600px) { .player { gap:6px; } .navigation { gap:5px; min-height:48px; padding:5px 6px; border-radius:11px; font-size:.69rem; } .exit { padding:6px; } .stage span { margin:0 1px; } .progress { gap:0; } .progressDots { gap:2px; } .progressDots span { width:5px; height:4px; } .progress small { display:none; } .result { padding:18px; } }
+@media(max-height:550px) { .navigation { min-height:44px; } .resultMark { margin-bottom:6px; } .result > p:not(.resultLabel) { margin-top:6px; } .resultActions { margin-top:12px; padding-top:10px; } .resultNote { margin-top:9px; padding:9px 12px; } }
+@media(prefers-reduced-motion:reduce) { .result,.resultMark { animation:none; } }

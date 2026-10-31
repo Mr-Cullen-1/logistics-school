@@ -74,14 +74,14 @@ O'quvchi: /learn ────────┘ faqat ochilgan kurslar
                   └► "Tugatdim" → progress saqlanadi
 ```
 
-**Intro istisnosi:** super admin `/admin/intro` da `INTRO.learn.jsx` ni yaratadi va nashr qiladi. Nashr qilingan Intro login qilgan barcha o'quvchilarga `/learn` da kurslardan oldin ko'rinadi; enrollment, kurs dostupi va kursning nashr holati talab qilinmaydi. Login, admin bergan PIN va majburiy parol almashtirish qoidalari o'zgarmaydi. Oddiy kurs va darslar yuqoridagi dostup qoidasida qoladi.
+**Intro istisnosi:** super admin `/admin/intro` da Intro yozuvini yaratadi, `/admin/lessons/[id]` da `INTRO.learn.jsx` ni draft yuklab Preview va Nashrdan o'tkazadi. Nashr qilingan Intro login qilgan barcha o'quvchilarga `/learn` da kurslardan oldin ko'rinadi; enrollment, kurs dostupi va kursning nashr holati talab qilinmaydi. Login, admin bergan PIN va majburiy parol almashtirish qoidalari o'zgarmaydi. Oddiy kurs va darslar yuqoridagi dostup qoidasida qoladi. Lokal JSX faylni tahrirlash bazadagi nashrdagi versiyani avtomatik yangilamaydi.
 
 ### 3.3. JSX yuklash pipeline (super admin)
 
 Ikki tur fayl: **Learn** (`M1L01.learn.jsx`) va **Practice** (`M1L01.p01.jsx` ... `p10`). To'liq shartnoma: `JSX_CONTRACT.md`.
 
 ```
-.jsx fayl(lar) tanlanadi (ommaviy drag & drop)
+.jsx fayl(lar) tanlanadi (bir nechta faylni tanlash mumkin)
    │
    ▼ 1) Nom va tur: qolipga mos, dars kodi mavjud
    ▼ 2) Sintaksis: Sucrase (JSX → JS, imports → CommonJS); default export; importlar ⊆ {react, react-dom, @coliseum/kit}
@@ -168,9 +168,9 @@ audit_log
 - `/change-password` — majburiy almashtirish (PIN bilan kirganlar uchun)
 
 ### O'quvchi (`/learn`)
-- `/learn` — mening kurslarim
+- `/learn` — boshqaruv paneli; Kurslar va Progress yig'iladigan sidebar guruhlari, profil va FAQ
 - `/learn/[courseId]` — modullar va darslar, progress
-- `/learn/[courseId]/[lessonId]` — dars (sandbox iframe), "Tugatdim", oldingi/keyingi
+- `/learn/[courseId]/[lessonId]` — sidebar/navbarsiz to'liq ekran dars (sandbox iframe), progress va yakuniy amallar
 - `/learn/profile` — ism, parolni almashtirish
 
 ### Admin (`/admin`)
@@ -185,7 +185,7 @@ audit_log
 - `/admin/courses/new`, `/admin/courses/[id]` — kurs/modul boshqaruvi, tartib (drag & drop)
 - `/admin/lessons/new` — `.jsx` yuklash, preview, nashr
 - `/admin/lessons/[id]` — yangi versiya yuklash, draft/publish
-- `/admin/staff` — adminlar qo'shish/o'chirish
+- `/admin/admins` — super admin tomonidan admin yaratish, bir martalik PIN berish
 - `/admin/audit` — audit log
 
 Himoya: `middleware.ts` rol va `must_change_password` ni tekshiradi; server tomonda har bir action/route yana tekshiradi (faqat middlewarega ishonmaymiz).

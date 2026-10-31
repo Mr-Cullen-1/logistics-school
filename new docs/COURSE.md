@@ -107,7 +107,7 @@ Har dars uchun **10 ta alohida fayl** (`M1L01.p01.jsx` ... `p10`). Har fayl = **
 | What | 6 ta vaziyat: load olish, pickup/delivery, kechikish, rate, hujjat, muammo |
 | Path | Kurs xaritasi: 4 modul va har birining natijasi |
 | Promise | Kurs oxirida nimani qila olasiz (3 ta aniq "I can…" jumla) |
-| CTA | "Birinchi darsni boshlash" |
+| Yakun | 9-ekranda birinchi urinish ko'rsatkichi, maqsadlar, qiyinchiliklar va xulosalar; saqlashdan keyin **Qayta ko'rish**, **Chiqish**, **Darslarni boshlash** (dostup bo'lmasa o'chiq) |
 
 ---
 

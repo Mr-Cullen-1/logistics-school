@@ -22,3 +22,7 @@ Har bir `module-XX` papkasiga faqat shu modulning 8 ta Learn fayli joylanadi. `p
 Fayl nomlari va ichki shartnoma: [`../new docs/JSX_CONTRACT.md`](../new%20docs/JSX_CONTRACT.md). Dars mazmuni: [`../new docs/COURSE.md`](../new%20docs/COURSE.md). Intro etaloni: [`../new docs/INTRO_ETALON.md`](../new%20docs/INTRO_ETALON.md).
 
 Intro'ni lokal tekshirish: bir terminalda `npm run dev`, ikkinchisida `node_modules\.bin\tsx.cmd scripts/check-intro-lesson.ts` (Windows). Sinov localhost:3000 dagi runtime iframe ichida barcha 9 ekranni ochadi.
+
+Hozir tayyor fayl — `intro/INTRO.learn.jsx`. U 9 ta ekran, `uz/ru/en` matnlari, har ekran uchun alohida harakat, javobga mos vizual feedback, CSS 3D o'tishlar va `public/` dagi mavjud rasmlardan foydalanadi; audio yo'q. 9-ekranda birinchi urinish ko'rsatkichi, tanlangan maqsad/qiyinchilik, uchta xulosa va keyingi bosqich bor. Platformaning yakun sahifasida **Qayta ko'rish**, **Chiqish**, **Darslarni boshlash** tugmalari ko'rinadi; kurs dostupi bo'lmasa oxirgisi o'chiq.
+
+Manbani o'zgartirgach, yangi holatni o'quvchida ko'rish uchun super admin `/admin/intro` orqali `/admin/lessons/[id]` ga o'tib JSX faylni draft sifatida qayta yuklaydi, Preview qiladi va nashr qiladi. Git commit yoki lokal faylning o'zgarishi bazadagi joriy versiyani almashtirmaydi.

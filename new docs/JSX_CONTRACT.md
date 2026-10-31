@@ -269,7 +269,7 @@ practice_attempts
 
 ### 6.6. Admin yuklash ekrani (faqat super admin)
 
-- Ommaviy yuklash: bir necha faylni birdan tashlash, nomdan dars/tur/tartib avtomatik.
+- Ommaviy yuklash: dars sahifasidagi aniq ajratilgan fayl tanlash maydonida bir nechta `.jsx` fayl tanlanadi; nomdan dars/tur/tartib aniqlanadi va tanlangan fayllar ko'rsatiladi.
 - Har fayl uchun holat: ✓ o'tdi / ✗ xato (4 darajadan qaysi birida va nima uchun).
 - Darsning "yig'ilish holati": Learn ✓, Practice 1–10 qaysilari bor/yo'q.
 - Preview: sandbox iframe da, Learn va har Practice alohida ochiladi.

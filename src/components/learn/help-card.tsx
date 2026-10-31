@@ -13,8 +13,7 @@ export function HelpCard({ locale }: { locale: LearnLocale }) {
 
   return <>
     <div className={styles.helpCard}>
-      <div className={styles.helpImage} />
-      <div className={styles.helpBody}><h2>{t.helpTitle}</h2><p>{t.helpText}</p><button type="button" onClick={() => setOpen(true)}>{t.helpButton} <LearnIcon name="arrow" size={17} /></button></div>
+      <div className={styles.helpBody}><h2>FAQ</h2><button type="button" onClick={() => setOpen(true)}>{t.helpButton} <LearnIcon name="arrow" size={17} /></button></div>
     </div>
     <Modal open={open} onClose={() => setOpen(false)} title={t.faqTitle}>
       <div className={styles.faqList}>{t.faq.map((item) => <details key={item.question}><summary>{item.question}</summary><p>{item.answer}</p></details>)}</div>
