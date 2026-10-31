@@ -1,4 +1,5 @@
 import { asc, eq } from "drizzle-orm";
+import Link from "next/link";
 import { redirect } from "next/navigation";
 
 import { IntroManager } from "@/components/admin/intro-manager";
@@ -14,5 +15,8 @@ export default async function IntroPage() {
     db.select({ id: lessons.id, title: lessons.title, status: lessons.status }).from(lessons).where(eq(lessons.code, "INTRO")).limit(1),
     db.select({ id: modules.id, moduleTitle: modules.title, courseTitle: courses.title }).from(modules).innerJoin(courses, eq(modules.courseId, courses.id)).orderBy(asc(courses.order), asc(modules.order)),
   ]);
-  return <IntroManager intro={intro || null} sections={sections} canEdit={user.role === "super_admin"} />;
+  return <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
+    <Link href="/admin" className="text-sm text-gold hover:underline">← Boshqaruv paneli</Link>
+    <IntroManager intro={intro || null} sections={sections} canEdit={user.role === "super_admin"} />
+  </div>;
 }
