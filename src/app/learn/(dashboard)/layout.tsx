@@ -26,7 +26,7 @@ export default async function LearnLayout({ children }: Readonly<{ children: Rea
 
   return <div className={styles.shell}>
     <aside className={styles.sidebar} aria-label="O‘quvchi navigatsiyasi">
-      <Link href="/learn" className={styles.brand}><Image src="/coliseum-logo-horizontal-light.svg" alt="Coliseum Logistics School" width={218} height={53} style={{ height: "auto" }} priority /></Link>
+      <Link href="/learn" className={styles.brand}><Image src="/brand/coliseum-logo-horizontal-brand.png" alt="Coliseum Logistics" width={1010} height={600} sizes="(max-width: 760px) 170px, 215px" priority /></Link>
       <LearnNavigation locale={locale} introHref={intro ? `/learn/${intro.courseId}/${intro.id}` : null} />
       <HelpCard locale={locale} />
     </aside>

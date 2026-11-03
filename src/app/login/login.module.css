@@ -68,7 +68,7 @@
   pointer-events: none;
 }
 
-.logo { display: block; width: 222px; max-width: 75%; margin: 0 auto 34px; }
+.logo { display: block; width: 222px; max-width: 75%; height: 54px; object-fit: cover; object-position: center; margin: 0 auto 34px; }
 .heading { margin-bottom: 32px; text-align: center; }
 .heading h1 { color: #f4f1e8; font-size: clamp(2rem, 5vw, 2.6rem); font-weight: 700; letter-spacing: -.045em; line-height: 1.1; text-shadow: 0 0 22px rgb(212 175 124 / 30%); }
 .heading p { max-width: 33ch; margin: 12px auto 0; color: #a7a7a7; font-size: .9rem; line-height: 1.6; }
@@ -106,7 +106,7 @@
 @media (max-width: 560px) {
   .stage { padding: 28px 16px; }
   .panel { padding: 36px 25px 38px; border-radius: 23px; }
-  .logo { width: 205px; margin-bottom: 30px; }
+  .logo { width: 205px; height: 50px; margin-bottom: 30px; }
   .heading { margin-bottom: 27px; }
   .orbOne { left: -7%; }
   .orbThree { right: -10%; }

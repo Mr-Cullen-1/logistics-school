@@ -26,7 +26,7 @@ export default function DesignSystemPage() {
     <main className="min-h-screen bg-charcoal">
       <div className="mx-auto max-w-6xl px-5 pb-20 pt-7 sm:px-8">
         <header className="flex flex-wrap items-center justify-between gap-5 border-b border-bronze/25 pb-7">
-          <Image src="/coliseum-logo-horizontal.svg" alt="Coliseum Logistics School" width={260} height={63} priority />
+          <Image src="/brand/coliseum-logo-horizontal-white.png" alt="Coliseum Logistics" width={1010} height={600} sizes="260px" priority style={{ width: 260, maxWidth: "100%", height: 63, objectFit: "cover" }} />
           <Link href="/" className="text-sm font-medium text-steel underline-offset-4 hover:text-gold hover:underline focus-visible:outline-2 focus-visible:outline-gold">
             Bosh sahifaga qaytish
           </Link>

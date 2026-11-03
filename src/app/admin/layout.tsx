@@ -16,7 +16,7 @@ export default async function AdminLayout({ children }: Readonly<{ children: Rea
 
   return <div className={styles.shell}>
     <aside className={styles.sidebar} aria-label="Admin navigatsiyasi">
-      <Link href="/admin" className={styles.brand}><Image src="/coliseum-logo-horizontal-light.svg" alt="Coliseum Logistics School" width={218} height={53} style={{ height: "auto" }} priority /></Link>
+      <Link href="/admin" className={styles.brand}><Image src="/brand/coliseum-logo-horizontal-brand.png" alt="Coliseum Logistics" width={1010} height={600} sizes="(max-width: 760px) 175px, 210px" priority /></Link>
       <AdminNavigation isSuperAdmin={user.role === "super_admin"} />
       <div className={styles.sidebarNote}><span className={styles.noteIcon}><AdminIcon name="courses" size={23} /></span><strong>O‘quv platformasi</strong><p>O‘quvchilar va kurslarni bir joydan boshqaring.</p><Link href="/admin/students">O‘quvchilarni ko‘rish <AdminIcon name="arrow" size={17} /></Link></div>
     </aside>
