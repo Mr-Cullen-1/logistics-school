@@ -12,10 +12,10 @@ type NavKey = keyof ReturnType<typeof getLearnText>["nav"];
 type NavItem = { key: NavKey; icon: LearnIconName; href?: string };
 type Group = "courses" | "progress";
 
-export function LearnNavigation({ locale, introHref }: { locale: LearnLocale; introHref: string | null }) {
+export function LearnNavigation({ locale, introHref, hasLessons }: { locale: LearnLocale; introHref: string | null; hasLessons: boolean }) {
   const t = getLearnText(locale);
   const pathname = usePathname();
-  const [open, setOpen] = useState<Record<Group, boolean>>({ courses: false, progress: false });
+  const [open, setOpen] = useState<Record<Group, boolean>>({ courses: pathname === "/learn/profile" || pathname === "/learn/lessons", progress: pathname === "/learn/profile" });
 
   useEffect(() => {
     const frame = requestAnimationFrame(() => {
@@ -32,7 +32,7 @@ export function LearnNavigation({ locale, introHref }: { locale: LearnLocale; in
   }
 
   function item({ key, icon, href }: NavItem) {
-    const active = key === "dashboard" ? pathname === "/learn" : key === "profile" && pathname === "/learn/profile";
+    const active = key === "dashboard" ? pathname === "/learn" : key === "profile" ? pathname === "/learn/profile" : key === "lessons" && pathname === "/learn/lessons";
     const content = <><LearnIcon name={icon} size={18} /><span>{t.nav[key]}</span>{!href && <small>{t.nav.soon}</small>}</>;
     return href
       ? <Link key={key} href={href} className={active ? styles.navActive : undefined} aria-current={active ? "page" : undefined} onClick={() => navigate(href)}>{content}</Link>
@@ -52,7 +52,7 @@ export function LearnNavigation({ locale, introHref }: { locale: LearnLocale; in
     {item({ key: "dashboard", icon: "dashboard", href: "/learn" })}
     {group("courses", "courses", [
       { key: "intro", icon: "play", href: introHref || undefined },
-      { key: "lessons", icon: "lessons" },
+      { key: "lessons", icon: "lessons", href: hasLessons ? "/learn/lessons" : undefined },
       { key: "exams", icon: "exams" },
       { key: "resources", icon: "resources" },
     ])}

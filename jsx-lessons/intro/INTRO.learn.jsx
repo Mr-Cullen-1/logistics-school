@@ -48,6 +48,19 @@ const STYLES = `
   @media(min-width:601px) and (min-height:550px){.intro-screen:has(.intro-feedback:not(:empty)){position:relative;padding-bottom:clamp(52px,8vh,82px)}.intro-screen .intro-feedback:not(:empty){position:absolute;bottom:0;left:0;right:0;min-height:46px;display:flex;align-items:center;padding:10px 15px;font-size:clamp(14px,1.2vw,16px);font-weight:650;line-height:1.4;box-shadow:0 5px 18px #47372216}.intro-screen .intro-feedback.good:not(:empty){border-left:4px solid #398457}.intro-screen .intro-feedback.bad:not(:empty){border-left:4px solid #b36a47}.intro-foot{margin-top:clamp(6px,1.3vh,14px)}}
   @media(max-width:600px){.intro-result{gap:5px}.intro-result-score{padding:7px;gap:7px}.intro-result-score strong{font-size:18px}.intro-result-score span{font-size:10px}.intro-result-pips{gap:2px}.intro-result-pips i{width:6px;height:6px}.intro-takeaways{padding:7px}.intro-takeaways li{padding:2px 0;font-size:10px}.intro-result-next{gap:5px}.intro-result-next span{font-size:10px}}
   @media(prefers-reduced-motion:reduce){.intro-root *{animation:none!important;transition:none!important;scroll-behavior:auto!important}.intro-how-step{opacity:1;transform:none}}
+  /* Shared lesson palette; layout and the nine slide animations remain unchanged. */
+  .intro-root{--background:#0d1114;--surface:#20252a;--surface-elevated:#2c3035;--foreground:#f5f3ee;--text-secondary:#b8bbbd;--line:#c19a6359;--success:#80c796;--warn:#ed8985;background:radial-gradient(circle at 12% 10%,#9f713020,transparent 34%),radial-gradient(circle at 90% 90%,#a8793229,transparent 36%),#0d1114;color:var(--foreground)}
+  .intro-body{border-color:#d8b67866;background:linear-gradient(135deg,#30343bd9,#1b1f23ed 57%,#24282de8);box-shadow:0 10px 36px #0006,inset 0 1px #ffffff12}
+  .intro-title{color:#e0c28c}.intro-english{color:#f5f3ee}.intro-kicker,.intro-link,.intro-feedback,.intro-roadmap-card em,.intro-card-button>span:last-child{color:#d8b678}
+  .intro-panel,.intro-card,.intro-choice,.intro-secondary,.intro-lang{border-color:#c19a6359;background:#ffffff0b;color:#f5f3ee;box-shadow:0 3px 12px #0003}
+  .intro-choice:hover,.intro-choice.selected{border-color:#d8b678;background:#c19a6326}.intro-choice.matched{border-color:#68ab7e;background:#25593a55}.intro-choice.wrong{border-color:#d77a79;background:#6a282858}.intro-choice small{color:#b8bbbd}
+  .intro-feedback:not(:empty){border-color:#c19a6377;background:#c19a631f;color:#e0c28c}.intro-feedback.good:not(:empty){border-color:#68ab7e;background:#25593a55;color:#9cddb5}.intro-feedback.bad:not(:empty){border-color:#d77a79;background:#6a282858;color:#ffaaa7}
+  .intro-result-score{border-color:#68ab7e;background:linear-gradient(110deg,#21442e,#1b3026);box-shadow:0 3px 0 #68ab7e55}.intro-result-score strong,.intro-result-score span{color:#9cddb5}.intro-result-pips i{border-color:#80c796}.intro-result-pips i.on{background:#80c796}
+  .intro-takeaways{border-color:#c19a6359;background:#ffffff0b}.intro-takeaways>span,.intro-takeaways b,.intro-result-next small{color:#d8b678}.intro-takeaways li{border-color:#c19a6333;color:#f5f3ee}.intro-result-next span{color:#b8bbbd}
+  .intro-result .intro-promise{background:linear-gradient(90deg,rgb(27 31 35 / 95%),rgb(27 31 35 / 82%)),url('/student-course-classroom.jpg') right center/auto 100% no-repeat}
+  .intro-screen[data-step="0"] .intro-panel{background:linear-gradient(90deg,rgb(27 31 35 / 95%) 54%,rgb(27 31 35 / 75%)),url('/admin-truck-hero.jpg') right center/auto 100% no-repeat}
+  .intro-screen[data-step="4"] .intro-panel{background:linear-gradient(90deg,rgb(27 31 35 / 96%) 58%,rgb(27 31 35 / 75%)),url('/student-course-office.jpg') right center/auto 100% no-repeat}
+  .intro-how-step:before{background:#20252a}.intro-result-badge{border-color:#d8b678;background:#c19a6326;color:#e0c28c}.intro-foot{border-color:#c19a6359}
 `;
 
 const UI = {

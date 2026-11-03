@@ -1,4 +1,4 @@
-import { and, desc, eq } from "drizzle-orm";
+import { and, desc, eq, sql } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -50,7 +50,9 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     const version = await db.transaction(async (tx) => {
       await tx.select({ id: lessons.id }).from(lessons).where(eq(lessons.id, id)).for("update").limit(1);
       const [last] = await tx.select({ version: lessonFiles.version }).from(lessonFiles).where(and(eq(lessonFiles.lessonId, id), eq(lessonFiles.kind, result.slot.kind), eq(lessonFiles.seq, result.slot.seq))).orderBy(desc(lessonFiles.version)).limit(1);
-      const version = (last?.version ?? 0) + 1;
+      // Deleted versions stay in the audit trail, so their numbers must not be reused.
+      const [historical] = await tx.select({ version: sql<number>`coalesce(max((${auditLog.meta}->>'version')::integer), 0)` }).from(auditLog).where(and(eq(auditLog.action, "lesson.file_uploaded"), sql`${auditLog.meta}->>'lessonId' = ${id}`, sql`${auditLog.meta}->>'kind' = ${result.slot.kind}`, sql`(${auditLog.meta}->>'seq')::integer = ${result.slot.seq}`));
+      const version = Math.max(last?.version ?? 0, Number(historical?.version ?? 0)) + 1;
       const [saved] = await tx.insert(lessonFiles).values({ lessonId: id, kind: result.slot.kind, seq: result.slot.seq, mechanic, source, compiledJs: result.compiledJs, sizeBytes: result.sizeBytes, sha256: result.sha256, version, uploadedBy: access.user.id }).returning({ id: lessonFiles.id });
       await tx.insert(auditLog).values({ actorId: access.user.id, action: "lesson.file_uploaded", targetType: "lesson_file", targetId: saved.id, meta: { lessonId: id, kind: result.slot.kind, seq: result.slot.seq, version } });
       return version;

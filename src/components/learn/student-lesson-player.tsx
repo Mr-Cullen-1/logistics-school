@@ -89,14 +89,14 @@ export function StudentLessonPlayer({ lessonId, title, code, lang, studentName, 
   async function submit(payload: unknown) {
     const value = payload && typeof payload === "object" ? payload as { correct?: boolean } : {};
     if (typeof value.correct !== "boolean") { setMessage("Topshiriq natijasi noto‘g‘ri"); return; }
-    if (reviewing) { setCorrect(value.correct); setReady(false); setMessage(value.correct ? "To‘g‘ri! Keyingisiga o‘ting." : "Yana urinib ko‘ring."); return; }
+    if (reviewing) { setCorrect(value.correct); setReady(false); setMessage(""); return; }
     const durationMs = Math.min(3_600_000, Math.max(0, Math.round(performance.now() - practiceStartedAt.current)));
     practiceStartedAt.current = performance.now();
     const result = await record({ type: "practice", seq: step, correct: value.correct, durationMs });
     if (!result) return;
     setCorrect(result.correct);
     setReady(false);
-    setMessage(result.correct ? "To‘g‘ri! Keyingisiga o‘ting." : "Yana urinib ko‘ring.");
+    setMessage("");
   }
 
   function next() {
@@ -112,31 +112,31 @@ export function StudentLessonPlayer({ lessonId, title, code, lang, studentName, 
   const file = data?.files.find((item) => item.kind === (step === 0 ? "learn" : "practice") && item.seq === step);
 
   return <div className={styles.player}>
-    <nav className={styles.navigation} aria-label="Dars navigatsiyasi">
+    <nav className={`${styles.navigation} ${step === 11 ? styles.resultNavigation : ""}`} aria-label="Dars navigatsiyasi">
       <Link href={exitHref} className={styles.exit}>← {lang === "ru" ? "Выйти" : lang === "en" ? "Exit" : "Chiqish"}</Link>
       <strong className={styles.title} title={visibleTitle}>{visibleTitle}</strong>
-      <span className={styles.stage}>{step === 0 || isIntro ? "Learn" : `Practice ${step}/10`} <span aria-hidden="true">·</span> {isIntro ? (lang === "ru" ? "Вводный урок" : lang === "en" ? "Intro lesson" : "Kirish darsi") : code}</span>
+      {message && data && step < 11 && <p role="alert" className={styles.navMessage}>{message}</p>}
+      <span className={styles.stage}>{step === 11 ? (lang === "ru" ? "Итог" : lang === "en" ? "Result" : "Yakun") : step === 0 || isIntro ? "Learn" : `Practice ${step}/10`} <span aria-hidden="true">·</span> {isIntro ? (lang === "ru" ? "Вводный урок" : lang === "en" ? "Intro lesson" : "Kirish darsi") : code}</span>
     </nav>
     {!data ? <p className={styles.status} role="status">{message || "Dars yuklanmoqda..."}</p> : step === 11 ?
       <section className={styles.result} aria-labelledby="lesson-result-title">
-        <div className={styles.resultMark} aria-hidden="true">✓</div>
+        <div className={styles.resultMark} aria-hidden="true"><svg viewBox="0 0 64 64" fill="none"><path d="M13 33 26 46 52 18" stroke="currentColor" strokeWidth="5" strokeLinecap="round" strokeLinejoin="round" /></svg></div>
         <p className={styles.resultLabel}>{isIntro ? "INTRO · 9/9" : "LESSON COMPLETE"}</p>
         <h1 id="lesson-result-title">Dars tugatildi</h1>
-        <p>Natijangiz saqlandi. {isIntro ? "Kirish darsining barcha 9 bosqichini ko‘rdingiz." : "Learn va Practice bosqichlarini yakunladingiz."}</p>
+        <p className={styles.resultDescription}>Natijangiz saqlandi. {isIntro ? "Kirish darsining barcha 9 bosqichini ko‘rdingiz." : "Learn va Practice bosqichlarini yakunladingiz."}</p>
         {isIntro && <div className={styles.resultNote}><strong>INTRO YAKUNLANDI</strong><span>Learn → Practice → keyingi ochiq dars. Kurs darslariga kirish administrator bergan ruxsatga bog‘liq.</span></div>}
+        {!nextHref && <div className={styles.lockNotice} role="note"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><rect x="4" y="10" width="16" height="11" rx="2" /><path d="M7 10V7a5 5 0 0 1 10 0v3" /><circle cx="12" cy="15.5" r="1" /></svg><span>Keyingi dars administrator ruxsat bergach ochiladi.</span></div>}
         <div className={styles.resultActions}>
           <button type="button" className={styles.secondaryAction} onClick={() => { setReviewing(true); setStep(0); setCorrect(false); setReady(false); setMessage(""); }}>Qayta ko‘rish</button>
-          <Link href={exitHref} className={styles.secondaryAction}>Chiqish</Link>
+          <Link href={exitHref} className={styles.resultExit}>Chiqish</Link>
           {nextHref ? <Link href={nextHref} className={styles.primaryAction}>{isIntro ? "Darslarni boshlash" : "Keyingi dars"} →</Link> : <button type="button" className={styles.primaryAction} disabled title="Administrator darsga ruxsat bergach ochiladi">{isIntro ? "Darslarni boshlash" : "Keyingi dars"} →</button>}
         </div>
-        {!nextHref && <p className={styles.lockedNote}>Keyingi dars administrator ruxsat bergach ochiladi.</p>}
       </section> : !file ? <p className={styles.status} role="alert">Dars fayli topilmadi. Administratorga xabar bering.</p> : <>
       <div className={styles.frameSlot}>
         <div className={practiceTransition ? styles.frameWaiting : styles.frameContent} aria-busy={practiceTransition} aria-hidden={practiceTransition}><LessonFrame key={`${file.id}-${reviewing}`} compiledJs={file.compiledJs} kind={step === 0 ? "learn" : "practice"} lang={lang} studentName={studentName} mode={reviewing ? "review" : undefined} fullScreen checkSignal={checkSignal} onReady={setReady} onSubmit={submit} onFinished={finish} onMounted={() => { if (step === 1) { practiceStartedAt.current = performance.now(); setPracticeTransition(false); } }} onError={() => { setPracticeTransition(false); if (step === 1) setMessage(lang === "ru" ? "Практика не открылась. Обновите страницу." : lang === "en" ? "Practice did not open. Reload the page." : "Practice ochilmadi. Sahifani yangilab ko‘ring."); }} /></div>
         {practiceTransition && <PracticeLoading lang={lang} saving={step === 0} />}
       </div>
-      {step > 0 && !practiceTransition && <div className={styles.practiceActions}>{correct ? <button onClick={next}>Keyingisi →</button> : <button disabled={!ready || busy} onClick={() => setCheckSignal((count) => count + 1)}>Tekshirish</button>}</div>}
-      {message && <p role="status" className={styles.message}>{message}</p>}
+      {step > 0 && !practiceTransition && <div className={styles.practiceActions}>{correct ? <button type="button" onClick={next}>Keyingisi →</button> : <button type="button" disabled={!ready || busy} onClick={() => setCheckSignal((count) => count + 1)}>Tekshirish →</button>}</div>}
     </>}
   </div>;
 }

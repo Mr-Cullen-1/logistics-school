@@ -7,8 +7,10 @@ import { useState, type FormEvent } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
-import { Table, TableBody, TableCell, TableHead, TableHeaderCell, TableRow } from "@/components/ui/table";
 import { Toast } from "@/components/ui/toast";
+import { AdminIcon } from "./admin-icon";
+import { CoursePageIcon } from "./course-page-icons";
+import styles from "./course-pages.module.css";
 
 type Course = { id: string; title: string; description: string | null; level: string | null; isPublished: boolean; order: number };
 const levels = ["A1", "A2", "B1", "B2", "C1"];
@@ -75,29 +77,30 @@ export function CourseManager({ courses, canEdit }: { courses: Course[]; canEdit
   }
 
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-10 sm:px-6">
-      <Link href="/admin" className="text-sm text-gold hover:underline">← Boshqaruv paneli</Link>
-      <div className="mt-6 mb-7 flex flex-wrap items-end justify-between gap-4">
-        <div><h1 className="text-3xl font-bold">Kurslar</h1><p className="mt-2 text-sm text-steel">Modullar va nashr holatini boshqaring.</p></div>
-        {canEdit && <Button onClick={() => openEditor()}>+ Kurs yaratish</Button>}
+    <div className={styles.page}>
+      <Link href="/admin" className={styles.back}><CoursePageIcon name="back" size={16} /> Boshqaruv paneli</Link>
+      <div className={styles.pageHeader}>
+        <div><h1>Kurslar</h1><p>Modullar va nashr holatini boshqaring.</p></div>
+        {canEdit && <button className={styles.primary} onClick={() => openEditor()}><CoursePageIcon name="plus" size={19} /> Kurs yaratish</button>}
       </div>
-      {courses.length ? <Table>
-        <TableHead><tr><TableHeaderCell>Kurs</TableHeaderCell><TableHeaderCell>Daraja</TableHeaderCell><TableHeaderCell>Holat</TableHeaderCell><TableHeaderCell>Amallar</TableHeaderCell></tr></TableHead>
-        <TableBody>{courses.map((course, index) => <TableRow key={course.id}>
-          <TableCell><Link href={`/admin/courses/${course.id}`} className="font-semibold text-gold hover:underline">{course.title}</Link>{course.description && <p className="mt-1 max-w-xl text-xs text-steel">{course.description}</p>}</TableCell>
-          <TableCell>{course.level || "—"}</TableCell>
-          <TableCell><span className={course.isPublished ? "text-gold" : "text-steel"}>{course.isPublished ? "Nashr qilingan" : "Qoralama"}</span></TableCell>
-          <TableCell><div className="flex flex-wrap gap-2">
-            <Link href={`/admin/courses/${course.id}`} className="inline-flex min-h-9 items-center rounded-[8px] border border-bronze px-3 text-sm font-semibold text-ivory hover:bg-bronze/10">Modullar</Link>
+      {courses.length ? <div className={styles.tableFrame}><div className={styles.tableScroll}><table className={styles.table}>
+        <thead><tr><th scope="col">Kurs</th><th scope="col">Daraja</th><th scope="col">Holat</th><th scope="col">Amallar</th></tr></thead>
+        <tbody>{courses.map((course, index) => <tr key={course.id}>
+          <td><div className={styles.courseIdentity}><span className={styles.courseGlyph}><AdminIcon name="book" size={17} /></span><div><Link href={`/admin/courses/${course.id}`}>{course.title}</Link>{course.description && <p title={course.description}>{course.description}</p>}</div></div></td>
+          <td><span className={styles.level}>{course.level || "—"}</span></td>
+          <td><span className={`${styles.status} ${course.isPublished ? "" : styles.statusDraft}`}>{course.isPublished ? "Nashr qilingan" : "Qoralama"}</span></td>
+          <td><div className={styles.actions}>
+            <Link href={`/admin/courses/${course.id}`} className={styles.iconAction} title="Modullar" aria-label={`${course.title} modullari`}><CoursePageIcon name="modules" /></Link>
             {canEdit && <>
-              <Button size="small" variant="tertiary" onClick={() => openEditor(course)}>Tahrirlash</Button>
-              <Button size="small" variant="tertiary" disabled={busy || index === 0} onClick={() => mutate(`/api/admin/courses/${course.id}/move`, "POST", { direction: "up" })} aria-label={`${course.title} yuqoriga`}>↑</Button>
-              <Button size="small" variant="tertiary" disabled={busy || index === courses.length - 1} onClick={() => mutate(`/api/admin/courses/${course.id}/move`, "POST", { direction: "down" })} aria-label={`${course.title} pastga`}>↓</Button>
-              <Button size="small" variant="tertiary" onClick={() => setDeleting(course)}>O‘chirish</Button>
+              <button className={styles.iconAction} title="Tahrirlash" aria-label={`${course.title}ni tahrirlash`} onClick={() => openEditor(course)}><CoursePageIcon name="edit" /></button>
+              <button className={styles.iconAction} title="Yuqoriga" disabled={busy || index === 0} onClick={() => mutate(`/api/admin/courses/${course.id}/move`, "POST", { direction: "up" })} aria-label={`${course.title} yuqoriga`}><CoursePageIcon name="up" /></button>
+              <button className={styles.iconAction} title="Pastga" disabled={busy || index === courses.length - 1} onClick={() => mutate(`/api/admin/courses/${course.id}/move`, "POST", { direction: "down" })} aria-label={`${course.title} pastga`}><CoursePageIcon name="down" /></button>
+              <span className={styles.actionDivider} aria-hidden="true" />
+              <button className={`${styles.iconAction} ${styles.iconDanger}`} title="O‘chirish" aria-label={`${course.title}ni o‘chirish`} onClick={() => setDeleting(course)}><CoursePageIcon name="trash" /></button>
             </>}
-          </div></TableCell>
-        </TableRow>)}</TableBody>
-      </Table> : <div className="rounded-cl-lg border border-bronze/20 bg-dark-slate p-8 text-center text-steel">Hozircha kurs yo‘q.</div>}
+          </div></td>
+        </tr>)}</tbody>
+      </table></div></div> : <div className={styles.emptyPage}>Hozircha kurs yo‘q.</div>}
 
       <Modal open={!!editing} onClose={() => { if (!busy) setEditing(null); }} title={editing === "new" ? "Yangi kurs" : "Kursni tahrirlash"}>
         <form onSubmit={save} className="space-y-4">

@@ -1,5 +1,7 @@
 # JSX shartnomasi: Learn va Practice fayllar + platforma talablari
 
+**Dizayn etaloni:** barcha yangi Learn va Practice fayllari uchun [`jsx-lessons/LESSON_DESIGN.md`](../jsx-lessons/LESSON_DESIGN.md) amal qiladi. To'q fon, tilla aksent, ochiq matn, yashil to'g'ri va qizil xato holatlari bir xil bo'lsin; ekran/karta hajmi va animatsiyalar dizayn yangilanganda saqlanadi.
+
 Bu hujjat yuklangan ikki namunaga (`Dars01.jsx` va `D01_01.jsx`) asoslangan. Ular boshqa loyihadan (4-sinf matematika LMS), lekin **ishlaydigan va sinalgan shartnoma** shu. Biz uni ingliz kursi uchun moslaymiz.
 
 ---
@@ -299,4 +301,4 @@ Bu to'plam 5-bosqichda (JSX pipeline) avtomatik testlarga aylantiriladi.
 2. **Learn uchun `onFinished` natijasi**: `passed` bo'lmasa (60% dan past) keyingi bosqich (practice) ochilsinmi yoki Learn ni qayta ko'rish majburiymi?
 3. **Practice xato chegarasi**: cheksiz urinishmi yoki 3 xatodan keyin "yechimni ko'rsatish" izohi chiqsinmi?
 4. **Til**: o'quvchi interfeys tilini o'zi tanlaydimi (profilda) yoki admin belgilaydimi?
-5. **Namunalar**: ularning dizayni (`#F5F5F0` och fon, `#FF5B35` accent) bizga mosmi yoki Coliseum uslubiga (qoramtir, bronza) o'tkazamizmi? PLAN.md da dizayn saytdan olinadi deb kelishilgan.
+5. **Dizayn qarori:** matematika namunasining och fon va to'q sariq aksenti o'rniga Coliseum'ning to'q fon va tilla uslubi qabul qilingan; aniq palitra va komponent qoidalari `jsx-lessons/LESSON_DESIGN.md` da.

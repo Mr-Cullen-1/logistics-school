@@ -75,6 +75,7 @@ async function main() {
       assert.ok(compactTheory.scroll <= compactTheory.client + 1, `Qoida ${index + 1} kichik ekranga sig‘madi: ${compactTheory.scroll}/${compactTheory.client}`);
       await page.setViewportSize({ width: 1440, height: 900 });
       await frame.locator(".m1-foot .m1-btn.p").click();
+      await frame.locator(".m1-eyebrow").filter({ hasText: new RegExp(`${index + 2}/19`) }).waitFor();
       assert.match((await frame.locator(".m1-eyebrow").textContent()) || "", new RegExp(`${index + 2}\\/19`), `Qoida ${index + 1} dan keyin o‘tilmadi`);
     }
     await frame.locator(".m1-route-canvas").waitFor();
@@ -120,9 +121,13 @@ async function main() {
     const next = frame.locator(".m1-foot .m1-btn.p");
     await next.click();
     assert.match((await frame.locator(".m1-slide h1").textContent()) || "", /Uch xil gap/, "Read dan keyingi slayd ochilmadi");
-    for (let index = 0; index < 3; index += 1) {
-      await frame.locator(".m1-grid .m1-list").first().locator("button").nth(index).click();
-      await frame.locator(".m1-grid .m1-list").last().locator("button").nth(index).click();
+    for (const [sentence, type] of [
+      ["I have a load from Dallas to Atlanta.", "Darak gap"],
+      ["Where is the shipper?", "Wh-savol"],
+      ["Do you have a load for me?", "Yes/No savol"],
+    ]) {
+      await frame.locator(".m1-pair").getByRole("button", { name: sentence, exact: true }).click();
+      await frame.locator(".m1-pair").getByRole("button", { name: type, exact: true }).click();
     }
     await next.click();
     await frame.locator(".m1-svo-stage").locator("button").first().click();
@@ -154,7 +159,7 @@ async function main() {
     await frame.locator(".m1-foot .m1-btn.p").click();
     const completed = await page.evaluate(() => (window as unknown as { lessonMessages: { type: string; payload: unknown }[] }).lessonMessages.filter((message) => message.type === "finished"));
     assert.equal(completed.length, 1);
-    console.log("M1L01: 5 animatsiyali qoida, Rive timeline, 3D truck, 19 slayd, javoblar va yakun payload ishladi.");
+    console.log("M1L01: 5 animatsiyali qoida, Rive timeline, harakatlanuvchi truck, 19 slayd, javoblar va yakun payload ishladi.");
   } finally { await browser.close(); await new Promise<void>((resolve) => server.close(() => resolve())); }
 }
 

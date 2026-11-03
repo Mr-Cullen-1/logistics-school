@@ -1,5 +1,7 @@
 # Module 1 — English Foundations: Learn dars kontenti (slaydlar)
 
+**Vizual etalon:** ushbu moduldagi barcha Learn ekranlari va ularga tegishli Practice topshiriqlari [`../LESSON_DESIGN.md`](../LESSON_DESIGN.md) dagi to'q Coliseum palitrasidan foydalanadi. Kontent, slayd/karta hajmi hamda mavjud 2D, 3D va Rive animatsiyalari dizaynni yangilaganda saqlanadi.
+
 8 ta dars. Standart oqim **14–15 slayd**; M1L01 boshidagi besh nazariy qoida bilan **19 slayd**. Bu hujjat **Learn fayllar** uchun kontent (nima yoziladi). Practice (10 tadan) `COURSE.md` da rejalashtirilgan.
 
 ---

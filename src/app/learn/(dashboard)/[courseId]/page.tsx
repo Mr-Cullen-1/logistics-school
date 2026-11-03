@@ -8,6 +8,7 @@ import { courses, enrollments, lessons, modules, progress, studentProfiles } fro
 import { requireReadyUser } from "@/lib/auth/current-user";
 import { activeCourseAccess } from "@/lib/courses/access";
 import { getLearnText } from "@/lib/learn/translations";
+import { LearnIcon } from "@/components/learn/learn-icon";
 import styles from "../../learn.module.css";
 
 export default async function CoursePage({ params }: { params: Promise<{ courseId: string }> }) {
@@ -43,8 +44,26 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
       <h2 className={styles.moduleHeading}>{t.modules}</h2>
       {sections.length ? <div className={styles.moduleList}>{sections.map((section, index) => {
         const sectionLessons = moduleLessons.filter((lesson) => lesson.moduleId === section.id);
-        return <section className={styles.moduleCard} key={section.id}><span className={styles.moduleNumber}>{index + 1}</span><div><h3>{section.title}</h3>{sectionLessons.length ? <ul className="mt-2 space-y-2">{sectionLessons.map((lesson) => <li key={lesson.id}><Link className="text-sm text-amber-800 hover:underline" href={`/learn/${courseId}/${lesson.id}`}>{lesson.code} · {lesson.title}{lesson.completedAt ? " ✓" : ""}</Link></li>)}</ul> : <p>{t.lessonsSoon}</p>}</div></section>;
-      })}</div> : <div className={styles.moduleCard}><p>{t.noModules}</p></div>}
+        const completed = sectionLessons.filter((lesson) => lesson.completedAt).length;
+        return <details className={styles.moduleCard} key={section.id} open={index === 0}>
+          <summary className={styles.moduleSummary}>
+            <span className={styles.moduleNumber}>{String(index + 1).padStart(2, "0")}</span>
+            <span className={styles.moduleIdentity}><span className={styles.moduleKicker}>{t.modules} / {String(index + 1).padStart(2, "0")}</span><strong>{section.title}</strong></span>
+            <span className={styles.moduleMeta}>{t.lessonsLabel} · {sectionLessons.length}{completed > 0 ? ` / ${t.completedLabel} · ${completed}` : ""}</span>
+            <span className={styles.moduleChevron} aria-hidden="true" />
+          </summary>
+          <div className={styles.moduleBody}>
+            {sectionLessons.length ? <ol className={styles.lessonList}>{sectionLessons.map((lesson, lessonIndex) => <li key={lesson.id}>
+              <Link className={styles.lessonRow} href={`/learn/${courseId}/${lesson.id}`}>
+                <span className={styles.lessonOrdinal}>{index + 1}.{lessonIndex + 1}</span>
+                <span className={styles.lessonIcon}><LearnIcon name={lesson.completedAt ? "check" : "play"} size={18} /></span>
+                <span className={styles.lessonIdentity}><strong>{lesson.title}</strong><small>{lesson.code}{lesson.completedAt ? ` · ${t.completedLabel}` : ""}</small></span>
+                <span className={styles.lessonAction}><span className={styles.lessonActionLabel}>{lesson.completedAt ? t.introReview : t.introOpen}</span><LearnIcon name="arrow" size={16} /></span>
+              </Link>
+            </li>)}</ol> : <p className={styles.moduleEmpty}>{t.lessonsSoon}</p>}
+          </div>
+        </details>;
+      })}</div> : <div className={styles.moduleEmptyCard}>{t.noModules}</div>}
     </div>
   );
 }

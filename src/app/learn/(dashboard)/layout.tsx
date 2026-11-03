@@ -6,19 +6,21 @@ import { HelpCard } from "@/components/learn/help-card";
 import { LearnIcon } from "@/components/learn/learn-icon";
 import { LearnNavigation } from "@/components/learn/learn-navigation";
 import { getDatabase } from "@/db";
-import { lessons, modules, studentProfiles } from "@/db/schema";
+import { courses, enrollments, lessons, modules, studentProfiles } from "@/db/schema";
 import { requireReadyUser } from "@/lib/auth/current-user";
+import { activeCourseAccess } from "@/lib/courses/access";
 import { getLearnText, type LearnLocale } from "@/lib/learn/translations";
-import { and, eq } from "drizzle-orm";
+import { and, eq, isNull, ne, or } from "drizzle-orm";
 import styles from "../learn.module.css";
 
 export default async function LearnLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   const user = await requireReadyUser();
   if (user.role !== "student") redirect("/admin");
   const db = getDatabase();
-  const [[studentProfile], [intro]] = await Promise.all([
+  const [[studentProfile], [intro], [firstLesson]] = await Promise.all([
     db.select({ avatarData: studentProfiles.avatarData, locale: studentProfiles.locale }).from(studentProfiles).where(eq(studentProfiles.studentId, user.id)).limit(1),
     db.select({ id: lessons.id, courseId: modules.courseId }).from(lessons).innerJoin(modules, eq(lessons.moduleId, modules.id)).where(and(eq(lessons.code, "INTRO"), eq(lessons.status, "published"))).limit(1),
+    db.select({ id: lessons.id }).from(enrollments).innerJoin(courses, eq(enrollments.courseId, courses.id)).innerJoin(modules, eq(modules.courseId, courses.id)).innerJoin(lessons, eq(lessons.moduleId, modules.id)).where(and(activeCourseAccess(user.id), eq(lessons.status, "published"), or(isNull(lessons.code), ne(lessons.code, "INTRO")))).limit(1),
   ]);
   const locale = (studentProfile?.locale === "ru" || studentProfile?.locale === "en" ? studentProfile.locale : "uz") as LearnLocale;
   const t = getLearnText(locale);
@@ -27,7 +29,7 @@ export default async function LearnLayout({ children }: Readonly<{ children: Rea
   return <div className={styles.shell}>
     <aside className={styles.sidebar} aria-label="O‘quvchi navigatsiyasi">
       <Link href="/learn" className={styles.brand}><Image src="/brand/coliseum-logo-horizontal-brand.png" alt="Coliseum Logistics" width={1010} height={600} sizes="(max-width: 760px) 170px, 215px" priority /></Link>
-      <LearnNavigation locale={locale} introHref={intro ? `/learn/${intro.courseId}/${intro.id}` : null} />
+      <LearnNavigation locale={locale} introHref={intro ? `/learn/${intro.courseId}/${intro.id}` : null} hasLessons={!!firstLesson} />
       <HelpCard locale={locale} />
     </aside>
     <div className={styles.workspace}>

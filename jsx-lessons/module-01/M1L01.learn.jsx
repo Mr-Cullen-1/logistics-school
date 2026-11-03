@@ -43,23 +43,23 @@ const STYLES = `
 .m1-face strong{font-size:clamp(12px,1.4vw,15px);font-weight:600;line-height:1.15}.m1-face small{color:var(--text-secondary);font-size:clamp(10px,1.1vw,12px);line-height:1.2}
 .m1-flip:hover .m1-face{border-color:var(--bronze)}
 .m1-trap .m1-face{min-height:72px}.m1-trap .bad strong{color:var(--warn)}.m1-trap .ok strong{color:var(--success)}
-.m1-truck-stage{perspective:900px;height:clamp(92px,19vh,160px);display:grid;place-items:center;touch-action:none;cursor:grab;user-select:none;position:relative}
-.m1-truck-wrap{transform:scale(var(--ts,1));width:0;height:0;position:relative}
-.m1-truck-tilt{transform-style:preserve-3d;transform:rotateX(-17deg)}
-.m1-truck{position:relative;width:0;height:0;transform-style:preserve-3d}
-.m1-box{position:absolute;left:50%;top:50%;width:var(--w);height:var(--h);margin:calc(var(--h)/-2) 0 0 calc(var(--w)/-2);transform-style:preserve-3d}
-.m1-f{position:absolute;display:flex;align-items:center;justify-content:center;font-style:normal;font-size:10px;font-weight:800;letter-spacing:.14em;color:#0d111499;background:var(--c);border:1px solid #00000040;overflow:hidden}
-.m1-f-front,.m1-f-back{width:var(--w);height:var(--h);left:0;top:0}.m1-f-front{transform:translateZ(calc(var(--d)/2))}.m1-f-back{transform:rotateY(180deg) translateZ(calc(var(--d)/2));filter:brightness(.8)}
-.m1-f-right,.m1-f-left{width:var(--d);height:var(--h);top:0;left:calc((var(--w) - var(--d))/2)}.m1-f-right{transform:rotateY(90deg) translateZ(calc(var(--w)/2));filter:brightness(.92)}.m1-f-left{transform:rotateY(-90deg) translateZ(calc(var(--w)/2));filter:brightness(.72)}
-.m1-f-top,.m1-f-bottom{width:var(--w);height:var(--d);left:0;top:calc((var(--h) - var(--d))/2)}.m1-f-top{transform:rotateX(90deg) translateZ(calc(var(--h)/2));filter:brightness(1.15)}.m1-f-bottom{transform:rotateX(-90deg) translateZ(calc(var(--h)/2));filter:brightness(.5)}
-.m1-wind{position:absolute;inset:6px 4px 14px;background:linear-gradient(135deg,#3b4a55,#0d1114);border-radius:3px}
-.m1-wheel{position:absolute;left:50%;top:50%;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:#0b0d0f;border:5px solid #3a4045}
-.m1-shadow{position:absolute;left:50%;bottom:6%;width:210px;height:34px;margin-left:-105px;border-radius:50%;background:radial-gradient(#000a,transparent 70%);transform:scale(var(--ts,1))}
+.m1-truck-stage{position:relative;width:100%;height:100%;user-select:none;pointer-events:none}
+.m1-truck-run{--truck-start:clamp(67px,12%,124px);position:absolute;left:var(--truck-start);top:calc(50% - clamp(17px,2.8vw,28px));width:clamp(125px,20vw,205px);transform:translate(-50%,-50%);animation:m1-drive 14s linear infinite;filter:drop-shadow(0 8px 5px #0009)}
+.m1-truck-run svg{display:block;width:100%;height:auto}
+.m1-route-point{position:absolute;top:10px;z-index:2;padding:3px 7px;border:1px solid #d8b67899;border-radius:7px;background:#14191ddd;color:#e0c28c;font-size:clamp(9px,1vw,11px);font-weight:800;letter-spacing:.04em}
+.m1-route-point.a{left:8px}.m1-route-point.b{right:8px}
+@keyframes m1-drive{0%,7%{left:var(--truck-start);opacity:1}86%,92%{left:calc(100% - var(--truck-start));opacity:1}97%{opacity:0}100%{left:var(--truck-start);opacity:0}}
+@media(prefers-reduced-motion:reduce){.m1-truck-run{animation:none;left:50%}}
 .m1-svo-stage{perspective:900px;padding:8px 0}.m1-svo{display:flex;gap:8px;justify-content:center;transform-style:preserve-3d;transform:rotateX(14deg)}
 .m1-tile{flex:1 1 0;max-width:210px;min-height:74px;border:0;border-radius:12px;padding:8px 10px;text-align:left;color:#0d1114;display:flex;flex-direction:column;justify-content:center;gap:2px;transition:transform .9s cubic-bezier(.2,.9,.2,1),opacity .6s;box-shadow:0 5px 0 #0009,0 14px 22px #0007;opacity:.85}
 .m1-tile small{font-size:10px;font-weight:800;letter-spacing:.1em;text-transform:uppercase;opacity:.75}.m1-tile strong{font-size:clamp(14px,2vw,22px);line-height:1.1}
 .m1-tile.t0{background:var(--bronze);transform:translate3d(-18px,-34px,-140px) rotateY(-38deg) rotateZ(-9deg)}.m1-tile.t1{background:var(--success);transform:translate3d(0,34px,90px) rotateX(48deg) rotateZ(4deg)}.m1-tile.t2{background:var(--ivory);transform:translate3d(18px,-30px,-70px) rotateY(42deg) rotateZ(8deg)}
 .m1-svo.asm .m1-tile{transform:translateZ(0);opacity:1}.m1-svo.asm .m1-tile:hover{transform:translateZ(26px) translateY(-3px)}
+.m1-root .m1-tile,.m1-root .m1-tile small,.m1-root .m1-tile strong{color:#172023}
+.m1-pair{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;padding:clamp(12px,2vw,22px);border:1px solid var(--line);border-radius:16px;background:linear-gradient(120deg,#c19a6312,#ffffff06)}
+.m1-pair .m1-list{gap:9px}.m1-pair .m1-opt{min-height:56px}.m1-pair .m1-opt:disabled{opacity:1}.m1-pair .m1-opt.good:after{content:'✓';margin-left:auto;color:var(--success);font-size:19px}.m1-pair .m1-opt.bad{border-color:var(--warn);background:#6a282858}
+.m1-pair-label{padding:0 4px 4px;color:var(--bronze-light);font-size:11px;font-weight:800;letter-spacing:.1em;text-transform:uppercase}
+@media(max-width:600px){.m1-pair{gap:6px;padding:8px}.m1-pair .m1-opt{min-height:64px;padding:6px}.m1-pair .m1-opt strong{font-size:11px}}
 .m1-trio{border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:7px 9px;display:grid;gap:3px;align-content:start}.m1-trio b{color:var(--bronze-light);font-size:12px;letter-spacing:.06em;text-transform:uppercase}.m1-trio span{font-size:clamp(11px,1.3vw,14px);font-weight:600;line-height:1.2}
 .m1-chips{display:flex;gap:5px;flex-wrap:wrap}.m1-chip{min-height:34px;border:1px solid var(--line);border-radius:9px;background:var(--surface);padding:3px 9px;font-size:12px}.m1-chip.on{border-color:var(--bronze);background:var(--bronze);color:var(--background);font-weight:700}
 .m1-slots{display:flex;gap:6px;flex-wrap:wrap;min-height:46px;align-items:center;border:1px dashed var(--line);border-radius:10px;padding:6px}.m1-token{min-height:44px;min-width:44px;border:1px solid var(--bronze);border-radius:9px;background:var(--surface-elevated);padding:4px 11px;font-weight:700;font-size:clamp(13px,1.6vw,17px);transition:transform .25s}
@@ -67,10 +67,21 @@ const STYLES = `
 .m1-coin-wrap{display:grid;place-items:center;gap:6px;perspective:700px;padding:4px}.m1-coin{width:86px;height:86px;position:relative;transform-style:preserve-3d;animation:m1-coin 3.4s linear infinite}
 .m1-coin i{position:absolute;inset:0;border-radius:50%;background:#8a6a3a;display:grid;place-items:center;font-style:normal;font-weight:800;font-size:24px;color:#0d1114}.m1-coin i.face{background:radial-gradient(circle at 30% 25%,var(--bronze-light),var(--bronze) 55%,#8a6a3a);border:3px solid #8a6a3a}
 @keyframes m1-coin{to{transform:rotateY(360deg)}}
+.m1-result-slide{max-width:1500px}.m1-result{width:100%;min-height:clamp(290px,55vh,560px);display:grid;grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr);align-items:center;gap:clamp(14px,3vw,48px);padding:clamp(16px,3vw,36px);border:1px solid #d8b67870;border-radius:24px;background:radial-gradient(circle at 22% 50%,#c19a6318,transparent 42%),linear-gradient(135deg,#2e3138,#1d2126);box-shadow:0 18px 40px #0005}
+.m1-result-art{position:relative;min-height:clamp(210px,40vh,360px);display:grid;place-items:center;border-right:1px solid #d8b67844}
+.m1-result-ring{position:relative;width:clamp(170px,28vh,250px);height:clamp(170px,28vh,250px);display:grid;place-items:center;border-radius:50%;background:conic-gradient(#e5c386 var(--score),#41464b 0);box-shadow:0 0 30px #c19a6333;animation:m1-result-pop .8s cubic-bezier(.2,.8,.2,1) both}
+.m1-result-ring:before{content:'';position:absolute;inset:14px;border-radius:50%;background:#202329;box-shadow:inset 0 0 22px #0005}
+.m1-result-score{position:relative;z-index:1;display:grid;text-align:center;line-height:1}.m1-result-score small{font-size:clamp(11px,1vw,15px);font-weight:800;letter-spacing:.12em;color:var(--bronze-light)}.m1-result-score strong{font-size:clamp(54px,7vw,90px);font-weight:800;color:#fff}
+.m1-result-art .m1-coin-wrap{position:absolute;right:12%;bottom:6%;transform:scale(.56);transform-origin:center}.m1-result-art .m1-coin-wrap p{display:none}
+.m1-result-copy{display:grid;justify-items:center;gap:clamp(8px,2vh,20px);text-align:center}.m1-result-copy svg{width:clamp(48px,6vw,78px);height:auto;color:#e0c28c}.m1-result-copy h2{margin:0;font-size:clamp(25px,3vw,44px);line-height:1.1}.m1-result-copy p{margin:0;max-width:460px;color:var(--text-secondary);font-size:clamp(13px,1.5vw,19px);line-height:1.5}.m1-result-copy b{color:var(--bronze-light);font-size:clamp(16px,1.9vw,25px)}
+.m1-confetti{position:absolute;inset:0;overflow:hidden;pointer-events:none}.m1-confetti i{position:absolute;left:50%;top:50%;width:7px;height:13px;border-radius:2px;background:var(--bronze-light);transform:rotate(var(--angle)) translateY(-130px);animation:m1-confetti 3.8s ease-in-out infinite;animation-delay:var(--delay)}.m1-confetti i:nth-child(3n){background:#e4784f}.m1-confetti i:nth-child(4n){width:6px;height:6px;border-radius:50%}
+@keyframes m1-confetti{0%,100%{opacity:0;transform:rotate(var(--angle)) translateY(-108px) scale(.6)}25%,75%{opacity:1}50%{transform:rotate(var(--angle)) translateY(-150px) scale(1)}}
+@keyframes m1-result-pop{from{opacity:0;transform:scale(.76) rotate(-35deg)}to{opacity:1;transform:scale(1) rotate(0)}}
+@media(max-width:600px){.m1-result{gap:8px;padding:12px;grid-template-columns:1fr}.m1-result-art{min-height:190px;border-right:0;border-bottom:1px solid #d8b67844}.m1-result-ring{width:160px;height:160px}.m1-result-ring:before{inset:11px}.m1-result-art .m1-coin-wrap{right:15%;bottom:0}.m1-result-copy{gap:6px}.m1-result-copy svg{width:36px}.m1-result-copy h2{font-size:22px}.m1-result-copy p{font-size:12px}}
 .m1-phrase{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:6px;align-items:center;border:1px solid var(--line);border-radius:10px;background:var(--surface);padding:4px 8px}
 @media(max-width:600px){.m1-g4{grid-template-columns:repeat(2,minmax(0,1fr))}.m1-root{--ts:.78}.m1-bubble{max-width:90%}.m1-phrase{grid-template-columns:1fr}.m1-chip{min-height:32px}}
 @media(max-height:700px){.m1-root{--ts:.74}.m1-panel{padding:7px}.m1-trap .m1-face{min-height:60px}}
-/* The lesson uses the same ivory, bronze and glass surfaces as the student player. */
+/* Existing layout values; the shared palette below overrides visual colors. */
 .m1-root{--background:#f3efe7;--surface:#fffaf2;--surface-elevated:#f8ead4;--foreground:#1b2429;--text-secondary:#59636a;--line:#876f5540;--success:#36754f;--warn:#9b542d;gap:clamp(6px,1vh,10px);background:radial-gradient(circle at 10% 9%,#e5cfac 0,transparent 35%),radial-gradient(circle at 90% 87%,#d9c49e 0,transparent 33%),#f3efe7}
 .m1-head{max-width:none;min-height:54px;padding:8px 16px;border:1px solid #fff;border-radius:16px;background:rgba(255,255,255,.7);backdrop-filter:blur(8px);box-shadow:0 8px 28px #6f533719}
 .m1-eyebrow,.m1-kick{color:#87572a}.m1-dot{background:#b9b8b3}.m1-dot.on{background:#b5864d}
@@ -92,7 +103,6 @@ const STYLES = `
 .m1-mission-visual{position:relative;height:clamp(110px,20vh,185px);border:1px solid #c6a6778a;border-radius:16px;overflow:hidden;background:radial-gradient(circle at 50% 45%,#f8e9ce,transparent 65%),linear-gradient(125deg,#fffaf2,#eee0c8)}
 .m1-route-canvas{position:absolute;inset:0;width:100%;height:100%;opacity:.7}
 .m1-mission-visual .m1-truck-stage{position:relative;height:100%;z-index:1}
-.m1-mission-visual .m1-shadow{bottom:0}
 .m1-theory{display:grid;gap:clamp(7px,1.1vh,12px)}
 .m1-theory-top{display:flex;align-items:center;justify-content:space-between;gap:8px}
 .m1-theory-controls{display:flex;gap:5px}.m1-theory-controls button{border:1px solid #b5864d80;border-radius:8px;background:#fffaf2;padding:4px 8px;color:#82562a;font-size:clamp(10px,1vw,12px);font-weight:700}
@@ -123,6 +133,20 @@ const STYLES = `
 @media(max-height:600px){.m1-theory{gap:4px}.m1-theory-flow{min-height:56px}.m1-theory-flip,.m1-theory-flip-inner{min-height:62px}.m1-theory-points p{padding:4px 6px}.m1-theory-example{padding:5px 8px}}
 @media(max-height:700px){.m1-mission-visual{height:100px}.m1-body{padding:4px 8px}.m1-slide{gap:4px}.m1-chat{gap:2px}.m1-bubble{padding:3px 8px}.m1-opt{min-height:38px}}
 @media(prefers-reduced-motion:reduce){.m1-root *{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+/* Shared visual theme: color and surface only; slide geometry and motion stay above. */
+.m1-root{--background:#0d1114;--surface:#20252a;--surface-elevated:#2c3035;--foreground:#f5f3ee;--text-secondary:#b8bbbd;--line:#c19a6359;--success:#80c796;--warn:#ed8985;background:radial-gradient(circle at 10% 9%,#9f713020,transparent 35%),radial-gradient(circle at 90% 87%,#a8793229,transparent 33%),#0d1114}
+.m1-head,.m1-body{border-color:#d8b67866;background:linear-gradient(135deg,#30343bd9,#1b1f23ed 57%,#24282de8);box-shadow:0 18px 42px #0006,inset 0 1px #ffffff12}
+.m1-title{color:#e0c28c}
+.m1-eyebrow,.m1-kick,.m1-bubble small,.m1-trio b,.m1-link{color:#d8b678}.m1-dot{background:#454b4e}.m1-dot.on{background:#e0c28c}.m1-foot{border-color:#c19a6359}
+.m1-panel,.m1-opt,.m1-bubble,.m1-trio,.m1-face,.m1-phrase,.m1-chip,.m1-token,.m1-btn{border-color:#c19a6359;background:#ffffff0b;color:#f5f3ee;box-shadow:0 5px 15px #0003}
+.m1-opt:hover:not(:disabled),.m1-opt.sel,.m1-face.back{border-color:#d8b678;background:#c19a6326}.m1-opt.good{border-color:#68ab7e;background:#25593a55}.m1-opt.bad{border-color:#d77a79;background:#6a282858}.m1-opt.good:after,.m1-trap .ok strong{color:#80c796}.m1-opt.bad:after,.m1-trap .bad strong{color:#ed8985}
+.m1-fb:not(:empty){border-color:#c19a6377;background:#c19a631f;color:#e0c28c}.m1-fb.good{border-color:#68ab7e;background:#25593a55;color:#9cddb5}.m1-fb.bad{border-color:#d77a79;background:#6a282858;color:#ffaaa7}
+.m1-btn.p,.m1-chip.on{border-color:#d8b678;background:linear-gradient(110deg,#f0d39a,#c5985f);color:#17191a}.m1-btn.p:hover:not(:disabled){background:#f4dcae}.m1-bubble.right{border-color:#c19a6377;background:#c19a6324}
+.m1-mission-visual{border-color:#d8b67880;background:radial-gradient(circle at 50% 45%,#c19a6328,transparent 65%),linear-gradient(125deg,#2b3034,#151a1d)}
+.m1-theory-controls button{border-color:#d8b67888;background:#1b2024;color:#e0c28c}.m1-type-caret{background:#d8b678}.m1-theory-flow{border-color:#d8b67880;background:linear-gradient(110deg,#30343b,#1a1e22)}
+.m1-theory-step{border-color:#c19a6388;background:#ffffff0b;box-shadow:0 5px 12px #0003}.m1-theory-step small,.m1-theory-arrow,.m1-theory-face small{color:#d8b678}
+.m1-theory-points p{border-color:#c19a6359;background:#ffffff0b;color:#f5f3ee}.m1-theory-example{border-color:#d8b678;background:#c19a6324}.m1-theory-example span,.m1-theory-face em{color:#b8bbbd}
+.m1-theory-face{border-color:#d8b678;background:#24292d;box-shadow:0 7px 16px #0004}.m1-theory-face.back{border-color:#68ab7e;background:#25593a}.m1-theory-face.back small{color:#9cddb5}
 `;
 
 const UI = {
@@ -309,44 +333,46 @@ const THEORY_UI = {
   en: { lesson: "Theory", wrong: "Incorrect order or form", reveal: "Show the correct form", right: "Correct form" },
 };
 
-/* ---------- 3D: truck ---------- */
-const FACES = ["front", "back", "right", "left", "top", "bottom"];
-const Box = ({ w, h, d, x = 0, y = 0, z = 0, c, faces = {} }) => (
-  <div className="m1-box" style={{ "--w": w + "px", "--h": h + "px", "--d": d + "px", "--c": c, transform: `translate3d(${x}px,${y}px,${z}px)` }}>
-    {FACES.map((f) => <i key={f} className={`m1-f m1-f-${f}`}>{faces[f]}</i>)}
-  </div>
-);
-
-function Truck({ hint }) {
-  const ref = useRef(null);
-  const st = useRef({ on: false, x: 0, a: 32 });
-  useEffect(() => {
-    const reduce = typeof matchMedia === "function" && matchMedia("(prefers-reduced-motion: reduce)").matches;
-    let raf; let last = performance.now();
-    const tick = (t) => {
-      if (!st.current.on && !reduce) st.current.a += (t - last) * 0.022;
-      last = t;
-      if (ref.current) ref.current.style.transform = `rotateY(${st.current.a}deg)`;
-      raf = requestAnimationFrame(tick);
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, []);
-  const down = (e) => { st.current.on = true; st.current.x = e.clientX; e.currentTarget.setPointerCapture?.(e.pointerId); };
-  const move = (e) => { if (st.current.on) { st.current.a += (e.clientX - st.current.x) * 0.7; st.current.x = e.clientX; } };
-  const up = () => { st.current.on = false; };
-  const wheels = [[-80, 27], [-80, -27], [-48, 27], [-48, -27], [62, 27], [62, -27]];
-  return (
-    <div className="m1-truck-stage" onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={up} title={hint}>
-      <div className="m1-shadow" />
-      <div className="m1-truck-wrap"><div className="m1-truck-tilt"><div className="m1-truck" ref={ref}>
-        <Box w={140} h={58} d={52} x={-32} y={-6} c="#c19a63" faces={{ right: "COLISEUM", left: "COLISEUM", back: "LOAD" }} />
-        <Box w={46} h={46} d={48} x={64} y={0} c="#f3efe7" faces={{ right: <span className="m1-wind" />, front: "", left: "" }} />
-        <Box w={188} h={6} d={40} x={-6} y={29} c="#2a2f33" />
-        {wheels.map(([x, z], i) => <i key={i} className="m1-wheel" style={{ transform: `translate3d(${x}px,35px,${z}px)` }} />)}
-      </div></div></div>
+/* ---------- Dallas to Atlanta: detailed side-view semi truck ---------- */
+function Truck() {
+  return <div className="m1-truck-stage" aria-hidden="true">
+    <span className="m1-route-point a">A · Dallas</span>
+    <span className="m1-route-point b">B · Atlanta</span>
+    <div className="m1-truck-run">
+      <svg viewBox="0 0 320 135" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="m1-trailer" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#f4e8d2"/><stop offset=".18" stopColor="#cbb997"/><stop offset=".72" stopColor="#a78e69"/><stop offset="1" stopColor="#6c5a43"/></linearGradient>
+          <linearGradient id="m1-cab" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#f4d59e"/><stop offset=".38" stopColor="#c3985c"/><stop offset="1" stopColor="#715235"/></linearGradient>
+          <linearGradient id="m1-glass" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#7f9caa"/><stop offset=".4" stopColor="#263a46"/><stop offset="1" stopColor="#101b22"/></linearGradient>
+          <radialGradient id="m1-tyre"><stop offset=".3" stopColor="#626a70"/><stop offset=".34" stopColor="#b8b9b4"/><stop offset=".49" stopColor="#41494e"/><stop offset=".52" stopColor="#11171b"/><stop offset=".9" stopColor="#11171b"/><stop offset="1" stopColor="#41474b"/></radialGradient>
+        </defs>
+        <ellipse cx="161" cy="119" rx="150" ry="9" fill="#000" opacity=".3"/>
+        <path d="M22 21h204v79H22z" fill="url(#m1-trailer)" stroke="#5f5040" strokeWidth="2"/>
+        <path d="M22 21h204v8H22z" fill="#f5e8d2" opacity=".8"/><path d="M22 91h204v9H22z" fill="#534a3d"/>
+        <path d="M30 30h186M30 83h186" stroke="#f1e6d2" strokeWidth="1.5" opacity=".55"/>
+        <path d="M55 28v62m40-62v62m40-62v62m40-62v62m40-62v62" stroke="#655744" strokeWidth="1.3" opacity=".3"/>
+        <text x="113" y="63" textAnchor="middle" fill="#443c32" fontSize="14" fontWeight="800" letterSpacing="1.2">COLISEUM</text>
+        <text x="113" y="76" textAnchor="middle" fill="#5a4b35" fontSize="7" fontWeight="700" letterSpacing="3">LOGISTICS</text>
+        <path d="M10 101h218v9H10z" fill="#2b3338" stroke="#151b1e" strokeWidth="2"/>
+        <path d="M33 101v14m68-14v14m116-14v14" stroke="#a9a9a2" strokeWidth="2"/>
+        <path d="M229 55h37l14 11 19 3 10 15v24h-82z" fill="url(#m1-cab)" stroke="#5b4732" strokeWidth="2"/>
+        <path d="M229 56h31v32h-31z" fill="url(#m1-glass)" stroke="#d7c7a9" strokeWidth="2"/>
+        <path d="M265 59l12 9 13 2 7 17h-32z" fill="url(#m1-glass)" stroke="#c7af83" strokeWidth="2"/>
+        <path d="M232 61l22-3-17 25h-5zM269 67l11 3-11 13z" fill="#d5e2e5" opacity=".22"/>
+        <path d="M230 91h68M266 87v17" stroke="#634932" strokeWidth="2"/>
+        <path d="M267 93h9" stroke="#e5c797" strokeWidth="2" strokeLinecap="round"/>
+        <path d="M308 84h7v19h-7z" fill="#2d3539" stroke="#a3a39b"/>
+        <path d="M308 90h6v7h-6z" fill="#ffe0a2"/>
+        <path d="M231 98h5v6h-5z" fill="#d9563c"/>
+        <path d="M241 55V37h5v18" fill="#626c6d" stroke="#323638" strokeWidth="1.5"/>
+        <path d="M263 67l-4-3v7" fill="none" stroke="#222a2d" strokeWidth="2"/>
+        <path d="M229 106h85v6h-85z" fill="#b4aaa0" stroke="#41494c" strokeWidth="1.5"/>
+        <path d="M239 107h24l-5 5h-19z" fill="#363d40"/>
+        {[47,90,248,289].map((x) => <g key={x}><circle cx={x} cy="111" r="17" fill="url(#m1-tyre)" stroke="#0c1013" strokeWidth="2"/><circle cx={x} cy="111" r="5" fill="#c6c9c5" stroke="#525b5e"/><circle cx={x} cy="111" r="2" fill="#687075"/></g>)}
+        <path d="M24 21h202v79" fill="none" stroke="#fff7e5" opacity=".42"/>
+      </svg>
     </div>
-  );
+  </div>;
 }
 
 /* ---------- small pieces ---------- */
@@ -512,8 +538,8 @@ function S1({ lang, ui, setGate, rec }) {
   const d = C.s1; const [pick, setPick] = useState(null); const [tr, setTr] = useState(false);
   return (<>
     <span className="m1-kick">{d.kicker}</span>
-    <div className="m1-mission-visual"><RiveRoute className="m1-route-canvas" /><Truck hint={ui.rotate} /></div>
-    <p className="m1-muted" style={{ textAlign: "center" }}>↻ {ui.rotate} · Dallas → Atlanta</p>
+    <div className="m1-mission-visual"><RiveRoute className="m1-route-canvas" /><Truck /></div>
+    <p className="m1-muted" style={{ textAlign: "center" }}>{lang === "ru" ? "Грузовик едет из Далласа в Атланту" : lang === "en" ? "The truck is driving from Dallas to Atlanta" : "Yuk mashinasi Dallasdan Atlantaga ketmoqda"}</p>
     <Bubble who="Tom · Driver" text={tr ? tx(d.tr, lang) : d.msg} muted={tr} />
     <button type="button" className="m1-link" onClick={() => setTr(!tr)}>{ui.translation}</button>
     <p className="m1-sub">{tx(d.q, lang)}</p>
@@ -536,21 +562,26 @@ function S2({ ui, setGate }) {
 }
 
 function S3({ lang, ui, setGate }) {
-  const d = C.s3; const [sel, setSel] = useState(null); const [done, setDone] = useState({}); const [fb, setFb] = useState(null);
+  const d = C.s3; const [sel, setSel] = useState(null); const [done, setDone] = useState({}); const [fb, setFb] = useState(null); const [attempt, setAttempt] = useState(null);
+  const [cats] = useState(() => {
+    const shift = 1 + Math.floor(Math.random() * (d.cats.length - 1));
+    return [...d.cats.slice(shift), ...d.cats.slice(0, shift)];
+  });
   const cat = (cid) => {
     if (!sel) { setFb({ t: ui.pickFirst, bad: true }); return; }
     const s = d.items.find((x) => x.id === sel);
-    if (s.cat === cid) { setDone((p) => ({ ...p, [sel]: true })); setFb({ t: tx(s.fb, lang), good: true }); setSel(null); } else setFb({ t: tx(d.wrong, lang), bad: true });
+    if (s.cat === cid) { setDone((p) => ({ ...p, [sel]: cid })); setFb({ t: tx(s.fb, lang), good: true }); setSel(null); setAttempt(null); }
+    else { setAttempt(cid); setFb({ t: tx(d.wrong, lang), bad: true }); }
   };
   useEffect(() => { if (Object.keys(done).length === d.items.length) setGate(); }, [done]); // eslint-disable-line
   return (<>
     <h1 className="m1-title">{TITLES[2]}</h1>
     <p className="m1-sub">Gapni, so&apos;ng uning turini bosing.</p>
-    <div className="m1-grid m1-g2">
-      <div className="m1-list">{d.items.map((s) => (
-        <button key={s.id} type="button" className={`m1-opt ${done[s.id] ? "good" : sel === s.id ? "sel" : ""}`} disabled={!!done[s.id]} onClick={() => setSel(s.id)}><strong>{s.en}</strong></button>))}</div>
-      <div className="m1-list">{d.cats.map((c) => (
-        <button key={c.id} type="button" className="m1-opt" onClick={() => cat(c.id)}><strong>{tx(c.t, lang)}</strong></button>))}</div>
+    <div className="m1-pair">
+      <div className="m1-list"><span className="m1-pair-label">{lang === "ru" ? "Предложения" : lang === "en" ? "Sentences" : "Gaplar"}</span>{d.items.map((s) => (
+        <button key={s.id} type="button" className={`m1-opt ${done[s.id] ? "good" : sel === s.id ? "sel" : ""}`} disabled={!!done[s.id]} aria-pressed={sel === s.id} onClick={() => { setSel(s.id); setAttempt(null); }}><strong>{s.en}</strong></button>))}</div>
+      <div className="m1-list"><span className="m1-pair-label">{lang === "ru" ? "Тип" : lang === "en" ? "Type" : "Gap turi"}</span>{cats.map((c) => (
+        <button key={c.id} type="button" className={`m1-opt ${Object.values(done).includes(c.id) ? "good" : attempt === c.id ? "bad" : ""}`} disabled={Object.values(done).includes(c.id)} onClick={() => cat(c.id)}><strong>{tx(c.t, lang)}</strong></button>))}</div>
     </div>
     <p className={`m1-fb ${fb?.good ? "good" : fb?.bad ? "bad" : ""}`} aria-live="polite">{fb?.t || ""}</p>
   </>);
@@ -687,10 +718,22 @@ export default function Lesson({ lang: supplied, onFinished, onProgress }) {
       skillTags: meta.skillTags, answers: [], profile: { aloud: rate },
     });
   };
-  const rapidView = (r) => (
-    <div className="m1-list" style={{ justifyItems: "center" }}>
-      <Coin text={`${r.firstTry}/${r.total}`} sub={r.firstTry / r.total >= 0.6 ? ui.passed : ui.retake} />
-    </div>);
+  const rapidView = (r) => {
+    const passed = r.firstTry / r.total >= 0.6;
+    const title = passed ? (lang === "ru" ? "Теория пройдена" : lang === "en" ? "Theory complete" : "Nazariy dars yakunlandi") : (lang === "ru" ? "Повторите теорию" : lang === "en" ? "Review the theory" : "Nazariyani takrorlang");
+    const description = passed ? (lang === "ru" ? "Поздравляем! Теперь закрепите знания на практических заданиях." : lang === "en" ? "Well done! Now strengthen what you learned with practice." : "Tabriklaymiz! Endi o‘rganganlaringizni amaliy mashg‘ulotlarda mustahkamlang.") : ui.retake;
+    return <div className="m1-result">
+      <div className="m1-result-art">
+        {passed && <div className="m1-confetti" aria-hidden="true">{Array.from({ length: 16 }, (_, index) => <i key={index} style={{ "--angle": `${index * 22.5}deg`, "--delay": `${index * -.22}s` }} />)}</div>}
+        <div className="m1-result-ring" style={{ "--score": `${r.firstTry / r.total * 100}%` }} role="img" aria-label={`${r.firstTry} / ${r.total}`}><div className="m1-result-score"><small>{ui.resultTitle}</small><strong>{r.firstTry}/{r.total}</strong></div></div>
+        <Coin text={passed ? "✓" : "↻"} sub="" />
+      </div>
+      <div className="m1-result-copy">
+        <svg viewBox="0 0 72 64" fill="none" aria-hidden="true"><path d="M5 9c12-4 23-3 31 4 8-7 19-8 31-4v44c-12-4-23-3-31 4-8-7-19-8-31-4V9Z" fill="currentColor" opacity=".8"/><path d="M36 13v44M10 15v30m52-30v30" stroke="#30251a" strokeWidth="3"/><circle cx="57" cy="11" r="11" fill="#e8c98f"/><path d="m52 11 3 3 6-7" stroke="#20252a" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/></svg>
+        <h2>{title}</h2><p>{description}</p><b>{passed ? ui.passed : ui.retake}</b>
+      </div>
+    </div>;
+  };
   const common = { lang, ui, rec };
   const view = [
     ...THEORY.map((_, index) => <TheorySlide key={`theory-${index}-${lang}`} index={index} lang={lang} setGate={setGate(index)} />),
@@ -717,7 +760,7 @@ export default function Lesson({ lang: supplied, onFinished, onProgress }) {
         <span className="m1-dots" aria-hidden="true">{ALL_TITLES.map((_, k) => <i key={k} className={`m1-dot ${k <= cur ? "on" : ""}`} />)}</span>
         {!supplied && <span className="m1-chips">{["uz", "ru", "en"].map((l) => <button key={l} type="button" className={`m1-chip ${lang === l ? "on" : ""}`} onClick={() => setPl(l)}>{l.toUpperCase()}</button>)}</span>}
       </header>
-      <section className="m1-body"><div className="m1-slide" key={cur}>{view}</div></section>
+      <section className="m1-body"><div className={`m1-slide ${cur === 17 && ok[17] ? "m1-result-slide" : ""}`} key={cur}>{view}</div></section>
       <footer className="m1-foot">
         <button type="button" className="m1-btn" disabled={cur === 0} onClick={() => setCur(cur - 1)}>← {ui.back}</button>
         {!open && <span className="m1-hold">{ui.hold}</span>}

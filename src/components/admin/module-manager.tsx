@@ -4,8 +4,10 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 
+import { AdminIcon } from "./admin-icon";
+import { CoursePageIcon } from "./course-page-icons";
+import styles from "./course-pages.module.css";
 import { Button } from "@/components/ui/button";
-import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { Toast } from "@/components/ui/toast";
@@ -89,21 +91,36 @@ export function ModuleManager({ course, modules, lessons, canEdit }: { course: C
     finally { setBusy(false); }
   }
 
-  return <div className="mx-auto w-full max-w-4xl px-4 py-10 sm:px-6">
-    <Link href="/admin/courses" className="text-sm text-gold hover:underline">← Kurslar</Link>
-    <div className="mt-6 mb-8"><span className="text-sm font-semibold text-gold">{course.level || "Daraja belgilanmagan"} · {course.isPublished ? "Nashr qilingan" : "Qoralama"}</span><h1 className="mt-2 text-3xl font-bold">{course.title}</h1>{course.description && <p className="mt-3 text-steel">{course.description}</p>}</div>
-    <div className="mb-4 flex items-center justify-between gap-4"><h2 className="text-xl font-semibold">Modullar</h2>{canEdit && <Button onClick={() => openEditor()}>+ Modul qo‘shish</Button>}</div>
-    {modules.length ? <div className="space-y-3">{modules.map((module, index) => <Card key={module.id}>
-      <div className="flex flex-wrap items-center justify-between gap-4"><span className="font-semibold">{index + 1}. {module.title}</span>{canEdit && <div className="flex flex-wrap gap-2">
-        <Button size="small" variant="tertiary" onClick={() => openEditor(module)}>Tahrirlash</Button>
-        <Button size="small" variant="tertiary" disabled={busy || index === 0} onClick={() => mutate(`/api/admin/modules/${module.id}/move`, "POST", { direction: "up" })} aria-label={`${module.title} yuqoriga`}>↑</Button>
-        <Button size="small" variant="tertiary" disabled={busy || index === modules.length - 1} onClick={() => mutate(`/api/admin/modules/${module.id}/move`, "POST", { direction: "down" })} aria-label={`${module.title} pastga`}>↓</Button>
-        <Button size="small" variant="tertiary" onClick={() => setDeleting(module)}>O‘chirish</Button>
-      </div>}</div>
-      <div className="mt-4 border-t border-white/10 pt-4"><div className="mb-2 flex items-center justify-between"><strong className="text-sm">Darslar</strong>{canEdit && <Button size="small" variant="tertiary" onClick={() => { setLessonModule(module); setError(""); }}>+ Dars</Button>}</div>
-        {lessons.filter((lesson) => lesson.moduleId === module.id).length ? <ul className="space-y-2">{lessons.filter((lesson) => lesson.moduleId === module.id).map((lesson) => <li key={lesson.id}><Link className="text-sm text-gold hover:underline" href={`/admin/lessons/${lesson.id}`}>{lesson.code || "Kod belgilanmagan"} · {lesson.title} <span className="text-steel">({lesson.status === "published" ? "nashr" : "draft"})</span></Link></li>)}</ul> : <p className="text-sm text-steel">Darslar hali yo‘q.</p>}
-      </div>
-    </Card>)}</div> : <Card title="Modullar hali yo‘q" description="Kurs uchun birinchi modulni qo‘shing." />}
+  return <div className={styles.page}>
+    <Link href="/admin/courses" className={`${styles.back} ${styles.backMuted}`}><CoursePageIcon name="back" size={16} /> Kurslar</Link>
+    <div className={styles.courseHeading}>
+      <h1>{course.title}</h1>
+      <div className={styles.courseMeta}><span className={styles.level}>{course.level || "—"}</span><span className={`${styles.status} ${course.isPublished ? "" : styles.statusDraft}`}>{course.isPublished ? "Nashr qilingan" : "Qoralama"}</span></div>
+      {course.description && <p className={styles.courseDescription}>{course.description}</p>}
+    </div>
+    <div className={styles.sectionHeader}><h2>Modullar</h2>{canEdit && <button className={styles.primary} onClick={() => openEditor()}><CoursePageIcon name="plus" size={18} /> Modul qo‘shish</button>}</div>
+    {modules.length ? <div className={styles.moduleList}>{modules.map((module, index) => {
+      const moduleLessons = lessons.filter((lesson) => lesson.moduleId === module.id);
+      return <section className={styles.moduleCard} key={module.id} aria-labelledby={`module-${module.id}`}>
+        <div className={styles.moduleHeader}>
+          <h3 id={`module-${module.id}`}><span className={styles.moduleNumber}>{index + 1}.</span>{module.title}</h3>
+          {canEdit && <div className={styles.actions}>
+            <button className={styles.iconAction} title="Tahrirlash" aria-label={`${module.title}ni tahrirlash`} onClick={() => openEditor(module)}><CoursePageIcon name="edit" /></button>
+            <button className={styles.iconAction} title="Yuqoriga" disabled={busy || index === 0} onClick={() => mutate(`/api/admin/modules/${module.id}/move`, "POST", { direction: "up" })} aria-label={`${module.title} yuqoriga`}><CoursePageIcon name="up" /></button>
+            <button className={styles.iconAction} title="Pastga" disabled={busy || index === modules.length - 1} onClick={() => mutate(`/api/admin/modules/${module.id}/move`, "POST", { direction: "down" })} aria-label={`${module.title} pastga`}><CoursePageIcon name="down" /></button>
+            <span className={styles.actionDivider} aria-hidden="true" />
+            <button className={`${styles.iconAction} ${styles.iconDanger}`} title="O‘chirish" aria-label={`${module.title}ni o‘chirish`} onClick={() => setDeleting(module)}><CoursePageIcon name="trash" /></button>
+          </div>}
+        </div>
+        <div className={styles.moduleBody}>
+          <div className={styles.lessonsHeader}><h4>Darslar</h4>{canEdit && <button className={styles.addLesson} onClick={() => { setLessonModule(module); setError(""); }}><CoursePageIcon name="plus" size={14} /> Dars</button>}</div>
+          {moduleLessons.length ? <ul className={styles.lessonList}>{moduleLessons.map((lesson) => <li className={styles.lessonRow} key={lesson.id}>
+            <Link className={styles.lessonLink} href={`/admin/lessons/${lesson.id}`}><span className={styles.lessonIcon}>{lesson.code === "INTRO" ? <CoursePageIcon name="file" size={20} /> : <CoursePageIcon name="play" size={20} />}</span><span className={styles.lessonName}>{lesson.code || "Kod belgilanmagan"} - {lesson.title}</span><span className={`${styles.lessonStatus} ${lesson.status === "draft" ? styles.lessonStatusDraft : ""}`}>{lesson.status === "published" ? "Nashr" : "Draft"}</span></Link>
+            {canEdit && <div className={styles.lessonActions}><Link href={`/admin/lessons/${lesson.id}`} className={styles.iconAction} aria-label={`${lesson.title}ni ochish`} title="Darsni ochish"><CoursePageIcon name="edit" size={15} /></Link></div>}
+          </li>)}</ul> : <div className={styles.emptyLessons}><AdminIcon name="book" size={27} /><p>Darslar hali yo‘q.</p></div>}
+        </div>
+      </section>;
+    })}</div> : <div className={styles.emptyPage}>Modullar hali yo‘q. Kurs uchun birinchi modulni qo‘shing.</div>}
 
     <Modal open={!!editing} onClose={() => { if (!busy) setEditing(null); }} title={editing === "new" ? "Yangi modul" : "Modulni tahrirlash"}>
       <form onSubmit={save} className="space-y-4"><Input label="Modul nomi" value={title} onChange={(event) => setTitle(event.target.value)} maxLength={120} required />{error && <p role="alert" className="text-sm text-alert">{error}</p>}<Button type="submit" disabled={busy} className="w-full">{busy ? "Saqlanmoqda..." : "Saqlash"}</Button></form>

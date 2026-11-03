@@ -1,5 +1,7 @@
 # INTRO — dars etaloni va JSX rejasi
 
+**Vizual qoida:** Intro ham boshqa Learn va Practice ekranlari bilan bir xil [`jsx-lessons/LESSON_DESIGN.md`](../jsx-lessons/LESSON_DESIGN.md) palitrasini ishlatadi. To'q shisha kartalar, tilla urg'u va javob holatlari barcha 9 ekranda bir xil; ekran hajmi va animatsiya ketma-ketligi saqlanadi.
+
 **Dars:** English for Logistics: The Why (`INTRO.learn.jsx`)
 **Muhim shart:** kursda **ovoz umuman yo'q**: audio, ovozli sharh (ozvucka), TTS, tovush effektlari ishlatilmaydi. Hamma narsa matn, tasvir va harakat orqali beriladi. To'g'ri/xato holati faqat vizual.
 
