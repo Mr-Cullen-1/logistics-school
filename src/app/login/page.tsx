@@ -36,7 +36,7 @@ export default async function LoginPage() {
         <span className={`${styles.orb} ${styles.orbFive}`} />
       </div>
       <section className={styles.panel} aria-labelledby="login-title">
-        <Image src="/brand/coliseum-logo-horizontal-white.png" alt="Coliseum Logistics" width={1010} height={600} sizes="(max-width: 560px) 205px, 222px" priority className={styles.logo} />
+        <Image src="/brand/coliseum-logo-horizontal-brand.png" alt="Coliseum Logistics" width={1010} height={600} sizes="(max-width: 560px) 205px, 222px" priority className={styles.logo} />
         <div className={styles.heading}>
           <h1 id="login-title">Platformaga kirish</h1>
           <p>Administrator bergan PIN yoki o&apos;zingiz tanlagan parol bilan kiring.</p>
