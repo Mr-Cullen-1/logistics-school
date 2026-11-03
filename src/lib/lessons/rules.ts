@@ -11,6 +11,15 @@ export function parseLessonFilename(name: string): { code: string; kind: LessonK
     : { code: match[1], kind: "practice", seq: Number(match[3]) };
 }
 
+export function validateUploadSelection(code: string, kind: LessonKind, names: string[]): string | null {
+  if (!names.length || names.length > (kind === "learn" ? 1 : 10)) return kind === "learn" ? "Bitta Learn fayl tanlang" : "1–10 ta Practice fayl tanlang";
+  if (kind === "practice" && code === "INTRO") return "Intro uchun Practice fayl yo‘q";
+  const slots = names.map(parseLessonFilename);
+  if (slots.some((slot) => !slot || slot.code !== code || slot.kind !== kind)) return "Fayl nomi, turi yoki dars kodi mos emas";
+  if (new Set(slots.map((slot) => slot?.seq)).size !== slots.length) return "Bir xil Practice sloti ikki marta tanlangan";
+  return null;
+}
+
 export function passThreshold(code: string): 60 | 70 | null {
   if (code === "INTRO") return null;
   return /^M[1-4]L08$/.test(code) ? 70 : 60;

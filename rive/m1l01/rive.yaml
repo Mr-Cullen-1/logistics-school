@@ -1,0 +1,8 @@
+name: m1l01-route
+artboard:
+  width: 440
+  height: 180
+  background: "#FFF9EE"
+logs:
+  file: build/rive.log
+  problems: build/problems.log

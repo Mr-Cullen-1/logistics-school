@@ -1,0 +1,39 @@
+<Rive version="1" kind="fragment">
+  <Artboard defaultStateMachineId="0:7" width="440" height="180" name="Dallas to Atlanta" id="0:2">
+    <Fill name="Background"><SolidColor colorValue="FFFFF9EE" name="Color"/></Fill>
+    <Shape x="220" y="91" name="Route rail" id="0:10">
+      <Rectangle width="320" height="5" cornerRadiusTL="3" originX="0.5" originY="0.5" name="Rail"/>
+      <Fill name="Fill"><SolidColor colorValue="55C19A63" name="Color"/></Fill>
+    </Shape>
+    <Shape x="378" y="91" name="Atlanta" id="0:11">
+      <Ellipse width="21" height="21" originX="0.5" originY="0.5" name="Point"/>
+      <Fill name="Fill"><SolidColor colorValue="FFC19A63" name="Color"/></Fill>
+    </Shape>
+    <Shape x="62" y="91" name="Dallas" id="0:12">
+      <Ellipse width="21" height="21" originX="0.5" originY="0.5" name="Point"/>
+      <Fill name="Fill"><SolidColor colorValue="FF1B2429" name="Color"/></Fill>
+      <Stroke thickness="3" name="Ring"><SolidColor colorValue="FFC19A63" name="Color"/></Stroke>
+    </Shape>
+    <Shape x="62" y="91" name="Moving load" id="0:14">
+      <Rectangle width="35" height="25" cornerRadiusTL="5" originX="0.5" originY="0.5" name="Load"/>
+      <Fill name="Fill"><SolidColor colorValue="FFE0C28C" name="Color"/></Fill>
+      <Stroke thickness="2" name="Border"><SolidColor colorValue="FF8D6337" name="Color"/></Stroke>
+    </Shape>
+    <StateMachine name="Route" id="0:7">
+      <StateMachineLayer name="Layer" id="0:8">
+        <AnyState x="200" y="-120"/>
+        <ExitState x="400" y="-120"/>
+        <EntryState><StateTransition stateToId="0:16"/></EntryState>
+        <AnimationState x="200" animationId="0:6" id="0:16"/>
+      </StateMachineLayer>
+    </StateMachine>
+    <LinearAnimation loopValue="1" duration="120" name="Delivery route" id="0:6">
+      <KeyedObject objectId="0:14">
+        <KeyedProperty propertyKey="13">
+          <KeyFrameDouble value="62" interpolationType="1" frame="0"/>
+          <KeyFrameDouble value="378" interpolationType="1" frame="120"/>
+        </KeyedProperty>
+      </KeyedObject>
+    </LinearAnimation>
+  </Artboard>
+</Rive>

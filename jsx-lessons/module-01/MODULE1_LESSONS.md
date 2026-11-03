@@ -1,6 +1,6 @@
 # Module 1 — English Foundations: Learn dars kontenti (slaydlar)
 
-8 ta dars, har biri **14–15 slayd**. Bu hujjat **Learn fayllar** uchun kontent (nima yoziladi). Practice (10 tadan) `COURSE.md` da rejalashtirilgan.
+8 ta dars. Standart oqim **14–15 slayd**; M1L01 boshidagi besh nazariy qoida bilan **19 slayd**. Bu hujjat **Learn fayllar** uchun kontent (nima yoziladi). Practice (10 tadan) `COURSE.md` da rejalashtirilgan.
 
 ---
 
@@ -24,7 +24,7 @@
 | 13–14 | Rapid test | 4 ta savol (L08 da 8 ta), natija `onFinished` ga |
 | 14–15 | Summary + Say it aloud | Phrase bank, o'quvchi matnni ovoz chiqarib o'qiydi va o'zini baholaydi (ballsiz) |
 
-**Matn qoidalari.** Slayd matni sarlavhadan tashqari 40 so'zdan oshmaydi; dialog (Read) 60 so'zgacha. Ingliz iboralar *kursivda*. Tarjima "Tarjima" tugmasi orqali ochiladi. Dars tili: tushuntirishlar o'zbekcha (`uz`); `ru` va `en` tushuntirishlar yig'ish bosqichida chiqariladi.
+**Matn qoidalari.** Standart slayd matni sarlavhadan tashqari 40 so'zdan oshmaydi; dialog (Read) 60 so'zgacha. M1L01 ning besh nazariy ekranida qoida, ikki eslatma va xato/tuzatish misoli alohida qisqa kartalarda beriladi. Ingliz iboralar *kursivda*. Tarjima "Tarjima" tugmasi orqali ochiladi. Dars tili: tushuntirishlar o'zbekcha (`uz`); M1L01 nazariyasi `ru` va `en` da ham berilgan, qolgan slaydlar uchun tarjimalar yig'ish bosqichida chiqariladi.
 
 **Feedback qoidasi.** Har xato variant javobni aytmasdan, **nimani tekshirish kerakligini** ko'rsatadi.
 
@@ -40,7 +40,20 @@
 
 **Maqsad:** gap va savol tuzishni avtomatlashtirish.
 **skillTags:** `svo_order`, `be_have_need`, `wh_questions`
-**Davomiyligi:** ~12 daqiqa
+**Davomiyligi:** ~16 daqiqa
+
+#### T1–T5 · Nazariy qoidalar (M1L01 ning 1–5-ekranlari)
+Mavjud S1–S14 oqimidan **oldin** ko'rsatiladi. Har birida 2D animatsiyali so'z sxemasi, real logistika misoli va noto'g'ri gapni to'g'ri shaklga aylantiradigan 3D karta bor. Kartani ochgach keyingi ekranga o'tiladi; bu besh ekran test baliga qo'shilmaydi.
+
+**Jonli tushuntirish oqimi:** T1–T5 da qoida matni yozilib chiqadi, gap bo'laklari bittadan joyiga keladi, ikki izoh navbat bilan yoziladi, so'ng misol va tarjima chiqadi. Shundan keyin xato/to'g'ri 3D kartasi ochiladi. O'quvchi animatsiyani qayta ko'rishi yoki kutmasdan hammasini ko'rsatishi mumkin. Keyingi Pattern va Traps ekranlarida ham izohlar yozilib, kartalar ketma-ket paydo bo'ladi. Ovoz ishlatilmaydi; harakatni kamaytirish tizim sozlamasida kontent darhol ko'rinadi.
+
+1. **Darak gap tartibi:** ega + fe'l + to'ldiruvchi. *The dispatcher sends the address.* O'zbekcha fe'l oxiridagi tartibni inglizchaga ko'chirmaslik.
+2. **be = am/is/are:** shaxs va birlik/ko'plikka mos shakl holat yoki joy uchun zarur. *The truck is ready*; *The truck ready* xato.
+3. **have va need:** bor/egalik va keraklik farqi; *he/she/it* bilan *has/needs*. *The broker needs a truck.*
+4. **Yes/No savol:** *be* egadan oldinga o'tadi (*Is the load ready?*); oddiy fe'lga *do/does* qo'shiladi, *does* dan keyin asosiy fe'l oddiy shaklda qoladi (*Does the broker need a truck?*).
+5. **Wh-savol:** *What/Where/When/How much + yordamchi + ega*; oddiy fe'l bo'lsa keyin fe'l. *Where is the shipper?*; *Who* ega bo'lganda *Who sends the address?* shakli.
+
+Quyidagi S1–S14 sarlavhalari avvalgi kontent tartibini bildiradi; o'quvchi interfeysida ular 6–19-ekranlar bo'ladi.
 
 #### S1 · Mission — "Birinchi kun"
 - **Ekranda:** belgi `07:30`. Haydovchi Tom yozmoqda: *Hi, it's Tom. I'm at the yard. Do you have a load for me?*
@@ -898,7 +911,7 @@
 
 | Dars | Slaydlar | Rapid test | Takrorlanuvchi tuzoq mavzu |
 |---|---:|---|---|
-| M1L01 | 14 | 4 savol | so'z tartibi, *is* tushib qolishi |
+| M1L01 | 19 | 4 savol | so'z tartibi, *is* tushib qolishi |
 | M1L02 | 14 | 4 savol | *-s/-ing*, *does + asl fe'l* |
 | M1L03 | 15 | 4 savol | *did + asl fe'l*, tartibsiz fe'llar |
 | M1L04 | 15 | 4 savol | 3-shakl, aniq vaqt = Past Simple |
@@ -906,7 +919,7 @@
 | M1L06 | 15 | 4 savol | modaldan keyin asl fe'l |
 | M1L07 | 15 | 4 savol | *if* dan keyin *will* yo'q |
 | M1L08 | 14 | 8 savol (checkpoint) | atamalar, 1–7 darsni takrorlash |
-| **Jami** | **117** | | |
+| **Jami** | **122** | | |
 
 **Yig'ishda keyingi qadamlar (JSX):**
 1. Har dars uchun `CONTENT` obyekti shu hujjatdan olinadi (`uz` matnlar tayyor; `ru` va `en` tushuntirishlar qo'shiladi).

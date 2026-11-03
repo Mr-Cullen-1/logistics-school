@@ -156,6 +156,7 @@ Practice fayl yuklanadi
 Qoidalar:
 - **"Tekshirish" tugmasini fayl chizmaydi**, platforma beradi.
 - `onSubmit` har urinishda **bir marta** chaqiriladi (namunada `reportedRef` bilan himoyalangan).
+- `SCENE` ning ichki to'g'ri qadamlari sahnaning o'zida davom etadi; xato urinish va oxirgi to'g'ri qadam natijasi `onSubmit` ga yuboriladi.
 - Xato javobdan keyin variantlar qayta aralashadi (taxmin qilib ketishning oldini oladi).
 - `mode === 'review'` bo'lsa `onReady(false)` va javob qulflanadi.
 - `meta.taskId` shakli: `M1L01-p04`; `meta.kind`: mexanika kodi; `meta.attempts`: urinish soni.
@@ -171,7 +172,7 @@ Bitta topshiriq uchun: sarlavha (`M1L01 · Task 4`), shart, mexanika, xato varia
 ### 6.1. Yuklash va kompilyatsiya (4 daraja)
 
 ```
-.jsx yuklandi (yoki bir nechta fayl birdan)
+.jsx yuklandi (Learn: bitta fayl; Practice: bir darsga tegishli 1–10 ta fayl birdan)
    │
    ▼  1-daraja: Nom va tur
    │   nom qolipiga mos; tur formada tanlangan tur bilan mos; dars kodi mavjud

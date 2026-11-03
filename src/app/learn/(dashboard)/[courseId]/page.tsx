@@ -26,13 +26,25 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
   const t = getLearnText(profile?.locale).course;
   const sections = await getDatabase().select({ id: modules.id, title: modules.title }).from(modules).where(eq(modules.courseId, courseId)).orderBy(asc(modules.order), asc(modules.id));
   const lessonRows = sections.length ? await getDatabase().select({ id: lessons.id, moduleId: lessons.moduleId, title: lessons.title, code: lessons.code, completedAt: progress.completedAt }).from(lessons).leftJoin(progress, and(eq(progress.lessonId, lessons.id), eq(progress.studentId, user.id))).where(and(inArray(lessons.moduleId, sections.map((section) => section.id)), eq(lessons.status, "published"))).orderBy(asc(lessons.order), asc(lessons.title)) : [];
+  const intro = lessonRows.find((lesson) => lesson.code === "INTRO");
+  const moduleLessons = lessonRows.filter((lesson) => lesson.code !== "INTRO");
 
   return (
     <div className={styles.courseDetail}>
       <Link href="/learn#my-courses" className={styles.backLink}>← {t.back}</Link>
       <div className={styles.courseDetailHero}><small>{course.level || t.defaultLevel}</small><h1>{course.title}</h1><p>{course.description || t.defaultDescription}</p></div>
+      {intro && <section className={styles.introSection} aria-labelledby="intro-heading">
+        <h2 id="intro-heading" className={styles.moduleHeading}>{t.introHeading}</h2>
+        <div className={styles.introCard}>
+          <div><span className={styles.introEyebrow}>INTRO</span><h3>{intro.title}</h3><p>{t.introHelp}</p></div>
+          <Link className={styles.introButton} href={`/learn/${courseId}/${intro.id}`}>{intro.completedAt ? t.introReview : t.introOpen} <span aria-hidden="true">→</span></Link>
+        </div>
+      </section>}
       <h2 className={styles.moduleHeading}>{t.modules}</h2>
-      {sections.length ? <div className={styles.moduleList}>{sections.map((section, index) => <section className={styles.moduleCard} key={section.id}><span className={styles.moduleNumber}>{index + 1}</span><div><h3>{section.title}</h3>{lessonRows.filter((lesson) => lesson.moduleId === section.id).length ? <ul className="mt-2 space-y-2">{lessonRows.filter((lesson) => lesson.moduleId === section.id).map((lesson) => <li key={lesson.id}><Link className="text-sm text-amber-800 hover:underline" href={`/learn/${courseId}/${lesson.id}`}>{lesson.code} · {lesson.title}{lesson.completedAt ? " ✓" : ""}</Link></li>)}</ul> : <p>{t.lessonsSoon}</p>}</div></section>)}</div> : <div className={styles.moduleCard}><p>{t.noModules}</p></div>}
+      {sections.length ? <div className={styles.moduleList}>{sections.map((section, index) => {
+        const sectionLessons = moduleLessons.filter((lesson) => lesson.moduleId === section.id);
+        return <section className={styles.moduleCard} key={section.id}><span className={styles.moduleNumber}>{index + 1}</span><div><h3>{section.title}</h3>{sectionLessons.length ? <ul className="mt-2 space-y-2">{sectionLessons.map((lesson) => <li key={lesson.id}><Link className="text-sm text-amber-800 hover:underline" href={`/learn/${courseId}/${lesson.id}`}>{lesson.code} · {lesson.title}{lesson.completedAt ? " ✓" : ""}</Link></li>)}</ul> : <p>{t.lessonsSoon}</p>}</div></section>;
+      })}</div> : <div className={styles.moduleCard}><p>{t.noModules}</p></div>}
     </div>
   );
 }

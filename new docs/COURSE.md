@@ -120,6 +120,7 @@ Maqsad: B1 o'quvchining mavjud grammatikasini speaking uchun **tez, aniq va ishl
 **Til:** S + V + O; to be / have / need; wh-savollar (What, Where, When, Who, How much).
 **Lug'at:** load, pickup, delivery, driver, broker, dispatcher, address, weight.
 **Dialog:** dispatcher haydovchidan yuk haqida oddiy ma'lumot so'raydi.
+**Learn oqimi:** avval 5 ta animatsiyali nazariy qoida (SVO, be, have/need, Yes/No, Wh), so'ng vaziyat, dialog va mashqlar. Jami 19 ekran; nazariya test baliga kirmaydi. Tafsilotlar `../jsx-lessons/module-01/MODULE1_LESSONS.md` da.
 
 | № | Mex. | Topshiriq |
 |---:|---|---|

@@ -7,7 +7,7 @@ import { auditLog, lessonFiles, lessons } from "@/db/schema";
 import { superAdminAccess } from "@/lib/auth/admin";
 import { sameOrigin } from "@/lib/auth/request";
 import { validateAndCompileLesson } from "@/lib/lessons/compile";
-import { practiceMechanics } from "@/lib/lessons/rules";
+import { practiceMechanics, validateUploadSelection } from "@/lib/lessons/rules";
 
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   if (!sameOrigin(request)) return NextResponse.json({ error: "So‘rov rad etildi" }, { status: 403 });
@@ -27,9 +27,13 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
   if (uploads.reduce((size, item) => size + (item instanceof File ? item.size : 0), 0) > 5_000_000) {
     return NextResponse.json({ error: "Fayllar jami 5 MB dan oshmasin" }, { status: 413 });
   }
-  if (!uploads.length || uploads.length > 11 || uploads.some((item) => !(item instanceof File))) return NextResponse.json({ error: "1–11 ta JSX fayl tanlang" }, { status: 400 });
+  if (uploads.some((item) => !(item instanceof File))) return NextResponse.json({ error: "JSX fayllarni tanlang" }, { status: 400 });
+  const kind = form.get("kind");
+  if (kind !== "learn" && kind !== "practice") return NextResponse.json({ error: "Fayl turini tanlang" }, { status: 400 });
+  const selectionError = validateUploadSelection(lesson.code, kind, uploads.map((item) => (item as File).name));
+  if (selectionError) return NextResponse.json({ error: selectionError }, { status: 400 });
   let rawMechanics: unknown;
-  try { rawMechanics = JSON.parse(String(form.get("mechanics") || "{}")); }
+  try { rawMechanics = kind === "learn" ? {} : JSON.parse(String(form.get("mechanics") || "{}")); }
   catch { return NextResponse.json({ error: "Mexanika ma’lumotlari noto‘g‘ri" }, { status: 400 }); }
   const mechanics = z.record(z.string(), z.enum(practiceMechanics)).safeParse(rawMechanics);
   if (!mechanics.success) return NextResponse.json({ error: "Mexanika ma’lumotlari noto‘g‘ri" }, { status: 400 });

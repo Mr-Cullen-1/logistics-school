@@ -3,7 +3,7 @@ export function lessonFrameDocument(platformOrigin: string): string {
   if (!/^https?:\/\//.test(origin)) throw new Error("Noto‘g‘ri platforma manzili");
   const csp = [
     "default-src 'none'",
-    `script-src ${origin} blob:`,
+    `script-src ${origin} blob: 'wasm-unsafe-eval'`,
     "style-src 'unsafe-inline'",
     `img-src ${origin} data: blob:`,
     "media-src 'none'",

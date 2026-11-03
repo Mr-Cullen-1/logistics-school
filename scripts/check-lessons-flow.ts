@@ -44,9 +44,14 @@ async function main() {
     const forbidden = await api(`/api/admin/lessons/${lesson.id}/publish`, studentCookie, { method: "POST" });
     assert.equal(forbidden.status, 403);
 
+    const learnForm = new FormData();
+    learnForm.set("kind", "learn");
+    learnForm.append("files", new File(['import React from "react"; export default function Lesson(){return <p>Learn</p>}'], "M1L01.learn.jsx", { type: "text/plain" }));
+    const learnUpload = await api(`/api/admin/lessons/${lesson.id}/files`, adminCookie, { method: "POST", body: learnForm });
+    assert.equal(learnUpload.status, 201, await learnUpload.clone().text());
     const form = new FormData();
+    form.set("kind", "practice");
     const metadata: Record<string, string> = {};
-    form.append("files", new File(['import React from "react"; export default function Lesson(){return <p>Learn</p>}'], "M1L01.learn.jsx", { type: "text/plain" }));
     for (let seq = 1; seq <= 10; seq++) {
       const name = `M1L01.p${String(seq).padStart(2, "0")}.jsx`;
       form.append("files", new File(['import React from "react"; export default function Practice(){return <p>Practice</p>}'], name, { type: "text/plain" }));
@@ -56,7 +61,7 @@ async function main() {
     const upload = await api(`/api/admin/lessons/${lesson.id}/files`, adminCookie, { method: "POST", body: form });
     const uploadBody = await upload.json() as { results?: { ok: boolean; error?: string }[]; error?: string };
     assert.equal(upload.status, 201, JSON.stringify(uploadBody));
-    assert.equal(uploadBody.results?.filter((item) => item.ok).length, 11);
+    assert.equal(uploadBody.results?.filter((item) => item.ok).length, 10);
     const prematurePublish = await api(`/api/admin/lessons/${lesson.id}/publish`, adminCookie, { method: "POST" });
     assert.equal(prematurePublish.status, 400, await prematurePublish.clone().text());
     const adminFiles = await api(`/api/admin/lessons/${lesson.id}`, adminCookie);
@@ -80,6 +85,7 @@ async function main() {
     const duplicateIntro = await api("/api/admin/lessons", adminCookie, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ moduleId: section.id, code: "INTRO", title: "Duplicate intro" }) });
     assert.equal(duplicateIntro.status, 409);
     const introForm = new FormData();
+    introForm.set("kind", "learn");
     introForm.append("files", new File(['import React from "react"; export default function Intro(){return <p>Intro</p>}'], "INTRO.learn.jsx", { type: "text/plain" }));
     const introUpload = await api(`/api/admin/lessons/${intro.id}/files`, adminCookie, { method: "POST", body: introForm });
     assert.equal(introUpload.status, 201, await introUpload.clone().text());

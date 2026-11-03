@@ -1,7 +1,7 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { parseLessonFilename, publishReadiness, passThreshold, selectPublishFiles } from "../src/lib/lessons/rules";
+import { parseLessonFilename, publishReadiness, passThreshold, selectPublishFiles, validateUploadSelection } from "../src/lib/lessons/rules";
 
 test("only canonical Learn and Practice filenames are accepted", () => {
   assert.deepEqual(parseLessonFilename("M1L01.learn.jsx"), { code: "M1L01", kind: "learn", seq: 0 });
@@ -10,6 +10,18 @@ test("only canonical Learn and Practice filenames are accepted", () => {
   for (const name of ["INTRO.p01.jsx", "M1L09.learn.jsx", "M1L01.p00.jsx", "M1L01.p11.jsx", "Dars01.jsx", "M1L01.p1.jsx"]) {
     assert.equal(parseLessonFilename(name), null, name);
   }
+});
+
+test("bulk selection belongs to one lesson and accepts Practice only", () => {
+  const names = Array.from({ length: 10 }, (_, index) => `M1L01.p${String(index + 1).padStart(2, "0")}.jsx`);
+  assert.equal(validateUploadSelection("M1L01", "practice", names), null);
+  assert.equal(validateUploadSelection("M1L01", "learn", ["M1L01.learn.jsx"]), null);
+  assert.match(validateUploadSelection("M1L01", "learn", ["M1L01.learn.jsx", "M1L01.learn.jsx"]) || "", /Bitta Learn/);
+  assert.match(validateUploadSelection("M1L01", "practice", [...names, names[0]]) || "", /1–10/);
+  assert.match(validateUploadSelection("M1L01", "practice", [names[0], names[0]]) || "", /ikki marta/);
+  assert.match(validateUploadSelection("M1L01", "practice", [names[0], "M1L02.p02.jsx"]) || "", /mos emas/);
+  assert.match(validateUploadSelection("M1L01", "practice", ["M1L01.learn.jsx"]) || "", /mos emas/);
+  assert.match(validateUploadSelection("INTRO", "practice", [names[0]]) || "", /Intro/);
 });
 
 test("Intro publishes with Learn only; regular lessons require a diverse ordered set", () => {

@@ -55,7 +55,7 @@ export function LessonFrame({ compiledJs, kind, lang, studentName, mode, fullScr
     setError("");
     if (mountTimer.current) clearTimeout(mountTimer.current);
     mountTimer.current = setTimeout(() => { setError("Dars previewi 8 soniyada ochilmadi"); onError?.("Dars previewi 8 soniyada ochilmadi"); }, 8000);
-    frame.current?.contentWindow?.postMessage({ type: "init", nonce: nonce.current, compiledJs, kind, props: { lang, studentName, mode } }, "*");
+    frame.current?.contentWindow?.postMessage({ type: "init", nonce: nonce.current, compiledJs, kind, props: { lang, studentName, mode, fullScreen } }, "*");
   }
 
   return <div style={fullScreen ? { height: "100%", minHeight: 0 } : undefined}><iframe ref={frame} title={kind === "learn" ? "Learn darsi" : "Practice topshirig‘i"} sandbox="allow-scripts" referrerPolicy="no-referrer" srcDoc={documentHtml} onLoad={initialize} style={{ display: "block", width: "100%", height: fullScreen ? "100%" : height, border: 0, borderRadius: 12, background: "#0d1114" }} />{error && <p role="alert" className="mt-2 text-sm text-alert">{error}</p>}</div>;

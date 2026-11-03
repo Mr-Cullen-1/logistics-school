@@ -3,6 +3,8 @@ import * as ReactDOM from "react-dom";
 import { createRoot, type Root } from "react-dom/client";
 
 import * as kit from "./kit";
+import { RiveRoute } from "./rive-route";
+import { PracticeTask } from "./practice-task";
 
 type Message = { type: string; nonce: string; compiledJs?: string; kind?: "learn" | "practice"; props?: Record<string, unknown> };
 type LessonProps = Record<string, unknown>;
@@ -34,7 +36,7 @@ window.addEventListener("unhandledrejection", (event) => {
   if (activeNonce) send("error", event.reason instanceof Error ? event.reason.message : "Dars kodi xato bilan to‘xtadi");
 });
 
-export const modules: Record<string, unknown> = { react: React, "react-dom": ReactDOM, "@coliseum/kit": kit };
+export const modules: Record<string, unknown> = { react: React, "react-dom": ReactDOM, "@coliseum/kit": { ...kit, RiveRoute, PracticeTask } };
 
 export function mount(Component: React.ComponentType<LessonProps>, kind: "learn" | "practice", props: LessonProps) {
   if (!Component) { send("error", "Default export topilmadi"); return; }

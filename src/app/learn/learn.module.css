@@ -124,6 +124,13 @@ a.stat:hover { border-color:#d4af7c; box-shadow:0 5px 18px rgb(100 70 30 / 9%); 
 .courseDetailHero small { color:#e7c58e; font-size:.75rem; font-weight:650; }
 .courseDetailHero h1 { margin:10px 0; font-size:clamp(1.6rem,3vw,2.2rem); }
 .courseDetailHero p { max-width:55ch; margin:0; color:#dbddde; font-size:.84rem; line-height:1.6; }
+.introSection { margin:0 0 24px; }
+.introCard { display:flex; align-items:center; justify-content:space-between; gap:20px; padding:20px 22px; border:1px solid #d7b784; border-radius:12px; background:linear-gradient(110deg,#fffaf1,#fff); }
+.introEyebrow { color:#9b611f; font-size:.7rem; font-weight:750; letter-spacing:.08em; }
+.introCard h3 { margin:4px 0 5px; color:#172025; font-size:1rem; }
+.introCard p { margin:0; color:#687176; font-size:.76rem; line-height:1.5; }
+.introButton { display:inline-flex; flex:none; align-items:center; justify-content:center; gap:12px; min-height:41px; padding:0 16px; border-radius:9px; background:linear-gradient(110deg,#f2cf94,#c99958); color:#211807; font-size:.78rem; font-weight:700; }
+.introButton:hover { filter:brightness(1.05); }
 .moduleHeading { margin:0 0 13px; font-size:1.15rem; }
 .moduleList { display:grid; gap:11px; }
 .moduleCard { display:flex; align-items:center; gap:15px; padding:19px; border:1px solid #e9e8e5; border-radius:10px; background:#fff; }
@@ -173,6 +180,7 @@ a.stat:hover { border-color:#d4af7c; box-shadow:0 5px 18px rgb(100 70 30 / 9%); 
 @media (max-width:760px) { .shell { display:flex; flex-direction:column; } .sidebar { flex:none; padding:12px 14px 8px; border-right:0; border-bottom:1px solid #263038; } .brand { width:170px; margin:0 4px 12px; } .brand img { height:41px; } .nav { display:flex; gap:5px; overflow-x:auto; overflow-y:hidden; } .nav a,.navDisabled { flex:none; min-height:38px; padding:0 10px; font-size:.72rem; } .navDisabled small { display:none; } .helpCard { margin:5px 0 0; border:0; background:none; } .helpImage,.helpBody h2,.helpBody p { display:none; } .helpBody { padding:0; } .helpBody button { min-height:33px; } .workspace { flex:1; } .topbar { min-height:58px; padding:8px 13px; gap:8px; } .searchDisabled { min-height:38px; } .searchDisabled small { display:none; } .topActions { gap:8px; } .profile strong,.profile small,.noticeDisabled { display:none; } .dashboard { padding:12px 13px 24px; } .hero { min-height:225px; padding:22px; } .heroCourse { width:280px; } .profileGrid { grid-template-columns:1fr; } .achievementsSection { grid-column:auto; } }
 @media (max-width:520px) { .topActions { gap:0; } .profilePage { padding:20px 13px 36px; } .profilePanel { padding:17px; } .badgeGrid { grid-template-columns:1fr; } }
 @media (max-width:600px) { .hero { display:block; } .hero::before { width:100%; background-position:64% center; opacity:.4; mask-image:linear-gradient(to right,transparent,#000 85%); } .heroText > p:not(.heroEyebrow) { max-width:31ch; } .hero blockquote { margin-top:13px; } .heroCourse { width:100%; max-width:350px; margin-top:20px; } .courseGrid { grid-template-columns:1fr; } .activityList { grid-template-columns:1fr; } .activityList li { border-right:0; border-bottom:1px solid #eee; } .activityList li:last-child { border-bottom:0; } .stat { gap:9px; padding:10px; } .statIcon { width:38px; height:38px; } .statIcon svg { width:21px; height:21px; } .stat strong { font-size:1.17rem; } .stat small { font-size:.61rem; } .courseDetail { padding:20px 14px 38px; } }
+@media (max-width:600px) { .introCard { align-items:flex-start; flex-direction:column; gap:14px; } }
 @media (max-height:700px) and (min-width:761px) { .helpCard { display:none; } }
 @media (max-width:760px) {
   .helpCard { display:block; height:46px; border:1px solid rgb(212 175 124 / 25%); background:linear-gradient(90deg,rgb(8 17 22 / 72%),rgb(8 17 22 / 90%)),url('/admin-truck-hero.jpg') center 53% / cover; }
