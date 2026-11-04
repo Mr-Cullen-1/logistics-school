@@ -32,7 +32,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
   if (kind !== "learn" && kind !== "practice") return NextResponse.json({ error: "Fayl turini tanlang" }, { status: 400 });
   const selectionError = validateUploadSelection(lesson.code, kind, uploads.map((item) => (item as File).name));
   if (selectionError) return NextResponse.json({ error: selectionError }, { status: 400 });
-  const results: { name: string; ok: boolean; error?: string; version?: number }[] = [];
+  const results: { name: string; ok: boolean; error?: string; version?: number; id?: string }[] = [];
   for (const item of uploads) {
     const file = item as File;
     if (!file.name.endsWith(".jsx")) { results.push({ name: file.name, ok: false, error: "Faqat .jsx fayl" }); continue; }
@@ -46,7 +46,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       results.push({ name: file.name, ok: false, error: "JSX ichidagi meta.mechanic va task.kind mos yoki tanilgan emas" });
       continue;
     }
-    const version = await db.transaction(async (tx) => {
+    const savedFile = await db.transaction(async (tx) => {
       await tx.select({ id: lessons.id }).from(lessons).where(eq(lessons.id, id)).for("update").limit(1);
       const [last] = await tx.select({ version: lessonFiles.version }).from(lessonFiles).where(and(eq(lessonFiles.lessonId, id), eq(lessonFiles.kind, result.slot.kind), eq(lessonFiles.seq, result.slot.seq))).orderBy(desc(lessonFiles.version)).limit(1);
       // Deleted versions stay in the audit trail, so their numbers must not be reused.
@@ -54,9 +54,9 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
       const version = Math.max(last?.version ?? 0, Number(historical?.version ?? 0)) + 1;
       const [saved] = await tx.insert(lessonFiles).values({ lessonId: id, kind: result.slot.kind, seq: result.slot.seq, mechanic, source, compiledJs: result.compiledJs, sizeBytes: result.sizeBytes, sha256: result.sha256, version, uploadedBy: access.user.id }).returning({ id: lessonFiles.id });
       await tx.insert(auditLog).values({ actorId: access.user.id, action: "lesson.file_uploaded", targetType: "lesson_file", targetId: saved.id, meta: { lessonId: id, kind: result.slot.kind, seq: result.slot.seq, version } });
-      return version;
+      return { id: saved.id, version };
     });
-    results.push({ name: file.name, ok: true, version });
+    results.push({ name: file.name, ok: true, ...savedFile });
   }
   return NextResponse.json({ results }, { status: results.some((item) => !item.ok) ? 207 : 201, headers: { "Cache-Control": "no-store" } });
 }

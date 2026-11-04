@@ -16,7 +16,9 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
   const db = getDatabase();
   const [file] = await db.select({ id: lessonFiles.id }).from(lessonFiles).where(and(eq(lessonFiles.id, fileId), eq(lessonFiles.lessonId, id))).limit(1);
   if (!file) return NextResponse.json({ error: "Fayl topilmadi" }, { status: 404 });
+  const body = await request.json().catch(() => null);
+  const method = body?.mode === "bulk" ? "bulk_approval_without_opening" : "iframe_mounted";
   const [existing] = await db.select({ id: auditLog.id }).from(auditLog).where(and(eq(auditLog.action, "lesson.file_previewed"), eq(auditLog.targetType, "lesson_file"), eq(auditLog.targetId, fileId))).limit(1);
-  if (!existing) await db.insert(auditLog).values({ actorId: access.user.id, action: "lesson.file_previewed", targetType: "lesson_file", targetId: fileId, meta: { lessonId: id } });
+  if (!existing) await db.insert(auditLog).values({ actorId: access.user.id, action: "lesson.file_previewed", targetType: "lesson_file", targetId: fileId, meta: { lessonId: id, method } });
   return NextResponse.json({ verified: true }, { headers: { "Cache-Control": "no-store" } });
 }

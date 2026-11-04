@@ -43,7 +43,7 @@ Super admin `/admin/courses` sahifasida kurslar va modullarni yaratadi, tahrirla
 
 ## Intro va dars interfeysi
 
-`/` to'g'ridan-to'g'ri `/login` ga yo'naltiradi. Login/PIN/parol qoidalari saqlanadi. Super admin `/admin/intro` da Intro darsini yaratadi, so'ng `/admin/lessons/[id]` da `jsx-lessons/intro/INTRO.learn.jsx` faylini tanlab draft yuklaydi, Preview orqali ko'radi va nashr qiladi. Fayl tanlash maydoni va tanlangan fayllar soni ajratib ko'rsatiladi. Lokal JSX faylni tahrirlashning o'zi bazadagi nashr qilingan versiyani yangilamaydi.
+`/` to'g'ridan-to'g'ri `/login` ga yo'naltiradi. Login/PIN/parol qoidalari saqlanadi. Super admin `/admin/intro` da Intro darsini yaratadi, so'ng `/admin/lessons/[id]` da `jsx-lessons/intro/INTRO.learn.jsx` faylini tanlab **Yuklash va nashr qilish** tugmasini bosadi. Oddiy darslarda Learn va Practice fayllarini birga tanlash mumkin; fayl turi va mexanikasi avtomatik aniqlanadi. Yuklash modali yo'q. Oldin preview ko'rish uchun **Draft saqlash** va fayl yonidagi ko'z ikonasi bor. To'g'ridan-to'g'ri nashr oynasiz tasdiq sifatida auditga yoziladi. Lokal JSX faylni tahrirlashning o'zi bazadagi nashr qilingan versiyani yangilamaydi.
 
 Nashrdagi Intro login qilgan barcha o'quvchilarga kurs dostupsiz ochiladi. Boshqa darslar faqat admin bergan faol kurs dostupi va nashr holati bilan ochiladi. O'quvchi darsni sidebar/navbarsiz to'liq ekran rejimida ko'radi; Intro 9 ekranli, ovozsiz va `uz/ru/en` tillarida. Natijada qayta ko'rish, chiqish va keyingi darsni boshlash amallari ko'rinadi; keyingi dars ochilmagan bo'lsa boshlash tugmasi o'chiq turadi.
 

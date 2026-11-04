@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useRef, useState, type ChangeEvent } from "react";
 import { LessonFrame } from "@/components/learn/lesson-frame";
-import { detectPracticeMechanic, publishReadiness, selectPublishFiles, validateUploadSelection, type LessonKind } from "@/lib/lessons/rules";
+import { parseLessonFilename, validateUploadSelection, type LessonKind } from "@/lib/lessons/rules";
 import styles from "./lesson-manager.module.css";
 
 type FileRow = { id: string; kind: string; seq: number; mechanic: string | null; version: number; status: "draft" | "published"; isCurrent: boolean; sizeBytes: number; previewed: boolean };
@@ -22,18 +22,13 @@ const paths: Record<Glyph, string> = {
 };
 function Icon({ name }: { name: Glyph }) { return <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.7" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d={paths[name]} /></svg>; }
 const label = (file: FileRow) => file.kind === "learn" ? "Learn" : `p${String(file.seq).padStart(2, "0")}`;
-const pageSize = 6;
 
 export function LessonManager({ lesson, files, canEdit }: { lesson: Lesson; files: FileRow[]; canEdit: boolean }) {
   const router = useRouter();
   const fileInput = useRef<HTMLInputElement>(null);
-  const flowDialog = useRef<HTMLDialogElement>(null);
   const mounted = useRef<string | null>(null);
   const previewPanel = useRef<HTMLElement>(null);
-  const batchRun = useRef(0);
   const [uploadFiles, setUploadFiles] = useState<File[]>([]);
-  const [flowKind, setFlowKind] = useState<LessonKind | null>(null);
-  const [mechanics, setMechanics] = useState<Record<string, string>>({});
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [preview, setPreview] = useState<Preview | null>(null);
@@ -43,76 +38,81 @@ export function LessonManager({ lesson, files, canEdit }: { lesson: Lesson; file
   const [verified, setVerified] = useState<string[]>([]);
   const [checked, setChecked] = useState<string[]>([]);
   const [chosenVersion, setChosenVersion] = useState<number | null>(null);
-  const [page, setPage] = useState(1);
-  const [batch, setBatch] = useState<FileRow[]>([]);
-  const [batchIndex, setBatchIndex] = useState(0);
   const [deleting, setDeleting] = useState<FileRow[]>([]);
 
   const versions = [...new Set(files.map((file) => file.version))].sort((a, b) => b - a);
   const version = chosenVersion !== null && versions.includes(chosenVersion) ? chosenVersion : versions[0];
-  const versionFiles = files.filter((file) => file.version === version).sort((a, b) => a.seq - b.seq);
-  const pages = Math.max(1, Math.ceil(versionFiles.length / pageSize));
-  const actualPage = Math.min(page, pages);
-  const visible = versionFiles.slice((actualPage - 1) * pageSize, actualPage * pageSize);
-  const selectedFiles = files.filter((file) => checked.includes(file.id)).sort((a, b) => b.version - a.version || a.seq - b.seq);
+  const versionFiles = files.filter((file) => file.version === version).sort((a, b) => a.seq - b.seq || a.kind.localeCompare(b.kind));
+  const visible = versionFiles;
+  const selectedFiles = versionFiles.filter((file) => checked.includes(file.id));
   const oldSelected = selectedFiles.filter((file) => !file.isCurrent);
   const allVisible = visible.length > 0 && visible.every((file) => checked.includes(file.id));
-  const candidates = selectPublishFiles(files);
-  const readiness = lesson.code ? publishReadiness(lesson.code, candidates.map((file) => ({ kind: file.kind as LessonKind, seq: file.seq, mechanic: file.mechanic }))) : ["Dars kodi belgilanmagan"];
-  const missing = candidates.filter((file) => !file.previewed && !verified.includes(file.id));
-  if (missing.length) readiness.push(`${missing.length} ta fayl iframe previewda tekshirilmagan`);
-
-  const flowFiles = candidates.filter((file) => file.kind === flowKind);
-  const flowMissing = flowFiles.filter((file) => !file.previewed && !verified.includes(file.id));
-  const flowPublished = flowFiles.length === (flowKind === "learn" ? 1 : 10) && flowFiles.every((file) => file.isCurrent && file.status === "published");
-  const flowReady = flowKind === "learn"
-    ? flowFiles.length === 1 && !flowMissing.length
-    : flowFiles.length === 10 && !flowMissing.length && !publishReadiness(lesson.code || "", [{ kind: "learn", seq: 0, mechanic: null }, ...flowFiles.map((file) => ({ kind: "practice" as const, seq: file.seq, mechanic: file.mechanic }))]).length;
-
-  useEffect(() => {
-    if (flowKind && !flowDialog.current?.open) flowDialog.current?.showModal();
-    if (!flowKind && flowDialog.current?.open) flowDialog.current.close();
-  }, [flowKind]);
 
   useEffect(() => { if (preview) previewPanel.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }, [preview]);
 
-  function openFlow(kind: LessonKind) {
-    setFlowKind(kind); setUploadFiles([]); setMechanics({}); setMessage(""); setPreview(null);
-  }
-
-  function closeFlow() {
-    if (busy || batch.length) return;
-    setFlowKind(null); setUploadFiles([]); setMechanics({}); setPreview(null); setMessage("");
-  }
-
-  async function choose(event: ChangeEvent<HTMLInputElement>, kind: LessonKind) {
+  function choose(event: ChangeEvent<HTMLInputElement>) {
     const list = Array.from(event.target.files || []);
-    const error = validateUploadSelection(lesson.code || "", kind, list.map((file) => file.name));
-    if (error) { setUploadFiles([]); setMechanics({}); setMessage(error); event.target.value = ""; return; }
-    const detected = kind === "practice"
-      ? Object.fromEntries(await Promise.all(list.map(async (file) => [file.name, detectPracticeMechanic(await file.text()) || ""] as const)))
-      : {};
-    setUploadFiles(list); setMechanics(detected);
-    setMessage(kind === "practice" && list.some((file) => !detected[file.name]) ? "Ayrim fayllarda meta.mechanic va task.kind mos yoki tanilgan emas" : "");
+    if (!list.length) return;
+    let error = list.some((file) => parseLessonFilename(file.name)?.code !== lesson.code)
+      ? `Faqat ${lesson.code} darsining JSX fayllarini tanlang.` : null;
+    for (const kind of ["learn", "practice"] as const) {
+      const names = list.filter((file) => parseLessonFilename(file.name)?.kind === kind).map((file) => file.name);
+      if (names.length) error ||= validateUploadSelection(lesson.code || "", kind, names);
+    }
+    if (list.some((file) => file.size > 1_500_000)) error ||= "Har bir fayl 1.5 MB dan oshmasin.";
+    if (list.reduce((total, file) => total + file.size, 0) > 5_000_000) error ||= "Fayllar jami 5 MB dan oshmasin.";
+    setMessage(error || ""); setUploadFiles(error ? [] : list);
+    if (error) event.target.value = "";
   }
 
-  async function upload() {
+  async function approveFiles(ids: string[]) {
+    for (const id of ids) {
+      const response = await fetch(`/api/admin/lessons/${lesson.id}/files/${id}/verify`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mode: "bulk" }) });
+      if (!response.ok) throw new Error("Fayl tasdiqlanmadi. Ro‘yxatdan qayta nashr qilishingiz mumkin.");
+      setVerified((current) => [...new Set([...current, id])]);
+    }
+  }
+
+  async function requestPublish(ids: string[]) {
+    await approveFiles(ids.filter((id) => !files.find((file) => file.id === id)?.previewed && !verified.includes(id)));
+    const response = await fetch(`/api/admin/lessons/${lesson.id}/publish`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ fileIds: ids }) });
+    const result = await response.json();
+    if (!response.ok) throw new Error([result.error, ...(result.errors || [])].filter(Boolean).join(" · "));
+    return `${result.files} ta fayl nashr qilindi.${result.lessonPublished ? " Dars o‘quvchilar uchun ochiq." : ` Dars hali o‘quvchilarga ochilmagan.\n${(result.pendingReasons || []).join(" · ")}`}`;
+  }
+
+  async function upload(publish: boolean) {
     setBusy(true); setMessage("");
+    const saved: string[] = [];
+    const uploadedNames: string[] = [];
+    const errors: string[] = [];
     try {
-      const body = new FormData();
-      uploadFiles.forEach((file) => body.append("files", file));
-      body.set("kind", flowKind || "learn");
-      const response = await fetch(`/api/admin/lessons/${lesson.id}/files`, { method: "POST", body });
-      const result = await response.json();
-      setMessage(result.results?.map((item: { name: string; ok: boolean; error?: string; version?: number }) => `${item.name}: ${item.ok ? `v${item.version} saqlandi` : item.error}`).join("\n") || result.error || "Yuklash tugadi");
-      if (response.ok) {
-        const failed = uploadFiles.filter((file) => result.results?.some((item: { name: string; ok: boolean }) => item.name === file.name && !item.ok));
-        setUploadFiles(failed);
-        if (!failed.length && fileInput.current) fileInput.current.value = "";
-        if (result.results?.some((item: { ok: boolean }) => item.ok)) router.refresh();
+      for (const kind of ["learn", "practice"] as LessonKind[]) {
+        const group = uploadFiles.filter((file) => parseLessonFilename(file.name)?.kind === kind);
+        if (!group.length) continue;
+        setMessage(`${kind === "learn" ? "Learn" : "Practice"} yuklanmoqda…`);
+        const body = new FormData();
+        group.forEach((file) => body.append("files", file)); body.set("kind", kind);
+        const response = await fetch(`/api/admin/lessons/${lesson.id}/files`, { method: "POST", body });
+        const result = await response.json();
+        if (!response.ok) { errors.push(result.error || "Yuklash amalga oshmadi."); continue; }
+        for (const item of result.results as { name: string; ok: boolean; id?: string; error?: string }[]) {
+          if (item.ok && item.id) { saved.push(item.id); uploadedNames.push(item.name); }
+          else errors.push(`${item.name}: ${item.error || "Yuklanmadi"}`);
+        }
       }
-    } catch { setMessage("Ulanishda xatolik yuz berdi"); }
-    finally { setBusy(false); }
+      let summary = `${saved.length} ta fayl draft sifatida saqlandi.`;
+      if (publish && saved.length && !errors.length) {
+        setMessage("Fayllar nashr qilinmoqda…");
+        summary = await requestPublish(saved);
+      } else if (publish && errors.length) summary += " Xatolar sababli nashr qilinmadi.";
+      setMessage([summary, ...errors].join("\n"));
+    } catch (error) { setMessage(`${saved.length ? `${saved.length} ta fayl saqlandi. ` : ""}${error instanceof Error ? error.message : "Ulanishda xatolik yuz berdi."} Ro‘yxatni yangilab holatni tekshiring.`); }
+    finally {
+      setUploadFiles((current) => current.filter((file) => !uploadedNames.includes(file.name)));
+      if (fileInput.current) fileInput.current.value = "";
+      setChosenVersion(null); router.refresh(); setBusy(false);
+    }
   }
 
   async function act(path: string, body?: object) {
@@ -141,29 +141,41 @@ export function LessonManager({ lesson, files, canEdit }: { lesson: Lesson; file
   async function previewMounted() {
     if (!preview || mounted.current === preview.id) return;
     mounted.current = preview.id;
-    const run = batchRun.current;
     if (canEdit && !files.find((file) => file.id === preview.id)?.previewed && !verified.includes(preview.id)) {
       try {
         const response = await fetch(`/api/admin/lessons/${lesson.id}/files/${preview.id}/verify`, { method: "POST" });
-        if (!response.ok) { setMessage("Preview tasdiqlanmadi. Qayta ochib ko‘ring."); setBatch([]); return; }
+        if (!response.ok) { setMessage("Preview tasdiqlanmadi. Qayta ochib ko‘ring."); return; }
         setVerified((ids) => ids.includes(preview.id) ? ids : [...ids, preview.id]);
-      } catch { setMessage("Preview tasdiqlanmadi. Ulanishni tekshiring."); setBatch([]); return; }
+      } catch { setMessage("Preview tasdiqlanmadi. Ulanishni tekshiring."); }
     }
-    if (!batch.length || run !== batchRun.current) return;
-    if (batchIndex + 1 === batch.length) {
-      setMessage(`${batch.length} ta fayl Preview OK: iframe’da muvaffaqiyatli ochildi.`);
-      setChecked([]); setBatch([]); router.refresh(); return;
-    }
-    const next = batchIndex + 1;
-    setBatchIndex(next);
-    if (!await openPreview(batch[next])) setBatch([]);
   }
 
-  async function startBatch() {
+  async function approveSelected() {
     if (!selectedFiles.length) return;
-    batchRun.current += 1;
-    setBatch(selectedFiles); setBatchIndex(0);
-    if (!await openPreview(selectedFiles[0])) setBatch([]);
+    setBusy(true); setMessage("");
+    const approved: string[] = [];
+    let failure = "";
+    for (const file of selectedFiles) {
+      if (file.previewed || verified.includes(file.id)) continue;
+      try {
+        const response = await fetch(`/api/admin/lessons/${lesson.id}/files/${file.id}/verify`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ mode: "bulk" }) });
+        if (!response.ok) { failure = `${label(file)} tasdiqlanmadi`; break; }
+        approved.push(file.id);
+      } catch { failure = `${label(file)}: ulanish xatosi`; break; }
+    }
+    if (approved.length) { setVerified((ids) => [...new Set([...ids, ...approved])]); router.refresh(); }
+    setMessage(`${approved.length} ta fayl ochilmasdan Preview OK deb belgilandi.${failure ? ` ${failure}` : ""}`);
+    setBusy(false);
+  }
+
+  async function publishFiles(ids: string[]) {
+    if (!ids.length) return;
+    setBusy(true); setMessage("");
+    try {
+      setMessage(await requestPublish(ids));
+      setChecked([]); router.refresh();
+    } catch (error) { setMessage(error instanceof Error ? error.message : "Nashr qilishda ulanish xatosi yuz berdi"); }
+    finally { router.refresh(); setBusy(false); }
   }
 
   async function deleteFiles() {
@@ -188,61 +200,45 @@ export function LessonManager({ lesson, files, canEdit }: { lesson: Lesson; file
     setBusy(false);
   }
 
-  const previewSection = preview && <section ref={previewPanel} className={styles.previewPanel} aria-labelledby="preview-title"><div className={styles.previewHeader}><div><h2 id="preview-title">{batch.length ? `Preview tekshiruvi ${batchIndex + 1}/${batch.length}` : "Fayl previewi"}</h2><p>{(() => { const item = files.find((file) => file.id === preview.id); return item ? `${label(item)} · v${item.version}` : "Fayl"; })()} · iframe’da ochiladi</p></div><div className={styles.previewControls}><label>Til <select value={previewLang} disabled={!!batch.length} onChange={(event) => setPreviewLang(event.target.value as "" | "uz" | "ru" | "en")}><option value="uz">UZ</option><option value="ru">RU</option><option value="en">EN</option><option value="">Avto</option></select></label><button type="button" title="Preview yopish" aria-label="Preview yopish" onClick={() => { batchRun.current += 1; setPreview(null); setBatch([]); }}><Icon name="close" /></button></div></div><div className={styles.frame}><LessonFrame key={`${preview.id}:${previewLang}`} compiledJs={preview.compiledJs} kind={preview.kind} lang={previewLang || undefined} studentName="Preview" checkSignal={previewCheck} onReady={setPreviewReady} onSubmit={(payload) => setMessage(JSON.stringify(payload))} onFinished={(payload) => setMessage(JSON.stringify(payload))} onMounted={() => void previewMounted()} onError={(detail) => { batchRun.current += 1; setMessage(`Preview xatosi: ${detail}`); setBatch([]); }} /></div>{preview.kind === "practice" && !batch.length && <button type="button" className={styles.secondary} disabled={!previewReady} onClick={() => setPreviewCheck((count) => count + 1)}>Tekshirish</button>}</section>;
+  const previewSection = preview && <section ref={previewPanel} className={styles.previewPanel} aria-labelledby="preview-title"><div className={styles.previewHeader}><div><h2 id="preview-title">Fayl previewi</h2><p>{(() => { const item = files.find((file) => file.id === preview.id); return item ? `${label(item)} · v${item.version}` : "Fayl"; })()} · iframe’da ochiladi</p></div><div className={styles.previewControls}><label>Til <select value={previewLang} onChange={(event) => setPreviewLang(event.target.value as "" | "uz" | "ru" | "en")}><option value="uz">UZ</option><option value="ru">RU</option><option value="en">EN</option><option value="">Avto</option></select></label><button type="button" title="Preview yopish" aria-label="Preview yopish" onClick={() => setPreview(null)}><Icon name="close" /></button></div></div><div className={styles.frame}><LessonFrame key={`${preview.id}:${previewLang}`} compiledJs={preview.compiledJs} kind={preview.kind} lang={previewLang || undefined} studentName="Preview" checkSignal={previewCheck} onReady={setPreviewReady} onSubmit={() => {}} onFinished={() => setMessage("Preview yakunlandi.")} onMounted={() => void previewMounted()} onError={(detail) => setMessage(`Preview xatosi: ${detail}`)} /></div>{preview.kind === "practice" && <button type="button" className={styles.secondary} disabled={!previewReady} onClick={() => setPreviewCheck((count) => count + 1)}>Tekshirish</button>}</section>;
 
   return <div className={styles.manager}>
     <header className={styles.heading}><div className={styles.headingMeta}><span className={styles.code}>{lesson.code || "Kod yo‘q"}</span><span className={lesson.status === "published" ? styles.published : styles.draft}>{lesson.status === "published" ? "Nashr qilingan" : "Draft"}</span></div><h1>{lesson.title}</h1><p>Dars fayllari, versiyalari va nashr holati</p></header>
     {message && <div role="status" className={styles.message}>{message}</div>}
-    <div className={styles.layout}>
+    {canEdit && <section className={styles.uploadCard} aria-labelledby="upload-title" aria-busy={busy}>
+      <div><h2 id="upload-title"><Icon name="upload" /> Dars fayllarini yuklash</h2>
+        <p>{lesson.code === "INTRO" ? "INTRO.learn.jsx faylini tanlang." : "Learn va Practice JSX fayllarini birga yoki alohida tanlang. Turi va mexanikasi avtomatik aniqlanadi."}</p>
+      </div>
+      <div className={styles.uploadActions}>
+        <input ref={fileInput} id="lesson-upload" className={styles.fileInput} type="file" multiple={lesson.code !== "INTRO"} accept=".jsx" onChange={choose} disabled={busy} />
+        <button type="button" className={styles.secondary} disabled={busy} onClick={() => fileInput.current?.click()}><Icon name="upload" /> {uploadFiles.length ? "Fayllarni almashtirish" : "JSX fayllarni tanlash"}</button>
+        {uploadFiles.length > 0 && <>
+          <button type="button" className={styles.primary} disabled={busy} onClick={() => void upload(true)}><Icon name="check" /> {busy ? "Bajarilmoqda…" : "Yuklash va nashr qilish"}</button>
+          <button type="button" className={styles.textButton} disabled={busy} onClick={() => void upload(false)}>Draft saqlash</button>
+        </>}
+      </div>
+      {uploadFiles.length > 0 && <div className={styles.selection}>
+        <div className={styles.selectionHeader}><strong>{uploadFiles.length} ta fayl tanlandi</strong><button type="button" className={styles.textButton} disabled={busy} onClick={() => { setUploadFiles([]); if (fileInput.current) fileInput.current.value = ""; }}>Tozalash</button></div>
+        <ul>{uploadFiles.map((file) => <li key={file.name}><Icon name={parseLessonFilename(file.name)?.kind === "learn" ? "book" : "practice"} />{file.name}</li>)}</ul>
+        <p>“Yuklash va nashr qilish” fayllarni Preview OK deb tasdiqlaydi va nashr qiladi. Oldin ko‘rish uchun “Draft saqlash”ni tanlang.</p>
+      </div>}
+    </section>}
       <section className={styles.filesPanel} aria-labelledby="files-title">
-        <div className={styles.panelHeader}><div><h2 id="files-title">Dars fayllari va holati</h2><p>Versiyani tanlang va fayllarni preview qiling.</p></div><span className={styles.count}>{files.length} ta fayl</span></div>
-        <div className={styles.slotStrip}>{[0, ...(lesson.code === "INTRO" ? [] : Array.from({ length: 10 }, (_, i) => i + 1))].map((seq) => {
-          const file = candidates.find((item) => item.seq === seq && item.kind === (seq === 0 ? "learn" : "practice"));
-          return <span key={seq} className={file ? styles.slotReady : styles.slotMissing} title={file ? `v${file.version}` : "Fayl yetishmaydi"}>{seq === 0 ? "Learn" : `p${String(seq).padStart(2, "0")}`}</span>;
-        })}</div>
+        <div className={styles.panelHeader}><div><h2 id="files-title">Dars fayllari</h2><p>Versiyani tanlang, kerakli fayllarni belgilang va amallarni bajaring.</p></div><span className={styles.count}>{files.length} ta fayl</span></div>
         {files.length ? <>
-          <div className={styles.versionTabs} role="tablist" aria-label="Fayl versiyalari">{versions.map((item) => <button type="button" role="tab" aria-selected={version === item} className={version === item ? styles.versionActive : ""} key={item} onClick={() => { setChosenVersion(item); setPage(1); }}>v{item} <small>{files.filter((file) => file.version === item).length}</small></button>)}</div>
-          <div className={styles.toolbar}><label><input type="checkbox" disabled={!canEdit || busy || !!batch.length} checked={allVisible} onChange={() => setChecked((ids) => allVisible ? ids.filter((id) => !visible.some((file) => file.id === id)) : [...new Set([...ids, ...visible.map((file) => file.id)])])} /> Shu sahifadagilarni belgilash</label><span>{checked.length ? `${checked.length} ta tanlangan` : `v${version} · ${versionFiles.length} ta fayl`}</span></div>
+          <div className={styles.versionTabs} role="tablist" aria-label="Fayl versiyalari">{versions.map((item) => <button type="button" role="tab" aria-selected={version === item} className={version === item ? styles.versionActive : ""} key={item} onClick={() => { setChosenVersion(item); setChecked([]); }}>v{item} <small>{files.filter((file) => file.version === item).length}</small></button>)}</div>
+          <div className={styles.toolbar}><label><input type="checkbox" disabled={!canEdit || busy} checked={allVisible} onChange={() => setChecked(allVisible ? [] : visible.map((file) => file.id))} /> Shu versiyadagi hammasini belgilash</label><span>{selectedFiles.length ? `${selectedFiles.length} ta tanlangan` : `v${version} · ${versionFiles.length} ta fayl`}</span></div>
           <div className={styles.fileList}>{visible.map((file) => <div className={styles.fileRow} key={file.id}>
-            {canEdit && <input type="checkbox" aria-label={`${label(file)} v${file.version} ni belgilash`} checked={checked.includes(file.id)} disabled={busy || !!batch.length} onChange={() => setChecked((ids) => ids.includes(file.id) ? ids.filter((id) => id !== file.id) : [...ids, file.id])} />}
+            {canEdit && <input type="checkbox" aria-label={`${label(file)} v${file.version} ni belgilash`} checked={checked.includes(file.id)} disabled={busy} onChange={() => setChecked((ids) => ids.includes(file.id) ? ids.filter((id) => id !== file.id) : [...ids, file.id])} />}
             <span className={styles.glyph}><Icon name={file.kind === "learn" ? "book" : "practice"} /></span><div className={styles.fileInfo}><strong>{label(file)}</strong><small>{file.kind === "learn" ? "Nazariy qism" : file.mechanic || "Mexanika yo‘q"}</small></div>
-            <div className={styles.fileMeta}><span>v{file.version}</span><small>{file.isCurrent ? "Joriy" : file.status === "draft" ? "Draft" : "Eski nashr"}</small></div>
+            <div className={styles.fileMeta}><span>v{file.version}</span><small>{file.isCurrent ? "Nashr · joriy" : file.status === "draft" ? "Draft" : "Eski nashr"}</small></div>
             <span className={file.previewed || verified.includes(file.id) ? styles.previewOk : styles.previewPending}>{file.previewed || verified.includes(file.id) ? "Preview OK" : "Kutilmoqda"}</span>
-            <div className={styles.actions}><button type="button" title="Preview ochish" aria-label={`${label(file)} v${file.version} preview`} disabled={busy || !!batch.length} onClick={() => void openPreview(file)}><Icon name="eye" /></button>{canEdit && file.status === "published" && !file.isCurrent && <button type="button" title="Joriy versiyaga qaytarish" aria-label={`${label(file)} v${file.version} ni qaytarish`} disabled={busy || !!batch.length} onClick={() => void act("restore", { fileId: file.id })}><Icon name="restore" /></button>}{canEdit && !file.isCurrent && <button type="button" className={styles.danger} title="Eski versiyani o‘chirish" aria-label={`${label(file)} v${file.version} ni o‘chirish`} disabled={busy || !!batch.length} onClick={() => setDeleting([file])}><Icon name="trash" /></button>}</div>
+            <div className={styles.actions}><button type="button" title="Preview ochish" aria-label={`${label(file)} v${file.version} preview`} disabled={busy} onClick={() => void openPreview(file)}><Icon name="eye" /></button>{canEdit && file.status === "draft" && <button type="button" className={styles.publishAction} title="Tasdiqlash va nashr qilish" aria-label={`${label(file)} v${file.version} ni nashr qilish`} disabled={busy} onClick={() => void publishFiles([file.id])}><Icon name="check" /></button>}{canEdit && file.status === "published" && !file.isCurrent && <button type="button" title="Joriy versiyaga qaytarish" aria-label={`${label(file)} v${file.version} ni qaytarish`} disabled={busy} onClick={() => void act("restore", { fileId: file.id })}><Icon name="restore" /></button>}{canEdit && !file.isCurrent && <button type="button" className={styles.danger} title="Faylni o‘chirish" aria-label={`${label(file)} v${file.version} ni o‘chirish`} disabled={busy} onClick={() => setDeleting([file])}><Icon name="trash" /></button>}</div>
           </div>)}</div>
-          <div className={styles.pagination}><span>{actualPage} / {pages} sahifa</span><div><button type="button" aria-label="Oldingi sahifa" disabled={actualPage <= 1} onClick={() => setPage(actualPage - 1)}><Icon name="left" /></button><button type="button" aria-label="Keyingi sahifa" disabled={actualPage >= pages} onClick={() => setPage(actualPage + 1)}><Icon name="right" /></button></div></div>
-          {canEdit && <div className={styles.bulkActions}><button type="button" className={styles.primary} disabled={!selectedFiles.length || busy || !!batch.length} onClick={() => void startBatch()}><Icon name="eye" /> {batch.length ? `Preview ${batchIndex + 1}/${batch.length}` : `Tanlanganlarni Preview OK (${selectedFiles.length})`}</button><button type="button" className={styles.secondary} disabled={!oldSelected.length || busy || !!batch.length} onClick={() => setDeleting(oldSelected)}><Icon name="trash" /> Eski versiyalarni o‘chirish ({oldSelected.length})</button></div>}
+          {canEdit && selectedFiles.length > 0 && <div className={styles.bulkActions}><button type="button" className={styles.secondary} disabled={busy || !selectedFiles.some((file) => !file.previewed && !verified.includes(file.id))} onClick={() => void approveSelected()}><Icon name="check" /> Tanlanganlarni Preview OK ({selectedFiles.length})</button>{allVisible && selectedFiles.some((file) => file.status === "draft") && <button type="button" className={styles.primary} disabled={busy} onClick={() => void publishFiles(selectedFiles.filter((file) => file.status === "draft").map((file) => file.id))}><Icon name="rocket" /> Tanlangan draftlarni nashr qilish</button>}<button type="button" className={styles.secondary} disabled={!oldSelected.length || busy} onClick={() => setDeleting(oldSelected)}><Icon name="trash" /> Tanlangan eski fayllarni o‘chirish ({oldSelected.length})</button></div>}
         </> : <div className={styles.empty}>Hali fayl yuklanmagan. Learn yoki Practice JSX faylini yuklang.</div>}
       </section>
-      <aside className={styles.side}>{canEdit && <section className={styles.sideCard} aria-labelledby="upload-title">
-        <h2 id="upload-title"><Icon name="upload" /> JSX fayl yuklash</h2>
-        <p className={styles.flowHint}>Fayllarni alohida oynada yuklang, preview qiling va nashrga tayyorlang.</p>
-        <button type="button" className={styles.flowOpen} onClick={() => openFlow("learn")}><Icon name="book" /><span><strong>Learn yuklash</strong><small>Nazariya va nashr holati</small></span><Icon name="right" /></button>
-        {lesson.code !== "INTRO" && <button type="button" className={styles.flowOpen} onClick={() => openFlow("practice")}><Icon name="practice" /><span><strong>Practice yuklash</strong><small>Mexanika avtomatik aniqlanadi</small></span><Icon name="right" /></button>}
-      </section>}</aside>
-    </div>
-    {!flowKind && previewSection}
-    {canEdit && <dialog ref={flowDialog} className={styles.flowDialog} aria-labelledby="flow-title" onCancel={(event) => { if (busy) event.preventDefault(); else closeFlow(); }} onClose={closeFlow}>
-      {flowKind && <>
-        <div className={styles.flowHeader}><div><span className={styles.flowKicker}>{lesson.code} · {flowKind === "learn" ? "NAZARIYA" : "AMALIYOT"}</span><h2 id="flow-title">{flowKind === "learn" ? "Learn yuklash" : "Practice yuklash"}</h2><p>Faylni tanlang, yuklang, previewda tekshiring va nashr qiling.</p></div><button type="button" className={styles.flowClose} aria-label="Yopish" disabled={busy} onClick={closeFlow}><Icon name="close" /></button></div>
-        <div className={styles.flowSteps}><span>1 · Tanlash</span><span>2 · Yuklash</span><span>3 · Preview</span><span>4 · Nashr</span></div>
-        {message && <div role="status" className={styles.message}>{message}</div>}
-        <section className={styles.flowSection}><div className={styles.flowSectionHead}><h3>JSX fayl</h3><span>{flowKind === "learn" ? "1 ta fayl" : "1–10 ta fayl"}</span></div><input ref={fileInput} type="file" multiple={flowKind === "practice"} accept=".jsx" onChange={(event) => void choose(event, flowKind)} disabled={busy} />
-          {uploadFiles.length > 0 && <div className={styles.flowSelection}>{uploadFiles.map((file) => <div key={file.name}><span>{file.name}</span><strong>{flowKind === "learn" ? "Learn" : mechanics[file.name] || "Aniqlanmadi"}</strong></div>)}</div>}
-          <button type="button" className={styles.primary} disabled={busy || !uploadFiles.length || (flowKind === "practice" && uploadFiles.some((file) => !mechanics[file.name]))} onClick={() => void upload()}><Icon name="upload" /> {busy ? "Yuklanmoqda…" : "Draftni yuklash"}</button>
-        </section>
-        <section className={styles.flowSection}><div className={styles.flowSectionHead}><h3>Yuklangan fayllar va preview</h3><span>{flowFiles.length} / {flowKind === "learn" ? 1 : 10}</span></div>
-          {flowFiles.length ? <div className={styles.flowFileList}>{flowFiles.map((file) => <div key={file.id}><span><strong>{label(file)}</strong> · v{file.version}{file.mechanic ? ` · ${file.mechanic}` : ""}</span><span className={file.previewed || verified.includes(file.id) ? styles.previewOk : styles.previewPending}>{file.previewed || verified.includes(file.id) ? "Preview OK" : "Preview kerak"}</span><button type="button" className={styles.secondary} disabled={busy} onClick={() => void openPreview(file)}><Icon name="eye" /> Ko‘rish</button></div>)}</div> : <p className={styles.flowEmpty}>Bu qism uchun fayl hali yuklanmagan.</p>}
-        </section>
-        {preview?.kind === flowKind && previewSection}
-        <section className={styles.flowSection}><div className={styles.flowSectionHead}><h3>{flowKind === "learn" ? "Learn" : "Practice"} nashr holati</h3><span className={flowReady ? styles.previewOk : styles.previewPending}>{flowPublished ? "Nashr qilingan" : flowReady ? "Tayyor" : "Tayyor emas"}</span></div>
-          {!flowReady && <p className={styles.flowHint}>{flowKind === "learn" ? "Learn faylini yuklang va previewda oching." : "p01–p10 fayllarini yuklang va barchasini previewda oching."}</p>}
-          {readiness.length > 0 && <ul className={styles.readiness}>{readiness.map((item) => <li key={item}>{item}</li>)}</ul>}
-          {!readiness.length && <div className={styles.ready}><Icon name="check" /> Barcha fayllar tayyor.</div>}
-          <button type="button" className={styles.primary} disabled={busy || !!batch.length || readiness.length > 0 || (lesson.status === "published" && !candidates.some((file) => file.status === "draft"))} onClick={() => void act("publish")}><Icon name="rocket" /> Nashr qilish</button>
-        </section>
-      </>}
-    </dialog>}
+    {previewSection}
     {deleting.length > 0 && <div className={styles.modalBackdrop} onMouseDown={(event) => { if (event.target === event.currentTarget) setDeleting([]); }}><div className={styles.modal} role="alertdialog" aria-modal="true" aria-labelledby="delete-title" aria-describedby="delete-desc"><h2 id="delete-title">Eski versiyalarni o‘chirish</h2><p id="delete-desc">{deleting.length} ta fayl butunlay o‘chiriladi va ularni qaytarib bo‘lmaydi. Joriy fayllar saqlanadi.</p><div className={styles.deleteList}>{deleting.map((file) => <span key={file.id}>{label(file)} · v{file.version}</span>)}</div><div className={styles.modalActions}><button type="button" className={styles.secondary} onClick={() => setDeleting([])}>Bekor qilish</button><button type="button" className={styles.deleteConfirm} onClick={() => void deleteFiles()}><Icon name="trash" /> O‘chirish</button></div></div></div>}
   </div>;
 }
