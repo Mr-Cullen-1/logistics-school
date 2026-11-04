@@ -28,7 +28,7 @@ export default async function LessonsPage() {
       .innerJoin(lessons, eq(lessons.moduleId, modules.id))
       .leftJoin(progress, and(eq(progress.lessonId, lessons.id), eq(progress.studentId, user.id)))
       .where(and(activeCourseAccess(user.id), eq(lessons.status, "published"), or(isNull(lessons.code), ne(lessons.code, "INTRO"))))
-      .orderBy(asc(courses.order), asc(modules.order), asc(lessons.order)),
+      .orderBy(asc(courses.order), asc(modules.order), asc(lessons.code), asc(lessons.id)),
   ]);
   const locale = profile?.locale === "ru" || profile?.locale === "en" ? profile.locale : "uz";
   const t = getLearnText(locale);

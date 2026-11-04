@@ -2,6 +2,15 @@ export type LessonKind = "learn" | "practice";
 export type LessonSlot = { kind: LessonKind; seq: number; mechanic: string | null };
 export const practiceMechanics = ["MC", "GAP", "TYPE", "MATCH", "ORDER", "READ-MC", "READ-TYPE", "REPLY", "SORT", "FIX", "FORM", "SCENE"] as const;
 
+export function detectPracticeMechanic(source: string): typeof practiceMechanics[number] | null {
+  const meta = /\bexport\s+const\s+meta\s*=\s*\{([^}]*)\}/.exec(source)?.[1];
+  const declared = meta && /(?:["']?mechanic["']?)\s*:\s*["']([A-Z-]+)["']/.exec(meta)?.[1];
+  const taskKind = /(?:["']?kind["']?)\s*:\s*["']([A-Z-]+)["']/.exec(source)?.[1];
+  return declared && taskKind === declared && practiceMechanics.includes(declared as typeof practiceMechanics[number])
+    ? declared as typeof practiceMechanics[number]
+    : null;
+}
+
 export function parseLessonFilename(name: string): { code: string; kind: LessonKind; seq: number } | null {
   if (name === "INTRO.learn.jsx") return { code: "INTRO", kind: "learn", seq: 0 };
   const match = /^(M[1-4]L0[1-8])\.(learn|p(0[1-9]|10))\.jsx$/.exec(name);

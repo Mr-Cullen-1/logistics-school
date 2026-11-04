@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
   const [exists] = await db.select({ id: lessons.id }).from(lessons).where(and(eq(lessons.moduleId, section.id), eq(lessons.code, parsed.data.code))).limit(1);
   if (exists) return NextResponse.json({ error: "Bu dars kodi modulda bor" }, { status: 409 });
   const created = await db.transaction(async (tx) => {
-    const [lesson] = await tx.insert(lessons).values({ moduleId: section.id, code: parsed.data.code, title: parsed.data.title, jsxSource: "", compiledJs: "", updatedBy: access.user.id }).returning({ id: lessons.id, code: lessons.code, title: lessons.title });
+    const [lesson] = await tx.insert(lessons).values({ moduleId: section.id, code: parsed.data.code, title: parsed.data.title, order: parsed.data.code === "INTRO" ? 0 : Number(parsed.data.code.slice(-2)), jsxSource: "", compiledJs: "", updatedBy: access.user.id }).returning({ id: lessons.id, code: lessons.code, title: lessons.title });
     await tx.insert(auditLog).values({ actorId: access.user.id, action: "lesson.created", targetType: "lesson", targetId: lesson.id });
     return lesson;
   });

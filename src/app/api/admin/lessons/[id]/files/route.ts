@@ -7,7 +7,7 @@ import { auditLog, lessonFiles, lessons } from "@/db/schema";
 import { superAdminAccess } from "@/lib/auth/admin";
 import { sameOrigin } from "@/lib/auth/request";
 import { validateAndCompileLesson } from "@/lib/lessons/compile";
-import { practiceMechanics, validateUploadSelection } from "@/lib/lessons/rules";
+import { detectPracticeMechanic, validateUploadSelection } from "@/lib/lessons/rules";
 
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   if (!sameOrigin(request)) return NextResponse.json({ error: "So‘rov rad etildi" }, { status: 403 });
@@ -32,11 +32,6 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
   if (kind !== "learn" && kind !== "practice") return NextResponse.json({ error: "Fayl turini tanlang" }, { status: 400 });
   const selectionError = validateUploadSelection(lesson.code, kind, uploads.map((item) => (item as File).name));
   if (selectionError) return NextResponse.json({ error: selectionError }, { status: 400 });
-  let rawMechanics: unknown;
-  try { rawMechanics = kind === "learn" ? {} : JSON.parse(String(form.get("mechanics") || "{}")); }
-  catch { return NextResponse.json({ error: "Mexanika ma’lumotlari noto‘g‘ri" }, { status: 400 }); }
-  const mechanics = z.record(z.string(), z.enum(practiceMechanics)).safeParse(rawMechanics);
-  if (!mechanics.success) return NextResponse.json({ error: "Mexanika ma’lumotlari noto‘g‘ri" }, { status: 400 });
   const results: { name: string; ok: boolean; error?: string; version?: number }[] = [];
   for (const item of uploads) {
     const file = item as File;
@@ -46,7 +41,11 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     const result = validateAndCompileLesson(file.name, source);
     if (!result.ok) { results.push({ name: file.name, ok: false, error: result.error }); continue; }
     if (result.slot.code !== lesson.code) { results.push({ name: file.name, ok: false, error: "Dars kodi mos emas" }); continue; }
-    const mechanic = result.slot.kind === "practice" ? mechanics.data[file.name] || null : null;
+    const mechanic = result.slot.kind === "practice" ? detectPracticeMechanic(source) : null;
+    if (result.slot.kind === "practice" && !mechanic) {
+      results.push({ name: file.name, ok: false, error: "JSX ichidagi meta.mechanic va task.kind mos yoki tanilgan emas" });
+      continue;
+    }
     const version = await db.transaction(async (tx) => {
       await tx.select({ id: lessons.id }).from(lessons).where(eq(lessons.id, id)).for("update").limit(1);
       const [last] = await tx.select({ version: lessonFiles.version }).from(lessonFiles).where(and(eq(lessonFiles.lessonId, id), eq(lessonFiles.kind, result.slot.kind), eq(lessonFiles.seq, result.slot.seq))).orderBy(desc(lessonFiles.version)).limit(1);

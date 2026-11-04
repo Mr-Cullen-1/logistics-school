@@ -26,7 +26,7 @@ export default async function CoursePage({ params }: { params: Promise<{ courseI
   if (!course) notFound();
   const t = getLearnText(profile?.locale).course;
   const sections = await getDatabase().select({ id: modules.id, title: modules.title }).from(modules).where(eq(modules.courseId, courseId)).orderBy(asc(modules.order), asc(modules.id));
-  const lessonRows = sections.length ? await getDatabase().select({ id: lessons.id, moduleId: lessons.moduleId, title: lessons.title, code: lessons.code, completedAt: progress.completedAt }).from(lessons).leftJoin(progress, and(eq(progress.lessonId, lessons.id), eq(progress.studentId, user.id))).where(and(inArray(lessons.moduleId, sections.map((section) => section.id)), eq(lessons.status, "published"))).orderBy(asc(lessons.order), asc(lessons.title)) : [];
+  const lessonRows = sections.length ? await getDatabase().select({ id: lessons.id, moduleId: lessons.moduleId, title: lessons.title, code: lessons.code, completedAt: progress.completedAt }).from(lessons).leftJoin(progress, and(eq(progress.lessonId, lessons.id), eq(progress.studentId, user.id))).where(and(inArray(lessons.moduleId, sections.map((section) => section.id)), eq(lessons.status, "published"))).orderBy(asc(lessons.code), asc(lessons.id)) : [];
   const intro = lessonRows.find((lesson) => lesson.code === "INTRO");
   const moduleLessons = lessonRows.filter((lesson) => lesson.code !== "INTRO");
 

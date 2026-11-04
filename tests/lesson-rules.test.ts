@@ -1,7 +1,13 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { parseLessonFilename, publishReadiness, passThreshold, selectPublishFiles, validateUploadSelection } from "../src/lib/lessons/rules";
+import { detectPracticeMechanic, parseLessonFilename, publishReadiness, passThreshold, selectPublishFiles, validateUploadSelection } from "../src/lib/lessons/rules";
+
+test("Practice mechanic comes from JSX metadata and matches its task", () => {
+  assert.equal(detectPracticeMechanic('export const meta = { mechanic: "MATCH" }; const task = { kind: "MATCH" };'), "MATCH");
+  assert.equal(detectPracticeMechanic('export const meta = {"mechanic":"READ-MC"}; const task = {"kind":"READ-MC"};'), "READ-MC");
+  assert.equal(detectPracticeMechanic('export const meta = { mechanic: "MATCH" }; const task = { kind: "MC" };'), null);
+});
 
 test("only canonical Learn and Practice filenames are accepted", () => {
   assert.deepEqual(parseLessonFilename("M1L01.learn.jsx"), { code: "M1L01", kind: "learn", seq: 0 });
