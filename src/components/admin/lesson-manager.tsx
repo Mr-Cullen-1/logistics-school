@@ -26,9 +26,12 @@ const label = (file: FileRow) => file.kind === "learn" ? "Learn" : `p${String(fi
 export function LessonManager({ lesson, files, canEdit }: { lesson: Lesson; files: FileRow[]; canEdit: boolean }) {
   const router = useRouter();
   const fileInput = useRef<HTMLInputElement>(null);
+  const uploadDialog = useRef<HTMLDialogElement>(null);
   const mounted = useRef<string | null>(null);
   const previewPanel = useRef<HTMLElement>(null);
   const [uploadFiles, setUploadFiles] = useState<File[]>([]);
+  const [uploadKind, setUploadKind] = useState<LessonKind>("learn");
+  const [uploadOpen, setUploadOpen] = useState(false);
   const [busy, setBusy] = useState(false);
   const [message, setMessage] = useState("");
   const [preview, setPreview] = useState<Preview | null>(null);
@@ -49,16 +52,20 @@ export function LessonManager({ lesson, files, canEdit }: { lesson: Lesson; file
   const allVisible = visible.length > 0 && visible.every((file) => checked.includes(file.id));
 
   useEffect(() => { if (preview) previewPanel.current?.scrollIntoView({ behavior: "smooth", block: "start" }); }, [preview]);
+  useEffect(() => {
+    if (uploadOpen) uploadDialog.current?.showModal();
+    else uploadDialog.current?.close();
+  }, [uploadOpen]);
+
+  function resetUpload() {
+    setUploadFiles([]); setMessage("");
+    if (fileInput.current) fileInput.current.value = "";
+  }
 
   function choose(event: ChangeEvent<HTMLInputElement>) {
     const list = Array.from(event.target.files || []);
     if (!list.length) return;
-    let error = list.some((file) => parseLessonFilename(file.name)?.code !== lesson.code)
-      ? `Faqat ${lesson.code} darsining JSX fayllarini tanlang.` : null;
-    for (const kind of ["learn", "practice"] as const) {
-      const names = list.filter((file) => parseLessonFilename(file.name)?.kind === kind).map((file) => file.name);
-      if (names.length) error ||= validateUploadSelection(lesson.code || "", kind, names);
-    }
+    let error = validateUploadSelection(lesson.code || "", uploadKind, list.map((file) => file.name));
     if (list.some((file) => file.size > 1_500_000)) error ||= "Har bir fayl 1.5 MB dan oshmasin.";
     if (list.reduce((total, file) => total + file.size, 0) > 5_000_000) error ||= "Fayllar jami 5 MB dan oshmasin.";
     setMessage(error || ""); setUploadFiles(error ? [] : list);
@@ -81,7 +88,7 @@ export function LessonManager({ lesson, files, canEdit }: { lesson: Lesson; file
     return `${result.files} ta fayl nashr qilindi.${result.lessonPublished ? " Dars o‘quvchilar uchun ochiq." : ` Dars hali o‘quvchilarga ochilmagan.\n${(result.pendingReasons || []).join(" · ")}`}`;
   }
 
-  async function upload(publish: boolean) {
+  async function upload() {
     setBusy(true); setMessage("");
     const saved: string[] = [];
     const uploadedNames: string[] = [];
@@ -102,11 +109,12 @@ export function LessonManager({ lesson, files, canEdit }: { lesson: Lesson; file
         }
       }
       let summary = `${saved.length} ta fayl draft sifatida saqlandi.`;
-      if (publish && saved.length && !errors.length) {
+      if (saved.length && !errors.length) {
         setMessage("Fayllar nashr qilinmoqda…");
         summary = await requestPublish(saved);
-      } else if (publish && errors.length) summary += " Xatolar sababli nashr qilinmadi.";
+      } else if (errors.length) summary += " Xatolar sababli nashr qilinmadi.";
       setMessage([summary, ...errors].join("\n"));
+      if (saved.length && !errors.length) setUploadOpen(false);
     } catch (error) { setMessage(`${saved.length ? `${saved.length} ta fayl saqlandi. ` : ""}${error instanceof Error ? error.message : "Ulanishda xatolik yuz berdi."} Ro‘yxatni yangilab holatni tekshiring.`); }
     finally {
       setUploadFiles((current) => current.filter((file) => !uploadedNames.includes(file.name)));
@@ -204,25 +212,31 @@ export function LessonManager({ lesson, files, canEdit }: { lesson: Lesson; file
 
   return <div className={styles.manager}>
     <header className={styles.heading}><div className={styles.headingMeta}><span className={styles.code}>{lesson.code || "Kod yo‘q"}</span><span className={lesson.status === "published" ? styles.published : styles.draft}>{lesson.status === "published" ? "Nashr qilingan" : "Draft"}</span></div><h1>{lesson.title}</h1><p>Dars fayllari, versiyalari va nashr holati</p></header>
-    {message && <div role="status" className={styles.message}>{message}</div>}
+    {message && !uploadOpen && <div role="status" className={styles.message}>{message}</div>}
     {canEdit && <section className={styles.uploadCard} aria-labelledby="upload-title" aria-busy={busy}>
       <div><h2 id="upload-title"><Icon name="upload" /> Dars fayllarini yuklash</h2>
-        <p>{lesson.code === "INTRO" ? "INTRO.learn.jsx faylini tanlang." : "Learn va Practice JSX fayllarini birga yoki alohida tanlang. Turi va mexanikasi avtomatik aniqlanadi."}</p>
+        <p>Learn yoki Practice turini tanlab, JSX fayl yuklang.</p>
       </div>
       <div className={styles.uploadActions}>
-        <input ref={fileInput} id="lesson-upload" className={styles.fileInput} type="file" multiple={lesson.code !== "INTRO"} accept=".jsx" onChange={choose} disabled={busy} />
-        <button type="button" className={styles.secondary} disabled={busy} onClick={() => fileInput.current?.click()}><Icon name="upload" /> {uploadFiles.length ? "Fayllarni almashtirish" : "JSX fayllarni tanlash"}</button>
-        {uploadFiles.length > 0 && <>
-          <button type="button" className={styles.primary} disabled={busy} onClick={() => void upload(true)}><Icon name="check" /> {busy ? "Bajarilmoqda…" : "Yuklash va nashr qilish"}</button>
-          <button type="button" className={styles.textButton} disabled={busy} onClick={() => void upload(false)}>Draft saqlash</button>
-        </>}
+        <button type="button" className={styles.primary} disabled={busy} onClick={() => { resetUpload(); setUploadKind("learn"); setUploadOpen(true); }}><Icon name="upload" /> Fayl yuklash</button>
       </div>
-      {uploadFiles.length > 0 && <div className={styles.selection}>
-        <div className={styles.selectionHeader}><strong>{uploadFiles.length} ta fayl tanlandi</strong><button type="button" className={styles.textButton} disabled={busy} onClick={() => { setUploadFiles([]); if (fileInput.current) fileInput.current.value = ""; }}>Tozalash</button></div>
-        <ul>{uploadFiles.map((file) => <li key={file.name}><Icon name={parseLessonFilename(file.name)?.kind === "learn" ? "book" : "practice"} />{file.name}</li>)}</ul>
-        <p>“Yuklash va nashr qilish” fayllarni Preview OK deb tasdiqlaydi va nashr qiladi. Oldin ko‘rish uchun “Draft saqlash”ni tanlang.</p>
-      </div>}
     </section>}
+    {canEdit && <dialog ref={uploadDialog} className={styles.uploadDialog} aria-labelledby="upload-dialog-title" onCancel={(event) => { if (busy) event.preventDefault(); else { resetUpload(); setUploadOpen(false); } }}>
+      <form onSubmit={(event) => { event.preventDefault(); if (uploadFiles.length && !busy) void upload(); }}>
+        <div className={styles.dialogHeader}><h2 id="upload-dialog-title">Fayl yuklash</h2><button type="button" aria-label="Yopish" disabled={busy} onClick={() => { resetUpload(); setUploadOpen(false); }}><Icon name="close" /></button></div>
+        <div className={styles.dialogBody}>
+          <label className={styles.field}>Turi<select value={uploadKind} disabled={busy} onChange={(event) => { resetUpload(); setUploadKind(event.target.value as LessonKind); }}><option value="learn">Learn</option>{lesson.code !== "INTRO" && <option value="practice">Practice</option>}</select></label>
+          <div className={styles.field}>
+            <label htmlFor="lesson-upload">JSX fayl {uploadKind === "practice" ? "yuklash (1–10 ta)" : "yuklash"}</label>
+            <input ref={fileInput} id="lesson-upload" type="file" multiple={uploadKind === "practice"} accept=".jsx" onChange={choose} disabled={busy} aria-describedby="upload-hint" />
+            <small id="upload-hint">{uploadKind === "learn" ? `${lesson.code}.learn.jsx` : `${lesson.code}.p01.jsx – ${lesson.code}.p10.jsx · Mexanika avtomatik aniqlanadi`}</small>
+            {uploadFiles.length > 0 && <ul className={styles.selectedNames}>{uploadFiles.map((file) => <li key={file.name}>{file.name}</li>)}</ul>}
+          </div>
+          {message && <div role="status" className={styles.message}>{message}</div>}
+        </div>
+        <div className={styles.dialogFooter}><button type="button" className={styles.secondary} disabled={busy} onClick={() => { resetUpload(); setUploadOpen(false); }}>Bekor qilish</button><button type="submit" className={styles.primary} disabled={busy || !uploadFiles.length}>{busy ? "Saqlanmoqda…" : "Saqlash va nashr qilish"}</button></div>
+      </form>
+    </dialog>}
       <section className={styles.filesPanel} aria-labelledby="files-title">
         <div className={styles.panelHeader}><div><h2 id="files-title">Dars fayllari</h2><p>Versiyani tanlang, kerakli fayllarni belgilang va amallarni bajaring.</p></div><span className={styles.count}>{files.length} ta fayl</span></div>
         {files.length ? <>
