@@ -4,7 +4,7 @@ type Choice = { label: string; feedback?: string };
 type Step = { prompt: string; options: Choice[]; answer: number };
 export type PracticeDefinition = {
   id: string;
-  kind: "MC" | "MATCH" | "READ-MC" | "GAP" | "ORDER" | "FIX" | "SORT" | "READ-TYPE" | "SCENE";
+  kind: "MC" | "MATCH" | "READ-MC" | "GAP" | "ORDER" | "FIX" | "SORT" | "READ-TYPE" | "TYPE" | "REPLY" | "SCENE";
   title: string;
   instruction: string;
   questionText: string;
@@ -67,7 +67,7 @@ export function PracticeTask({ definition: d, lang = "uz", mode, fullScreen = fa
   const [page, setPage] = useState(0);
   const checking = useRef(false);
   const review = mode === "review";
-  const choiceMode = ["MC", "READ-MC", "GAP", "FIX", "SCENE"].includes(d.kind);
+  const choiceMode = ["MC", "READ-MC", "GAP", "FIX", "REPLY", "SCENE"].includes(d.kind);
   const current = d.kind === "SCENE" ? d.steps?.[step] : undefined;
   const options = current?.options || d.options || [];
   const chosen = selected !== null ? options[selected] : undefined;
@@ -79,7 +79,7 @@ export function PracticeTask({ definition: d, lang = "uz", mode, fullScreen = fa
     sync(); query.addEventListener("change", sync);
     return () => query.removeEventListener("change", sync);
   }, []);
-  const ready = !locked && !review && (choiceMode ? selected !== null : d.kind === "ORDER" ? order.length === (d.tokens?.length || 0) : d.kind === "MATCH" ? Object.keys(matches).length === (d.pairs?.length || 0) : d.kind === "SORT" ? Object.keys(groups).length === d.groups?.reduce((n, group) => n + group.items.length, 0) : d.kind === "READ-TYPE" ? (d.fields || []).every((_, index) => fields[index]?.trim()) : false);
+  const ready = !locked && !review && (choiceMode ? selected !== null : d.kind === "ORDER" ? order.length === (d.tokens?.length || 0) : d.kind === "MATCH" ? Object.keys(matches).length === (d.pairs?.length || 0) : d.kind === "SORT" ? Object.keys(groups).length === d.groups?.reduce((n, group) => n + group.items.length, 0) : d.kind === "READ-TYPE" || d.kind === "TYPE" ? (d.fields || []).every((_, index) => fields[index]?.trim()) : false);
   useEffect(() => { onReady?.(Boolean(ready)); }, [onReady, ready]);
   const check = useCallback(() => {
     if (!ready || checking.current) return;
@@ -101,7 +101,7 @@ export function PracticeTask({ definition: d, lang = "uz", mode, fullScreen = fa
         const misplaced = (d.groups || []).flatMap((group) => group.items.map((item) => ({ item, label: group.label }))).find((item) => groups[item.item] !== item.label);
         detail = `«${misplaced?.item || "Gap"}» guruhini qayta tekshiring. Boshida savol so'zi yoki yordamchi fe'l bormi?`;
       }
-    } else if (d.kind === "READ-TYPE") {
+    } else if (d.kind === "READ-TYPE" || d.kind === "TYPE") {
       correct = (d.fields || []).every((field, index) => field.answers.some((answer) => normalize(fields[index] || "") === normalize(answer)));
       if (!correct) detail = (d.fields || []).find((field, index) => !field.answers.some((answer) => normalize(fields[index] || "") === normalize(answer)))?.hint || d.hint;
     }
@@ -125,7 +125,7 @@ export function PracticeTask({ definition: d, lang = "uz", mode, fullScreen = fa
   const visibleSort = compact ? sortedItems.slice(page * 4, page * 4 + 4) : sortedItems;
   const totalPages = d.kind === "MATCH" ? Math.ceil(matchRows.length / 3) : Math.ceil(sortedItems.length / 4);
   return <div className={`pt ${fullScreen ? "pt-full" : ""}`}><style>{STYLE}</style><main className="pt-shell">
-    <div className="pt-head">M1L01 · Practice {taskNumber}</div>
+    <div className="pt-head">{d.id.split("-")[0]} · Practice {taskNumber}</div>
     <h1>{d.title}</h1><p className="pt-sub">{d.instruction}</p>
     {d.passage && <div className="pt-passage">{d.passage}</div>}
     <p className="pt-question">{current?.prompt || d.prompt || d.questionText}</p>
@@ -135,7 +135,7 @@ export function PracticeTask({ definition: d, lang = "uz", mode, fullScreen = fa
     {d.kind === "MATCH" && <div className="pt-list pt-pairs-grid">{visibleMatches.map(({ pair, index }) => <div className={`pt-pair ${feedback ? normalize(matches[index] || "") === normalize(pair.right) ? "correct" : "wrong" : ""}`} key={pair.left}><span className="pt-button">{pair.left}</span><select aria-label={`${pair.left} ta'rifi`} disabled={locked || review} value={matches[index] || ""} onChange={(event) => { setMatches({ ...matches, [index]: event.target.value }); setFeedback(null); }}><option value="">Ta&apos;rifni tanlang</option>{[...(d.pairs || [])].sort((a,b) => a.right.localeCompare(b.right)).map((item) => <option key={item.right} value={item.right}>{item.right}</option>)}</select></div>)}</div>}
     {d.kind === "SORT" && <div className="pt-list pt-pairs-grid">{visibleSort.map((item) => <div className={`pt-pair ${feedback ? groups[item] === d.groups?.find((group) => group.items.includes(item))?.label ? "correct" : "wrong" : ""}`} key={item}><span className="pt-button">{item}</span><select aria-label={`${item} guruhi`} disabled={locked || review} value={groups[item] || ""} onChange={(event) => { setGroups({ ...groups, [item]: event.target.value }); setFeedback(null); }}><option value="">Guruhni tanlang</option>{d.groups?.map((group) => <option key={group.label} value={group.label}>{group.label}</option>)}</select></div>)}</div>}
     {compact && (d.kind === "MATCH" || d.kind === "SORT") && <div className="pt-row" aria-label={`Qism ${page + 1} / ${totalPages}`}><button type="button" className="pt-token" disabled={page === 0} onClick={() => setPage((value) => value - 1)}>← Oldingi</button><span>{page + 1}/{totalPages}</span><button type="button" className="pt-token" disabled={page >= totalPages - 1} onClick={() => setPage((value) => value + 1)}>Keyingi →</button></div>}
-    {d.kind === "READ-TYPE" && <div className="pt-grid">{d.fields?.map((field, index) => <div className="pt-field" key={field.label}><label htmlFor={`${d.id}-${index}`}>{field.label}</label><input id={`${d.id}-${index}`} className="pt-input" disabled={locked || review} value={fields[index] || ""} onChange={(event) => { setFields({ ...fields, [index]: event.target.value }); setFeedback(null); }} autoComplete="off" /></div>)}</div>}
+    {(d.kind === "READ-TYPE" || d.kind === "TYPE") && <div className="pt-grid">{d.fields?.map((field, index) => <div className="pt-field" key={field.label}><label htmlFor={`${d.id}-${index}`}>{field.label}</label><input id={`${d.id}-${index}`} className="pt-input" disabled={locked || review} value={fields[index] || ""} onChange={(event) => { setFields({ ...fields, [index]: event.target.value }); setFeedback(null); }} autoComplete="off" /></div>)}</div>}
     {feedback && <div className={`pt-help ${feedback.good ? "good" : "bad"}`} role="status"><span aria-hidden="true">{feedback.good ? "✓" : "!"}</span><span>{feedback.text}</span></div>}
     <p className="pt-foot">{review ? "Ko'rib chiqish rejimi" : lang === "en" ? "Use the platform's Check button." : lang === "ru" ? "Нажмите кнопку проверки на платформе." : "Javob tayyor bo'lgach, platformadagi «Tekshirish» tugmasini bosing."}</p>
   </main></div>;
