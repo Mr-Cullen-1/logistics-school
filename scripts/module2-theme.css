@@ -39,3 +39,20 @@
 .ml-theory-flip,.ml-theory-flip-inner{min-height:100px}.ml-theory-face{overflow-wrap:anywhere}.ml-vocab-card,.ml-vocab-inner{min-height:108px}
 @media(max-width:650px){.m2-scene{min-height:165px}.m2-endpoint{font-size:8px;padding:7px}.m2-network{inset-inline:9px}.m2-perspective{transform:scale(.85);transform-origin:center}.m2-hook{padding:14px;gap:10px}.m2-fields{grid-template-columns:1fr}.m2-scene-caption{font-size:10px;max-width:44%}.m2-motion{max-width:50%;min-height:44px}.ml-theory-flip,.ml-theory-flip-inner{min-height:132px}.ml-vocab-card,.ml-vocab-inner{min-height:112px}.ml-foot{flex-wrap:wrap}.ml-note{display:none}}
 @media(prefers-reduced-motion:reduce){.m2-device,.m2-wire i{animation:none!important}.m2-device{transform:rotateY(-12deg) rotateX(6deg)}.m2-wire i{left:22%}.m2-wire i:nth-child(2){left:50%}.m2-wire i:nth-child(3){left:78%}.m2-motion{display:none}}
+/* Fit the lesson iframe below the platform header on laptop/zoomed desktops.
+   Keep overflow available for smaller/mobile screens; never crop lesson content. */
+@media(min-width:900px){
+  .ml-slide[data-kind="mission"] .ml-options{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .m2-fields{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media(min-width:900px) and (max-height:760px){
+  .ml-body{padding:12px}.ml-slide{gap:8px}.ml-title{font-size:32px}
+  .ml-theory{gap:6px}.ml-theory-rule{min-height:0;font-size:15px}
+  .ml-theory-flow{min-height:64px;padding:6px}.ml-theory-step{padding:6px 8px}.ml-theory-step strong{font-size:16px}
+  .ml-theory-points p{min-height:44px;padding:7px 9px}.ml-theory-example{padding:8px 10px}
+  .ml-theory-flip,.ml-theory-flip-inner{min-height:84px}
+  .m2-scene{min-height:140px}.m2-hook{padding:12px;gap:8px}.m2-hook-message{font-size:26px}
+  .ml-slide[data-kind="mission"] .m2-scene{min-height:96px}
+  .ml-slide[data-kind="mission"] .m2-perspective{top:0;transform:scale(.7);transform-origin:top center}
+  .ml-slide[data-kind="mission"] .m2-network{inset:8px 20px 38px}
+}

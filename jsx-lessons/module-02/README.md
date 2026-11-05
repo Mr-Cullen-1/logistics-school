@@ -37,6 +37,8 @@ M2L07 dagi o‘qish manbalari uchta emaildan iborat: rate request, attachment va
 - Module 1 dan farqli **to‘q ko‘k + firuza + och ko‘k**, sarlavhalarda shampan aksenti. Module 1 va umumiy Practice stiliga tegilmaydi.
 - Hook va Mission: 2D xabar oqimi, perspektivaga ega CSS 3D xabar kartasi, pauza tugmasi.
 - Nazariya: matn yozilishi → sxema bo‘laklari → izohlar → misol/tarjima → 3D tuzatish. **Qayta** va **Hammasi** boshqaruvi saqlangan.
+- Barcha 20 slaydda sarlavha ustidagi takroriy tur/kod qatori olib tashlangan. Progress va mashq ichidagi kerakli belgilar saqlangan.
+- Balandligi 760px gacha bo‘lgan desktop iframe uchun ichki bo‘shliqlar ixcham. Desktopda Mission variantlari ikki ustunda, ma’lumot kiritish maydonlari uch ustunda; ekran va asosiy karta geometriyasi, animatsiya ketma-ketligi saqlangan.
 - Variantlar hamda gap bo‘laklari bir marta aralashtiriladi; javob identifikatori joylashuvdan mustaqil.
 - `prefers-reduced-motion` yoqilganda mazmun statik ko‘rinadi. Kichik ekranda asosiy karta ichida vertikal scroll, navigatsiya esa ko‘rinadigan joyda qoladi.
 - JSX ichida React, ma’lumot, SVG va CSS bor. Tashqi rasm, CDN, Rive fayli, audio yoki API talab qilinmaydi.
@@ -57,12 +59,17 @@ Manba fayllar:
 ```powershell
 node scripts/generate-module2-learn.mjs
 node_modules\.bin\tsx.cmd scripts/check-module2-lessons.ts
+node_modules\.bin\tsx.cmd scripts/check-module2-layout.ts
 ```
 
 Tekshiruv alohida lokal iframe ichida ishlaydi; DB, login yoki ishlab turgan Next dev server kerak emas. Barcha 8 fayl kompilyatsiyasi, 20 slaydli oqim, ball payloadi, 2D/3D harakat, mobil yozma mashq va checkpoint qayta urinishi tekshiriladi.
+
+`check-module2-layout.ts` — alohida fokuslangan layout tekshiruvi: barcha 8 darsning 20 slaydi 1536×650, 1280×620 va 1920×810 iframe o‘lchamlarida. To‘liq ochilgan nazariya, aylantirilgan karta, savol feedbacki va to‘ldirilgan forma holatlari tekshiriladi. 2026-11-05 tekshiruvida shu o‘lchamlarda ichki scroll yo‘q, footer ko‘rinadi. Kichik/mobil ekranda mazmun kesilmaydi, zarur scroll saqlanadi. Faqat tegishli dars/slaydni tekshirish uchun `M2_LAYOUT_LESSON=M2L06` va `M2_LAYOUT_SLIDES=7,17` muhit o‘zgaruvchilari mavjud.
 
 ## Yuklash
 
 Admin panelda tegishli `M2L0x` darsini oching → **Fayl yuklash** → **Learn** → shu koddagi `.learn.jsx` faylini tanlang. Generator manbalarini yuklamang. Dars ichidagi mashqlar Learn tarkibida. Alohida 80 ta Practice fayli `../practice/M2L01/`–`../practice/M2L08/` papkalarida tayyor: [Practice qo‘llanmasi](../practice/MODULE2_PRACTICE.md). Ularni **Practice** turi orqali har darsga 10 tadan yuklang. Lokal fayl yaratilishi bazadagi darsni avtomatik yuklamaydi yoki nashr qilmaydi.
 
 2026-11-05: M2L01–M2L08 Learn fayllari platformaning bazasiga v1 sifatida yuklandi, tasdiqlandi va joriy nashr sifatida saqlandi. Fayl xeshlari lokal JSX bilan tekshirildi. Shu kuni har darsning 10 ta alohida Practice fayli ham productionga yuklanib nashr qilindi. M2L01–M2L08 ning barchasi `published`: har birida 1 Learn + 10 Practice. Practice xeshlari va production API nashr holati tekshirildi.
+
+2026-11-05 yangilanish: takroriy sarlavha belgisi va desktop scroll tuzatishlari bilan barcha 8 Learn fayli **v2** sifatida productionga yuklandi va joriy nashr qilindi. Production API holati va bazadagi SHA-256 lokal JSX bilan mosligi tekshirildi. Har darsning 10 ta joriy Practice identifikatori o‘zgarmadi.

@@ -22,6 +22,7 @@ Foydalanuvchi talabiga ko'ra `M2L01`–`M2L08` nazariy darslari Module 1 dan far
 - Matn `#f0f6fa`, yordamchi matn `#bacbd8`; to'g'ri/xato javob yashil/qizil va yozma feedback bilan ajratiladi.
 - Marshrutdagi yuk mashinasi o'rnida xabar oqimi va CSS 3D muloqot kartasi. Nazariyadagi ketma-ket yozilish, 2D sxema, flip kartalar, pauza va reduced-motion qo'llanadi.
 - Har dars: Hook → 5 nazariya → etalon asosidagi ichki mashqlar → test → Summary; jami 20 slayd.
+- Learn sarlavhasi ustida tur/kodni takrorlamang: progress va mashq ichidagi belgi yetarli. Past desktop ekranlarda bo‘shliq va ichki joylashuv ixchamlashadi; animatsiya, asosiy karta va navigatsiya saqlanadi. Mobil ekranda mazmunni kesish yoki scrollni yashirish mumkin emas.
 - Learn uslubi o‘z JSX fayliga joylanadi. Module 2 Practice shu palitrani faqat `.m2-practice` bilan chegaralangan CSS orqali oladi. Umumiy runtime va Module 1 ranglari o‘zgarmaydi; Practice karta hajmi, mexanika va animatsiyalar etalondan saqlanadi.
 
 Manbalar: `scripts/module2-theme.css` va `scripts/module2-practice-theme.css`; qayta yaratish tartibi: [Learn](module-02/README.md) va [Practice](practice/MODULE2_PRACTICE.md).

@@ -21,13 +21,16 @@ template = template.replace(/\.ml-stage\{[^\n]*\n@keyframes ml-drive\{[^\n]*\n/,
 replace('function TypeLine(', `const MODULE_CSS = ${JSON.stringify(readFileSync(join(root, "scripts/module2-theme.css"), "utf8"))};\n\nfunction TypeLine(`);
 replace('<TruckScene code={DATA.code} />', '<CommunicationScene />');
 replace('index={current}', 'index={current - 1}');
-replace('${current + 1}/5', '${current}/5');
+// The slide category/code already appears in the progress bar or inner exercise.
+// Remove the duplicated line above every title, including theory, quiz and summary.
+replace('<div className="ml-kick">{slide.kind === "theory" ? `ASOSIY QOIDA · ${current + 1}/5` : slide.kind === "quiz" ? "TEKSHIRUV" : slide.kind === "vocab" ? "SO‘ZLAR" : "NAZARIYA"} · {DATA.code}</div>', '');
 replace('/rapid test|checkpoint 1/i', '/rapid test|checkpoint 2/i');
 replace('slides.findIndex(item => /rapid test|checkpoint 2/i.test(item.heading))', 'slides.findIndex(item => item.kind === "quiz" && /rapid test|checkpoint 2/i.test(item.heading))');
 template = template.replaceAll('M1L08', 'M2L08').replaceAll('Module 1 yakunlandi. Asosiy grammatika va logistika atamalarini o‘zlashtirdingiz.', 'Module 2 nazariyasi yakunlandi. Kundalik ish muloqoti, telefon va yozma tasdiqlash ko‘nikmalarini mashq qildingiz.');
 replace('const markReady = () => setReady(prev => prev[current] ? prev : ({ ...prev, [current]: true }));', 'const markReady = useCallback(() => setReady(prev => prev[current] ? prev : ({ ...prev, [current]: true })), [current]);');
 replace('if (slide.kind === "theory") content', 'if (slide.kind === "hook") content = <HookSlide key={current} {...props} />;\n  else if (slide.kind === "details") content = <DetailsSlide key={current} {...props} />;\n  else if (slide.kind === "theory") content');
 replace('<style>{CSS}</style>', '<style>{CSS + MODULE_CSS}</style>');
+replace('<div className="ml-slide" key={current}>', '<div className="ml-slide" data-kind={slide.kind} key={current}>');
 replace('{DATA.code} · {current + 1}/{slides.length}', 'M02 / COMMUNICATION · {DATA.code} · {current + 1}/{slides.length}');
 replace('"Qoida va misolni eslang, yana urinib ko‘ring."', '`“${question.options[selection]}” variantini qoida bilan solishtiring. ${question.hint || "Ma’no, so‘z tartibi yoki raqamlar mosligini tekshiring."}`');
 // Keep a failed checkpoint retryable and prevent skipping straight to completion.
@@ -38,7 +41,6 @@ replace('answers: [],', 'answers: Object.entries(results).map(([index, value]) =
 // Sentence tokens shuffle once per mount, retain stable identities for repeated words.
 replace('const build = slide.builds[index];', 'const [tokenOrders] = useState(() => slide.builds.map(item => shuffled({ options: item.parts })));\n  const build = slide.builds[index];');
 replace('build.parts.map((part, partIndex) => <button', 'tokenOrders[index].map(({ text: part, id: partIndex }) => <button');
-replace('slide.kind === "theory" ? `ASOSIY QOIDA', 'slide.kind === "hook" ? "HOOK" : slide.kind === "details" ? "AMALDA QO‘LLASH" : slide.kind === "theory" ? `ASOSIY QOIDA');
 
 const applications = {
   M2L01: { source: "Maya Reed works as a carrier representative for Northline Freight. She has been in logistics for three years.", fields: [["Name", "Maya Reed"], ["Position", "carrier representative"], ["Company", "Northline Freight"]] },
