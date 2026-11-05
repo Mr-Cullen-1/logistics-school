@@ -20,6 +20,8 @@ jsx-lessons/
 
 Har bir `module-XX` papkasiga faqat shu modulning 8 ta Learn fayli joylanadi. `practice/<dars kodi>/` papkasida faqat shu darsning 10 ta Practice fayli bo'ladi. Intro uchun practice yo'q. Hozirgi `.gitkeep` fayllari bo'sh papkalarni Gitda saqlaydi; dars fayllari yozilganda olib tashlanadi.
 
+**Module 2 nazariyasi tayyor:** [`module-02/README.md`](module-02/README.md) da M2L01–M2L08 fayllari, kontent manbalari va yuklash tartibi bor. Har dars 20 slayd: Hook → 5 ta nazariy qoida → ichki mashqlar → tezkor test → Summary. Module 2 to'q ko'k/firuza palitra, 2D xabar oqimi va CSS 3D kartalar bilan farqlanadi. Qayta yaratish: `node scripts/generate-module2-learn.mjs`; lokal sandbox sinovi: `node_modules\.bin\tsx.cmd scripts/check-module2-lessons.ts`. Alohida Module 2 Practice fayllari bu bosqichga kirmaydi.
+
 Fayl nomlari va ichki shartnoma: [`../new docs/JSX_CONTRACT.md`](../new%20docs/JSX_CONTRACT.md). Dars mazmuni: [`../new docs/COURSE.md`](../new%20docs/COURSE.md). Intro etaloni: [`../new docs/INTRO_ETALON.md`](../new%20docs/INTRO_ETALON.md). Barcha Learn va Practice ekranlari uchun rang va stil: [`LESSON_DESIGN.md`](LESSON_DESIGN.md).
 
 Intro'ni lokal tekshirish: bir terminalda `npm run dev`, ikkinchisida `node_modules\.bin\tsx.cmd scripts/check-intro-lesson.ts` (Windows). Sinov localhost:3000 dagi runtime iframe ichida barcha 9 ekranni ochadi.

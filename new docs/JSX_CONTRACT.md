@@ -1,6 +1,6 @@
 # JSX shartnomasi: Learn va Practice fayllar + platforma talablari
 
-**Dizayn etaloni:** barcha yangi Learn va Practice fayllari uchun [`jsx-lessons/LESSON_DESIGN.md`](../jsx-lessons/LESSON_DESIGN.md) amal qiladi. To'q fon, tilla aksent, ochiq matn, yashil to'g'ri va qizil xato holatlari bir xil bo'lsin; ekran/karta hajmi va animatsiyalar dizayn yangilanganda saqlanadi.
+**Dizayn etaloni:** barcha yangi Learn va Practice fayllari uchun [`jsx-lessons/LESSON_DESIGN.md`](../jsx-lessons/LESSON_DESIGN.md) amal qiladi. Asosiy uslub: to'q fon, tilla aksent, ochiq matn, yashil to'g'ri va qizil xato holatlari. Foydalanuvchi talabiga ko'ra Module 2 Learn alohida to'q ko'k/firuza palitra va muloqot animatsiyalaridan foydalanadi; uning qoidalari shu dizayn hujjatida yozilgan. Mavjud darslarning ekran/karta hajmi va animatsiyalari oddiy dizayn yangilanishida saqlanadi.
 
 Bu hujjat yuklangan ikki namunaga (`Dars01.jsx` va `D01_01.jsx`) asoslangan. Ular boshqa loyihadan (4-sinf matematika LMS), lekin **ishlaydigan va sinalgan shartnoma** shu. Biz uni ingliz kursi uchun moslaymiz.
 

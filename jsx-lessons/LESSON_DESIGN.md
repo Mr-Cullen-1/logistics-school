@@ -1,6 +1,19 @@
 # Learn va Practice ekranlari dizayn etaloni
 
-Bu ko'rinish `INTRO.learn.jsx`, `M1L01.learn.jsx` va barcha `@coliseum/kit` asosidagi Practice fayllari uchun umumiy qoida. Keyingi darslar ham shu palitradan foydalanadi. Dizayn o'zgarishlari dars mazmuni, tekshirish mexanikasi, ekran va asosiy karta o'lchami hamda animatsiya ketma-ketligini o'zgartirmaydi.
+Bu ko'rinish `INTRO.learn.jsx`, Module 1 va barcha `@coliseum/kit` asosidagi Practice fayllari uchun umumiy qoida. Module 2 Learn uchun quyidagi alohida uslub qo'llanadi; boshqa darslar shu palitradan foydalanadi. Mavjud darslarda dizayn o'zgarishlari dars mazmuni, tekshirish mexanikasi, ekran va asosiy karta o'lchami hamda animatsiya ketma-ketligini o'zgartirmaydi.
+
+## Module 2 Learn — alohida uslub
+
+Foydalanuvchi talabiga ko'ra `M2L01`–`M2L08` nazariy darslari Module 1 dan farqlanadi:
+
+- Fon `#081322`, karta `#1a3045` → `#101d30` → `#182640`.
+- Asosiy aksent firuza `#79e0d2`, ikkinchi aksent och ko'k `#73b9ef`, sarlavha shampan `#e7d3ad`.
+- Matn `#f0f6fa`, yordamchi matn `#bacbd8`; to'g'ri/xato javob yashil/qizil va yozma feedback bilan ajratiladi.
+- Marshrutdagi yuk mashinasi o'rnida xabar oqimi va CSS 3D muloqot kartasi. Nazariyadagi ketma-ket yozilish, 2D sxema, flip kartalar, pauza va reduced-motion qo'llanadi.
+- Har dars: Hook → 5 nazariya → etalon asosidagi ichki mashqlar → test → Summary; jami 20 slayd.
+- Uslub faqat Learn JSX ichiga joylanadi. Umumiy runtime, Module 1 yoki Practice komponentlarining ranglari o'zgartirilmaydi.
+
+Manba: `scripts/module2-theme.css`; to'liq tuzilma va qayta yaratish tartibi: [module-02/README.md](module-02/README.md).
 
 ## Palitra
 

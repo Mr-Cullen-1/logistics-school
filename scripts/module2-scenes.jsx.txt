@@ -1,0 +1,33 @@
+function CommunicationScene() {
+  const [paused, setPaused] = useState(false);
+  return <div className={`m2-scene ${paused ? "paused" : ""}`}>
+    <div className="m2-network" aria-hidden="true"><span className="m2-endpoint">DISPATCH</span><span className="m2-wire"><i /><i /><i /></span><span className="m2-endpoint">CONTACT</span></div>
+    <div className="m2-perspective" aria-hidden="true"><div className="m2-device"><div className="m2-device-front"><svg viewBox="0 0 64 48" fill="none"><rect x="4" y="5" width="56" height="38" rx="6" stroke="currentColor" strokeWidth="2"/><path d="m6 9 26 20L58 9" stroke="currentColor" strokeWidth="2"/><path d="m22 34 6 5 14-14" stroke="currentColor" strokeWidth="3"/></svg></div><span className="m2-device-back"/><span className="m2-device-side"/></div></div>
+    <span className="m2-scene-caption">Aniq xabar → tekshirish → tasdiq</span>
+    <button className="m2-motion" type="button" aria-pressed={paused} onClick={() => setPaused(value => !value)}>{paused ? "Animatsiyani yoqish" : "Animatsiyani to‘xtatish"}</button>
+  </div>;
+}
+
+function HookSlide({ slide, onReady }) {
+  useEffect(() => { onReady(); }, [onReady]);
+  return <><CommunicationScene /><div className="m2-hook"><span className="m2-tag">REAL ISH VAZIYATI</span><p className="m2-hook-message">{slide.lines[0]}</p><p className="ml-lead">{slide.lines[1]}</p><p className="ml-sub">{slide.lines[2]}</p></div></>;
+}
+
+function DetailsSlide({ slide, onReady }) {
+  const [values, setValues] = useState({});
+  const [checked, setChecked] = useState(false);
+  const [done, setDone] = useState(false);
+  const normalize = value => String(value || "").trim().toLowerCase().replace(/[.,!?]/g, "").replace(/\s+/g, " ");
+  const correct = slide.fields.map(field => [field.answer, ...(field.accept || [])].some(answer => normalize(answer) === normalize(values[field.label])));
+  function check(event) {
+    event.preventDefault();
+    if (done || slide.fields.some(field => !values[field.label]?.trim())) return;
+    setChecked(true);
+    if (correct.every(Boolean)) { setDone(true); onReady(); }
+  }
+  return <><div className="m2-source"><span className="m2-tag">MANBA</span><p>{slide.source}</p></div><div className="m2-details" role="group" aria-label="Ma’lumotlarni tekshirish" onKeyDown={event => { if (event.key === "Enter") check(event); }}>
+    <div className="m2-fields">{slide.fields.map((field, index) => <label key={field.label}>{field.label}<input value={values[field.label] || ""} disabled={done} autoComplete="off" spellCheck={false} aria-invalid={checked && !correct[index]} aria-describedby={checked && !correct[index] ? `field-hint-${index}` : undefined} className={checked ? correct[index] ? "good" : "bad" : ""} onChange={event => { setChecked(false); setValues(prev => ({ ...prev, [field.label]: event.target.value })); }}/>{checked && !correct[index] && <small id={`field-hint-${index}`}>Manbadagi shu maydonni qayta tekshiring.</small>}{checked && correct[index] && <small className="m2-correct">✓ Mos keldi</small>}</label>)}</div>
+    {checked && <p role="status" className={`ml-feedback ${done ? "good" : "bad"}`}>{done ? "✓ Barcha detallar manbaga mos." : "Ayrim detallar mos emas. Raqam, birlik va so‘zlarni tekshiring."}</p>}
+    <button type="button" className="ml-button primary" onClick={check} disabled={done || slide.fields.some(field => !values[field.label]?.trim())}>Tekshirish →</button>
+  </div></>;
+}
