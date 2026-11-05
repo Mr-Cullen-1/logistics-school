@@ -8,6 +8,7 @@ Bu ko'rinish `INTRO.learn.jsx`, Module 1 va `@coliseum/kit` asosidagi Practice f
 - Hook va Mission: qatlamli CSS 3D hujjat, 2D tekshirish chizig‘i va uchta ketma-ket holat. Pauza va reduced-motion majburiy.
 - Slaydlar perspektivada kiradi; hujjatlar almashadi; nazariya yozilishi va sxemasi ketma-ket ochiladi. Tuzatish kartasi Y o‘qi bo‘ylab aylanadi.
 - Hook → 6–7 ta nazariya → hujjat/suhbat va ichki mashqlar → test → Summary; jami 21–22 slayd. M3L02 va M3L08 da 7 nazariya mavjud.
+- Learn sarlavhasi ustidagi takroriy tur/kod qatori ko‘rsatilmaydi. Past desktop ekranlarda ichki bo‘shliqlar ixchamlashadi; uzun hujjatlar ikki ustunda, nom va qiymati birga beriladi. Animatsiyalar va asosiy karta geometriyasi saqlanadi.
 - Mobil ekran: ichki vertikal scroll, o‘qiladigan karta va inputlar, doim ko‘rinadigan navigatsiya. To‘g‘ri/xato holat rang bilan birga yozma izoh oladi.
 - Barcha stil va animatsiyalar shu modul JSX fayllarida; umumiy runtime hamda oldingi modullar o‘zgartirilmaydi.
 

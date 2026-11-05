@@ -29,3 +29,29 @@
 .m3-source{display:grid;gap:8px;border:1px solid var(--line);border-radius:12px;padding:14px;background:#201a29}.m3-source p{font-size:15px;line-height:1.5}.m3-details{display:grid;gap:12px}.m3-details>.ml-button{justify-self:end}.m3-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.m3-fields label{display:grid;gap:6px;color:#c3bccc;font-size:13px}.m3-fields input{width:100%;min-width:0;min-height:44px;padding:10px;border:1px solid #a18aad;border-radius:8px;background:#181420;color:#f5f1f7;font:inherit}.m3-fields input:focus-visible{outline:2px solid #edbd91;outline-offset:2px}.m3-fields input.good{border-color:#78bc94}.m3-fields input.bad{border-color:#f2a2ac}.m3-fields small{font-size:11px;color:#f2a2ac}.m3-fields small.m3-correct{color:#9cddb5}
 @media(max-width:650px){.m3-scene{grid-template-columns:100px minmax(0,1fr);gap:10px;padding:14px 10px 55px;min-height:190px}.m3-perspective{transform:scale(.65);transform-origin:left center;width:100px;height:100px}.m3-stages{gap:4px}.m3-stages>div{padding:6px 4px}.m3-stages b{font-size:15px}.m3-stages span{font-size:8px}.m3-process{gap:9px}.m3-process p{font-size:10px}.m3-motion{min-height:44px}.m3-hook{padding:12px}.m3-document dl>div{grid-template-columns:1fr;gap:4px;padding:9px 12px}.m3-document header{padding:12px}.m3-document-note{padding:10px 12px!important}.m3-fields{grid-template-columns:1fr}.ml-theory-flip,.ml-theory-flip-inner{min-height:150px}.ml-vocab-card,.ml-vocab-inner{min-height:116px}.ml-foot{flex-wrap:wrap}.ml-note{display:none}.m3-document-reader .ml-note{display:block;font-size:11px}.m3-tabs button{flex:1;font-size:11px}.ml-progress{max-width:42%}.ml-progress i{width:4px}}
 @media(prefers-reduced-motion:reduce){.m3-dossier,.m3-stages>div,.m3-track i{animation:none!important}.m3-dossier{transform:rotateY(-14deg) rotateX(6deg)}.m3-track i{left:50%}.m3-motion{display:none}.m3-document{animation:none}}
+/* Fit desktop lesson content below the platform header without hiding overflow.
+   Small/mobile screens retain scrolling and the existing navigation. */
+@media(min-width:900px){
+  .ml-slide[data-kind="mission"] .ml-options{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .m3-fields{grid-template-columns:repeat(3,minmax(0,1fr))}
+  .ml-slide[data-kind="mission"] .m3-scene{min-height:184px}
+  .m3-document[data-dense="true"] dl{display:grid;grid-template-columns:repeat(2,minmax(0,1fr))}
+  .m3-document[data-dense="true"] dl>div{grid-template-columns:1fr;gap:3px;padding:8px 12px}
+  .m3-document[data-dense="true"] dl>div:nth-child(odd){border-right:1px solid #b7a2d21a}
+}
+@media(min-width:900px) and (max-height:760px){
+  .ml-body{padding:12px}.ml-slide{gap:8px}.ml-title{font-size:32px}
+  .ml-theory{gap:6px}.ml-theory-rule{min-height:0;font-size:15px}
+  .ml-theory-flow{min-height:64px;padding:6px}.ml-theory-step{padding:6px 8px}.ml-theory-step strong{font-size:16px}
+  .ml-theory-points p{min-height:44px;padding:7px 9px}.ml-theory-example{padding:8px 10px}
+  .ml-theory-flip,.ml-theory-flip-inner{min-height:90px}
+  .m3-scene,.ml-slide[data-kind="mission"] .m3-scene{min-height:108px;grid-template-columns:90px minmax(0,1fr);padding:6px 12px 40px;gap:12px}
+  .m3-perspective{width:80px;height:60px}.m3-dossier{scale:.48;transform-origin:top left}
+  .m3-process{gap:4px}.m3-stages>div{display:flex;align-items:center;padding:3px 6px;gap:6px}.m3-stages b{font-size:13px}
+  .ml-slide[data-kind="mission"]{gap:5px}.ml-slide[data-kind="mission"] .ml-sub{font-size:15px}.ml-slide[data-kind="mission"] .ml-lead{font-size:17px}
+  .m3-hook{padding:12px;gap:8px}.m3-hook-message{font-size:26px}
+  .m3-document-reader{gap:8px}.m3-document header{padding:8px 12px;gap:4px}
+  .m3-document dl>div{padding:6px 12px;gap:10px}.m3-document dd{font-size:13px;line-height:1.4}
+  .m3-document[data-dense="true"] dl>div{grid-template-columns:minmax(90px,.32fr) minmax(0,1fr);padding:6px 12px;gap:10px}
+  .m3-document-note{padding:8px 12px!important}
+}

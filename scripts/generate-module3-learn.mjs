@@ -21,12 +21,14 @@ replace('function TypeLine(',`const MODULE_CSS = ${JSON.stringify(readFileSync(j
 replace('<TruckScene code={DATA.code} />','<WorkplaceScene />');
 replace('index={current}', 'index={current - 1}');
 replace('{index + 1}/5','{index + 1}/{DATA.theoryCount}');
-replace('${current + 1}/5','${current}/${DATA.theoryCount}');
+// Progress and exercise labels already identify the slide; omit the duplicate above its title.
+replace('<div className="ml-kick">{slide.kind === "theory" ? `ASOSIY QOIDA · ${current + 1}/5` : slide.kind === "quiz" ? "TEKSHIRUV" : slide.kind === "vocab" ? "SO‘ZLAR" : "NAZARIYA"} · {DATA.code}</div>', '');
 replace('slides.findIndex(item => /rapid test|checkpoint 1/i.test(item.heading))','slides.findIndex(item => item.kind === "quiz" && /rapid test|checkpoint 3/i.test(item.heading))');
 template = template.replaceAll('M1L08','M3L08').replaceAll('Module 1 yakunlandi. Asosiy grammatika va logistika atamalarini o‘zlashtirdingiz.','Module 3 nazariyasi yakunlandi. Ish hujjatlarini o‘qish, noaniqlikni so‘rash va tekshirilgan update yozishni mashq qildingiz.');
 replace('const markReady = () => setReady(prev => prev[current] ? prev : ({ ...prev, [current]: true }));','const markReady = useCallback(() => setReady(prev => prev[current] ? prev : ({ ...prev, [current]: true })), [current]);');
 replace('if (slide.kind === "theory") content','if (slide.kind === "hook") content = <HookSlide key={current} {...props} />;\n  else if (slide.kind === "document") content = <DocumentSlide key={current} {...props} />;\n  else if (slide.kind === "details") content = <DetailsSlide key={current} {...props} />;\n  else if (slide.kind === "theory") content');
 replace('<style>{CSS}</style>','<style>{CSS + MODULE_CSS}</style>');
+replace('<div className="ml-slide" key={current}>','<div className="ml-slide" data-kind={slide.kind} key={current}>');
 replace('{DATA.code} · {current + 1}/{slides.length}','M03 / WORKPLACE · {DATA.code} · {current + 1}/{slides.length}');
 replace('"Qoida va misolni eslang, yana urinib ko‘ring."','`“${question.options[selection]}” variantini manba bilan solishtiring. ${question.hint || question.why || "Fakt, vaqt va shart mosligini tekshiring."}`');
 replace('const canContinue = !!ready[current] || slide.kind === "summary";','const failedTest = resultScreen && rapid.firstTry / rapid.total < DATA.threshold;\n  const canContinue = !failedTest && (!!ready[current] || slide.kind === "summary");');
@@ -35,7 +37,6 @@ replace('if (done.current) return;','if (done.current || !rapid || rapid.firstTr
 replace('answers: [],','answers: Object.entries(results).map(([index, value]) => ({ slide: Number(index) + 1, ...value })),');
 replace('const build = slide.builds[index];','const [tokenOrders] = useState(() => slide.builds.map(item => shuffled({ options: item.parts })));\n  const build = slide.builds[index];');
 replace('build.parts.map((part, partIndex) => <button','tokenOrders[index].map(({ text: part, id: partIndex }) => <button');
-replace('slide.kind === "theory" ? `ASOSIY QOIDA','slide.kind === "hook" ? "HOOK" : slide.kind === "document" ? "HUJJAT TAHLILI" : slide.kind === "details" ? "AMALDA QO‘LLASH" : slide.kind === "theory" ? `ASOSIY QOIDA');
 // Reset inner scroll when navigating between long documents and short exercises.
 replace('const slide = slides[current];','const slide = slides[current];\n  const bodyRef = useRef(null);\n  useEffect(() => { if (bodyRef.current) bodyRef.current.scrollTop = 0; }, [current]);');
 replace('<section className="ml-body">','<section className="ml-body" ref={bodyRef}>');

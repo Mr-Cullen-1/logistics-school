@@ -30,6 +30,8 @@
 - Hook va Mission: qatlamli CSS 3D hujjat kartasi, 2D tekshirish chizig‘i, ketma-ket jarayon belgilari va pauza tugmasi.
 - Nazariya: matn yozilishi → sxema → izoh → misol → Y o‘qi bo‘ylab 3D tuzatish kartasi. **Qayta** va **Hammasi** saqlangan.
 - Slayd va hujjat almashishi alohida animatsiyali; variantlar va gap bo‘laklari bir marta aralashtiriladi.
+- Sarlavha ustidagi takroriy tur/kod qatori barcha slaydlardan olib tashlangan. Progress va mashq ichidagi kerakli belgilar saqlangan.
+- Desktopda Mission variantlari ikki ustunda, yozma mashq maydonlari uch ustunda. Uzun hujjatlarning maydonlari ikki ustunda beriladi; har nom o‘z qiymati bilan qoladi. Past ekranlarda ichki bo‘shliqlar va sahna ixchamlashadi; 2D/3D animatsiyalar, asosiy karta va navigatsiya saqlanadi.
 - `prefers-reduced-motion` animatsiyani o‘chirib, mazmunni darhol ko‘rsatadi. Mobil ekranda ichki vertikal scroll va ko‘rinadigan navigatsiya mavjud.
 - Tashqi media, CDN, audio, Rive yoki API talab qilinmaydi. Barcha CSS, SVG va kontent JSX ichida; faqat React import qilinadi.
 - `onProgress` va bir martalik `onFinished` platforma shartnomasiga mos. `answers` slaydlar bo‘yicha mashq natijalarini uzatadi.
@@ -45,9 +47,13 @@
 ```powershell
 node scripts/generate-module3-learn.mjs
 node_modules\.bin\tsx.cmd scripts/check-module3-lessons.ts
+$env:LAYOUT_MODULE='3'
+node_modules\.bin\tsx.cmd scripts/check-module2-layout.ts
 ```
 
 Tekshiruv lokal sandbox iframe’da ishlaydi; DB yoki Next dev server talab qilmaydi. Tanlangan darslar uchun `M3_LESSON=M3L01,M3L02,M3L06,M3L08` filtridan foydalanish mumkin.
+
+Layout tekshiruvi Module 2 bilan umumiy skriptdan foydalanadi: `LAYOUT_MODULE=3`. Barcha 8 darsning 21–22 slaydi 1536×650, 1280×620 va 1920×810 iframe o‘lchamlarida tekshirildi; nazariya flipi, savol feedbacki, to‘ldirilgan forma va hujjat tablari hisobga olindi. Overflow aniqlangan ekranlar tuzatilib, alohida qayta tekshirildi. Shu desktop o‘lchamlarida scroll yo‘q, footer ko‘rinadi; kichik/mobil ekranda mazmun kesilmasligi uchun scroll saqlanadi. Fokuslangan qayta tekshiruv: `M3_LAYOUT_LESSON=M3L02`, `M3_LAYOUT_SLIDES=10`.
 
 2026-11-05 tekshiruv: 8/8 JSX platforma validatori bilan kompilyatsiya qilindi. M3L01, M3L02, M3L06 va M3L08 to‘liq sandbox oqimidan o‘tdi; yakuniy ball/callback, hujjatlarni o‘qish, 2D/3D harakat va pauza, mobil yozma mashq hamda checkpointning muvaffaqiyatsiz urinishdan keyingi qayta ishlashi tekshirildi. Qolgan to‘rtta dars uchun alohida brauzer oqimi bajarilmadi.
 
@@ -56,3 +62,5 @@ Tekshiruv lokal sandbox iframe’da ishlaydi; DB yoki Next dev server talab qilm
 Tegishli `M3L0x` darsi → **Fayl yuklash** → **Learn** → shu koddagi `.learn.jsx`. Generator manbalari yuklanmaydi. Dars ichidagi mashqlar Learn tarkibida. Alohida [80 ta Practice JSX](../practice/MODULE3_PRACTICE.md) ham har darsga 10 tadan lokalda tayyor. Lokal fayllar yaratilishi platformadagi nashrni avtomatik o‘zgartirmaydi.
 
 2026-11-05: M3L01–M3L08 productiondagi **Workplace Communication** modulida yaratildi. Har bir Learn v1 sifatida yuklandi, Preview OK va joriy fayl nashri saqlandi; production API holati va baza xeshlari lokal JSX bilan tekshirildi. Keyin har darsga 10 tadan Practice yuklanib nashr qilindi. Barcha 8 dars `published`: 1 Learn + 10 Practice. Practice xeshlari, mexanikalari va production nashr holati tekshirildi.
+
+2026-11-05 yangilanish: takroriy sarlavha belgisi va desktop scroll tuzatishlari bilan barcha 8 Learn fayli **v2** sifatida productionga yuklandi va joriy nashr qilindi. Production API holati va bazadagi SHA-256 lokal JSX bilan mosligi tekshirildi. Har darsning 10 ta joriy Practice identifikatori saqlandi.
