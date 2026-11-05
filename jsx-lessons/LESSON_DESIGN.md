@@ -1,6 +1,17 @@
 # Learn va Practice ekranlari dizayn etaloni
 
-Bu ko'rinish `INTRO.learn.jsx`, Module 1 va `@coliseum/kit` asosidagi Practice fayllari uchun umumiy qoida. Module 2 Learn va Practice uchun quyidagi alohida palitra qo'llanadi; boshqa darslar umumiy palitradan foydalanadi. Mavjud darslarda dizayn o'zgarishlari dars mazmuni, tekshirish mexanikasi, ekran va asosiy karta o'lchami hamda animatsiya ketma-ketligini o'zgartirmaydi.
+Bu ko'rinish `INTRO.learn.jsx`, Module 1 va `@coliseum/kit` asosidagi Practice fayllari uchun umumiy qoida. Module 2 Learn/Practice va Module 3 Learn uchun quyidagi alohida uslublar qo'llanadi. Mavjud darslarda dizayn o'zgarishlari dars mazmuni, tekshirish mexanikasi, ekran va asosiy karta o'lchami hamda animatsiya ketma-ketligini o'zgartirmaydi.
+
+## Module 3 — ish hujjatlari va vaziyatlar
+
+- Fon `#14121c`, karta `#302a3b` → `#1d1a27` → `#28232e`; mis aksent `#edbd91`, och binafsha `#c5addf`, matn `#f5f1f7`, yordamchi matn `#c3bccc`.
+- Hook va Mission: qatlamli CSS 3D hujjat, 2D tekshirish chizig‘i va uchta ketma-ket holat. Pauza va reduced-motion majburiy.
+- Slaydlar perspektivada kiradi; hujjatlar almashadi; nazariya yozilishi va sxemasi ketma-ket ochiladi. Tuzatish kartasi Y o‘qi bo‘ylab aylanadi.
+- Hook → 6–7 ta nazariya → hujjat/suhbat va ichki mashqlar → test → Summary; jami 21–22 slayd. M3L02 va M3L08 da 7 nazariya mavjud.
+- Mobil ekran: ichki vertikal scroll, o‘qiladigan karta va inputlar, doim ko‘rinadigan navigatsiya. To‘g‘ri/xato holat rang bilan birga yozma izoh oladi.
+- Barcha stil va animatsiyalar shu modul JSX fayllarida; umumiy runtime hamda oldingi modullar o‘zgartirilmaydi.
+
+Manbalar: `scripts/module3-theme.css`, `scripts/module3-scenes.jsx.txt`; [Module 3 qo‘llanmasi](module-03/README.md).
 
 ## Module 2 — alohida uslub
 

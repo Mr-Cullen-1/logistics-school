@@ -1,0 +1,51 @@
+function WorkplaceScene() {
+  const [paused, setPaused] = useState(false);
+  const scene = DATA.scene;
+  return <div className={`m3-scene ${paused ? "paused" : ""}`}>
+    <div className="m3-perspective" aria-hidden="true"><div className="m3-dossier">
+      <div className="m3-sheet shadow-sheet"/><div className="m3-sheet middle-sheet"/>
+      <div className="m3-sheet front-sheet"><span className="m3-doc-label">{scene.label}</span><svg viewBox="0 0 120 65" fill="none"><path d="M12 48h96M12 33h68M12 18h42" stroke="currentColor" strokeWidth="4" strokeLinecap="round"/><path d="m86 20 8 8 17-20" stroke="#9bd8b0" strokeWidth="4" strokeLinecap="round" strokeLinejoin="round"/></svg><strong>{scene.ref}</strong><span className="m3-stamp">CHECK DETAILS</span></div>
+    </div></div>
+    <div className="m3-process" aria-hidden="true"><span className="m3-tag">{scene.label}</span><div className="m3-stages">{scene.stages.map((stage, index) => <div key={stage} style={{"--step":index}}><b>{String(index + 1).padStart(2,"0")}</b><span>{stage}</span></div>)}</div><div className="m3-track"><i/></div><p>{scene.detail}</p></div>
+    <button className="m3-motion" type="button" aria-pressed={paused} onClick={() => setPaused(value => !value)}>{paused ? "Animatsiyani yoqish" : "Animatsiyani to‘xtatish"}</button>
+  </div>;
+}
+
+function HookSlide({ slide, onReady }) {
+  useEffect(() => { onReady(); }, [onReady]);
+  return <><WorkplaceScene/><div className="m3-hook"><span className="m3-tag">WORKPLACE CASE · O‘QUV VAZIYATI</span><p className="m3-hook-message">{slide.lines[0]}</p><p className="ml-lead">{slide.lines[1]}</p><p className="ml-sub">{slide.lines[2]}</p></div></>;
+}
+
+function DocumentSlide({ slide, onReady }) {
+  const [active, setActive] = useState(0);
+  const [reviewed, setReviewed] = useState({});
+  const document = slide.documents[active];
+  const complete = Object.keys(reviewed).length === slide.documents.length;
+  useEffect(() => { if (complete) onReady(); }, [complete, onReady]);
+  return <div className="m3-document-reader">
+    <p className="ml-sub">{slide.instructions || "Manbani o‘qing. Har hujjatni tekshirgach belgilab chiqing; keyingi mashqlar shu detallarga asoslanadi."}</p>
+    <div className="m3-tabs" role="group" aria-label="O‘quv hujjatlari">{slide.documents.map((item, index) => <button type="button" key={item.title} className={active === index ? "on" : ""} aria-pressed={active === index} onClick={() => setActive(index)}>{reviewed[index] ? "✓ " : ""}{item.title}</button>)}</div>
+    <article className="m3-document" key={active}><header><span className="m3-tag">SAMPLE DOCUMENT · {active + 1}/{slide.documents.length}</span><h2>{document.title}</h2></header><dl>{document.rows.map(([label, value]) => <div key={label}><dt>{label}</dt><dd>{value}</dd></div>)}</dl>{document.note && <p className="m3-document-note">{document.note}</p>}</article>
+    <div className="ml-actions"><span className="ml-note" role="status">Ko‘rib chiqildi: {Object.keys(reviewed).length}/{slide.documents.length}</span><button type="button" className="ml-button primary" disabled={!!reviewed[active]} onClick={() => { setReviewed(prev => ({...prev,[active]:true})); if (active < slide.documents.length - 1) setActive(active + 1); }}>{reviewed[active] ? "Tekshirildi ✓" : "Hujjatni ko‘rib chiqdim →"}</button></div>
+  </div>;
+}
+
+function DetailsSlide({ slide, onReady, onDone }) {
+  const [values, setValues] = useState({});
+  const [checked, setChecked] = useState(false);
+  const [done, setDone] = useState(false);
+  const [attempts, setAttempts] = useState(0);
+  const normalize = value => String(value || "").trim().toLowerCase().replace(/[.,!?]/g, "").replace(/\s+/g, " ");
+  const correct = slide.fields.map(field => [field.answer, ...(field.accept || [])].some(answer => normalize(answer) === normalize(values[field.label])));
+  function check(event) {
+    event.preventDefault();
+    if (done || slide.fields.some(field => !values[field.label]?.trim())) return;
+    setChecked(true); setAttempts(value => value + 1);
+    if (correct.every(Boolean)) { setDone(true); onDone?.({total:1,firstTry:attempts === 0 ? 1 : 0,attempts:attempts + 1}); onReady(); }
+  }
+  return <><div className="m3-source"><span className="m3-tag">MANBA · FACT CHECK</span><p>{slide.source}</p></div><div className="m3-details" role="group" aria-label="Ma’lumotlarni tekshirish" onKeyDown={event => { if (event.key === "Enter") check(event); }}>
+    <div className="m3-fields">{slide.fields.map((field, index) => <label key={field.label}>{field.label}<input value={values[field.label] || ""} disabled={done} autoComplete="off" spellCheck={false} aria-invalid={checked && !correct[index]} aria-describedby={checked && !correct[index] ? `field-hint-${index}` : undefined} className={checked ? correct[index] ? "good" : "bad" : ""} onChange={event => { setChecked(false); setValues(prev => ({ ...prev, [field.label]: event.target.value })); }}/>{checked && !correct[index] && <small id={`field-hint-${index}`}>{field.hint || "Manbadagi shu detalni qayta tekshiring; raqam va vaqt birligini saqlang."}</small>}{checked && correct[index] && <small className="m3-correct">✓ Mos keldi</small>}</label>)}</div>
+    {checked && <p role="status" className={`ml-feedback ${done ? "good" : "bad"}`}>{done ? "✓ Barcha detallar manbaga mos." : "Ayrim detallar mos emas. Tuzatib qayta tekshiring."}</p>}
+    <button type="button" className="ml-button primary" onClick={check} disabled={done || slide.fields.some(field => !values[field.label]?.trim())}>Tekshirish →</button>
+  </div></>;
+}

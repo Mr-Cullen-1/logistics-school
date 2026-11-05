@@ -18,7 +18,9 @@ jsx-lessons/
    └─ ... M4L08/
 ```
 
-Har bir `module-XX` papkasiga faqat shu modulning 8 ta Learn fayli joylanadi. `practice/<dars kodi>/` papkasida faqat shu darsning 10 ta Practice fayli bo'ladi. Intro uchun practice yo'q. Hozirgi `.gitkeep` fayllari bo'sh papkalarni Gitda saqlaydi; dars fayllari yozilganda olib tashlanadi.
+Har bir `module-XX` papkasiga shu modulning 8 ta Learn fayli va qo'llanmasi joylanadi. `practice/<dars kodi>/` papkasida faqat shu darsning 10 ta Practice fayli bo'ladi. Intro uchun practice yo'q. Hozirgi `.gitkeep` fayllari bo'sh papkalarni Gitda saqlaydi; dars fayllari yozilganda olib tashlanadi.
+
+**Module 3 nazariyasi tayyor:** [module-03/README.md](module-03/README.md) — M3L01–M3L08, har birida Hook va 6–7 nazariya, jami 21–22 slayd. Module 2 dan keyingi bosqich: hujjat tahlili, bir nechta shartni solishtirish, RPM/ETA hisobi va tasdiqlangan update. Grafit/binafsha-mis palitra, 2D jarayon va CSS 3D hujjat animatsiyalari. Qayta yaratish: `node scripts/generate-module3-learn.mjs`. Bu to'plam lokal Learn fayllaridan iborat; alohida Practice va platformaga yuklash kiritilmagan.
 
 **Module 2 nazariyasi va Practice fayllari tayyor:** [`module-02/README.md`](module-02/README.md) da M2L01–M2L08 nazariyasi; [`practice/MODULE2_PRACTICE.md`](practice/MODULE2_PRACTICE.md) da har dars uchun 10 tadan, jami 80 ta Practice fayli va yuklash tartibi bor. Har Learn 20 slayd: Hook → 5 ta nazariy qoida → ichki mashqlar → tezkor test → Summary. Module 2 to'q ko'k/firuza palitra bilan farqlanadi. Practice etalon `PracticeTask` mexanika va animatsiyalarini saqlaydi. Qayta yaratish: `node scripts/generate-module2-learn.mjs` va `node scripts/generate-module2-practice.mjs`; lokal sandbox sinovlari: `node_modules\.bin\tsx.cmd scripts/check-module2-lessons.ts` va `node_modules\.bin\tsx.cmd scripts/check-module2-practice.ts`. 2026-11-05: 80 ta Practice productionga yuklandi, M2L01-M2L08 darslari to'liq nashr qilindi.
 
