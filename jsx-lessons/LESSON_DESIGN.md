@@ -1,6 +1,6 @@
 # Learn va Practice ekranlari dizayn etaloni
 
-Bu ko'rinish `INTRO.learn.jsx`, Module 1 va `@coliseum/kit` asosidagi Practice fayllari uchun umumiy qoida. Module 2 Learn/Practice va Module 3 Learn uchun quyidagi alohida uslublar qo'llanadi. Mavjud darslarda dizayn o'zgarishlari dars mazmuni, tekshirish mexanikasi, ekran va asosiy karta o'lchami hamda animatsiya ketma-ketligini o'zgartirmaydi.
+Bu ko'rinish `INTRO.learn.jsx`, Module 1 va `@coliseum/kit` asosidagi Practice fayllari uchun umumiy qoida. Module 2 va Module 3 Learn/Practice uchun quyidagi alohida uslublar qo'llanadi. Mavjud darslarda dizayn o'zgarishlari dars mazmuni, tekshirish mexanikasi, ekran va asosiy karta o'lchami hamda animatsiya ketma-ketligini o'zgartirmaydi.
 
 ## Module 3 — ish hujjatlari va vaziyatlar
 
@@ -11,7 +11,7 @@ Bu ko'rinish `INTRO.learn.jsx`, Module 1 va `@coliseum/kit` asosidagi Practice f
 - Mobil ekran: ichki vertikal scroll, o‘qiladigan karta va inputlar, doim ko‘rinadigan navigatsiya. To‘g‘ri/xato holat rang bilan birga yozma izoh oladi.
 - Barcha stil va animatsiyalar shu modul JSX fayllarida; umumiy runtime hamda oldingi modullar o‘zgartirilmaydi.
 
-Manbalar: `scripts/module3-theme.css`, `scripts/module3-scenes.jsx.txt`; [Module 3 qo‘llanmasi](module-03/README.md).
+Module 3 Practice shu palitrani `.m3-practice` doirasidagi CSS orqali oladi; `PracticeTask` karta hajmi, mexanika va animatsiyalari saqlanadi. Manbalar: `scripts/module3-theme.css`, `scripts/module3-scenes.jsx.txt`, `scripts/module3-practice-theme.css`; [Learn](module-03/README.md) va [Practice](practice/MODULE3_PRACTICE.md) qo‘llanmalari.
 
 ## Module 2 — alohida uslub
 

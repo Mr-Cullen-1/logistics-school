@@ -2,6 +2,8 @@
 
 **Dizayn etaloni:** barcha yangi Learn va Practice fayllari uchun [`jsx-lessons/LESSON_DESIGN.md`](../jsx-lessons/LESSON_DESIGN.md) amal qiladi. Asosiy uslub: to'q fon, tilla aksent, ochiq matn, yashil to'g'ri va qizil xato holatlari. Module 2 Learn va Practice alohida to'q ko'k/firuza palitradan foydalanadi; Learn muloqot animatsiyalariga ega, Practice etalon kit animatsiyalarini saqlaydi. Module 3 Learn grafit/binafsha va mis palitra, 2D tekshirish oqimi, CSS 3D hujjatlar hamda 6–7 ta ketma-ket nazariy slayd bilan farqlanadi. Qoidalar shu dizayn hujjatida yozilgan. Mavjud darslarning ekran/karta hajmi va animatsiyalari oddiy dizayn yangilanishida saqlanadi.
 
+Module 3 Practice Learn palitrasini `.m3-practice` doirasida oladi; etalon `PracticeTask` mexanikasi, karta hajmi, animatsiyalari va natija shartnomasi saqlanadi. Har M3L01–M3L08 uchun p01–p10 alohida JSX, p10 esa SCENE.
+
 Bu hujjat yuklangan ikki namunaga (`Dars01.jsx` va `D01_01.jsx`) asoslangan. Ular boshqa loyihadan (4-sinf matematika LMS), lekin **ishlaydigan va sinalgan shartnoma** shu. Biz uni ingliz kursi uchun moslaymiz.
 
 ---

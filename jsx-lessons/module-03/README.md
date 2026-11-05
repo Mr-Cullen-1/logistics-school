@@ -53,6 +53,6 @@ Tekshiruv lokal sandbox iframe’da ishlaydi; DB yoki Next dev server talab qilm
 
 ## Yuklash
 
-Tegishli `M3L0x` darsi → **Fayl yuklash** → **Learn** → shu koddagi `.learn.jsx`. Generator manbalari yuklanmaydi. Dars ichidagi mashqlar Learn tarkibida; alohida Practice fayllari bu to‘plamga kirmaydi. Lokal fayllar yaratilishi platformadagi nashrni avtomatik o‘zgartirmaydi.
+Tegishli `M3L0x` darsi → **Fayl yuklash** → **Learn** → shu koddagi `.learn.jsx`. Generator manbalari yuklanmaydi. Dars ichidagi mashqlar Learn tarkibida. Alohida [80 ta Practice JSX](../practice/MODULE3_PRACTICE.md) ham har darsga 10 tadan lokalda tayyor. Lokal fayllar yaratilishi platformadagi nashrni avtomatik o‘zgartirmaydi.
 
-2026-11-05: M3L01–M3L08 productiondagi **Workplace Communication** modulida yaratildi. Har bir Learn v1 sifatida yuklandi, Preview OK va joriy fayl nashri saqlandi; production API holati va baza xeshlari lokal JSX bilan tekshirildi. Darslar 10 ta Practice hali nashr qilinmagani sabab `draft`; bu holatda o‘quvchiga to‘liq dars sifatida ochilmaydi.
+2026-11-05: M3L01–M3L08 productiondagi **Workplace Communication** modulida yaratildi. Har bir Learn v1 sifatida yuklandi, Preview OK va joriy fayl nashri saqlandi; production API holati va baza xeshlari lokal JSX bilan tekshirildi. Keyin har darsga 10 tadan Practice yuklanib nashr qilindi. Barcha 8 dars `published`: 1 Learn + 10 Practice. Practice xeshlari, mexanikalari va production nashr holati tekshirildi.
