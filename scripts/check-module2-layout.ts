@@ -8,7 +8,7 @@ import { lessonFrameDocument } from '../src/lib/lessons/frame';
 // Focused layout audit: direct navigation exists only in the compiled test copy.
 async function main() {
   const moduleNumber=process.env.LAYOUT_MODULE||'2';
-  assert.ok(['2','3'].includes(moduleNumber));
+  assert.ok(['2','3','4'].includes(moduleNumber));
   const lessonFilter=process.env[`M${moduleNumber}_LAYOUT_LESSON`];
   const slideFilter=process.env[`M${moduleNumber}_LAYOUT_SLIDES`];
   const assets:Record<string,[string,string]>={
@@ -56,9 +56,11 @@ async function main() {
           };
           await check('initial');
           if(slide.kind==='theory') {await frame.locator('.ml-theory-flip').click();await check('flipped');}
-          if(slide.questions) {await frame.locator('.ml-option span').getByText(slide.questions[0].options[slide.questions[0].answer],{exact:true}).click();await check('feedback');}
+          if(slide.questions) {const question=slide.questions[0];if(question.kind==='type'){await frame.getByLabel('Javobingiz',{exact:true}).fill(question.answerText);await frame.locator('.m4-written button').click();}else {const option=frame.locator('.ml-option span').getByText(question.options[question.answer],{exact:true});if(await option.locator('..').isEnabled())await option.click();}await check('feedback');}
           if(slide.fields) {for(const field of slide.fields)await frame.getByLabel(field.label,{exact:true}).fill(field.answer);await frame.getByRole('button',{name:/Tekshirish/}).click();await check('completed');}
-          if(slide.documents) {for(let doc=0;doc<slide.documents.length;doc++){await frame.locator('.m3-tabs button').nth(doc).click();await check(`document ${doc+1}`);}}
+          if(slide.documents) {for(let doc=0;doc<slide.documents.length;doc++){await frame.locator(`.m${moduleNumber}-tabs button`).nth(doc).click();await check(`document ${doc+1}`);}}
+          if(moduleNumber==='4'&&slide.kind==='evidence'){for(const card of await frame.locator('.m4-evidence-card').all())await card.click();await check('all evidence');}
+          if(moduleNumber==='4'&&slide.kind==='reveal'){for(const card of await frame.locator('.ml-card.reveal').all())await card.click();await check('all cards');}
           if(code==='M2L02'&&index===5&&viewport.width===1536&&process.env.M2_LAYOUT_SCREENSHOT)await page.screenshot({path:'.tmp-module2-layout.png'});
         }
       }

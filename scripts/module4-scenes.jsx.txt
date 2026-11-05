@@ -1,0 +1,54 @@
+function DecisionScene() {
+  const [paused, setPaused] = useState(false);
+  return <div className={`m4-scene ${paused ? 'paused' : ''}`}>
+    <div className="m4-perspective" aria-hidden="true"><div className="m4-console">
+      <div className="m4-console-floor"/><div className="m4-console-side"/>
+      <div className="m4-console-screen"><span>{DATA.scene.label}</span><svg viewBox="0 0 150 66" fill="none"><path d="M10 33h35l17-21 27 42 18-21h33" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/><circle cx="45" cy="33" r="5" fill="#eab873"/><circle cx="107" cy="33" r="5" fill="#eab873"/><path d="M10 60h130" stroke="currentColor" opacity=".25"/></svg><strong>{DATA.scene.ref}</strong></div>
+    </div></div>
+    <div className="m4-signals" aria-hidden="true"><span className="m4-tag">EVIDENCE → DECISION</span><div className="m4-signal-flow">{DATA.scene.stages.map((stage,index)=><div key={stage} style={{'--step':index}}><b>{String(index+1).padStart(2,'0')}</b><span>{stage}</span></div>)}</div><div className="m4-track"><i/></div><p>{DATA.scene.detail}</p></div>
+    <button type="button" className="m4-motion" aria-pressed={paused} onClick={()=>setPaused(value=>!value)}>{paused?'Animatsiyani yoqish':'Animatsiyani to‘xtatish'}</button>
+  </div>;
+}
+
+function EvidenceSlide({ slide, onReady }) {
+  const [open,setOpen]=useState({});
+  useEffect(()=>{if(Object.keys(open).length===3)onReady();},[open,onReady]);
+  return <><p className="ml-sub">{slide.source}</p><div className="m4-evidence">{slide.items.map(([label,text],index)=><button type="button" key={label} className={`m4-evidence-card ${open[index]?'open':''}`} aria-expanded={!!open[index]} onClick={()=>setOpen(value=>({...value,[index]:true}))}><small>{label}</small><p>{open[index]?<TypeLine text={text}/>:'Dalilni ochish ↗'}</p></button>)}</div></>;
+}
+
+// Written answers keep IDs, numbers, negation, AM/PM and units meaningful.
+function normalizeAnswer(value) { return String(value||'').trim().toLowerCase().replace(/[‘’]/g,"'").replace(/[.!?]+$/,'').replace(/(\D),|,(\D)/g,'$1$2').replace(/\s+/g,' '); }
+
+function AssessmentSlide({ slide, onDone, attempt, final=false }) {
+  const [index,setIndex]=useState(attempt.index||0);
+  const [input,setInput]=useState(attempt.input||'');
+  const [checked,setChecked]=useState(attempt.checked||null);
+  const [complete,setComplete]=useState(attempt.complete||false);
+  const [orders]=useState(()=>attempt.orders||(attempt.orders=slide.questions.map(q=>q.kind==='type'?[]:shuffled(q))));
+  const history=useRef(attempt.history||(attempt.history={}));
+  useEffect(()=>{Object.assign(attempt,{index,input,checked,complete});},[attempt,index,input,checked,complete]);
+  const question=slide.questions[index];
+  const written=question.kind==='type';
+  const locked=!!checked&&(checked.correct||final);
+  function grade(value) {
+    if(locked)return;
+    const correct=written?[question.answerText,...(question.accept||[])].some(answer=>normalizeAnswer(answer)===normalizeAnswer(value)):value===question.answer;
+    const previous=history.current[index];
+    history.current[index]={question:index+1,kind:question.kind,value,correct,firstTry:previous?previous.firstTry:correct,attempts:(previous?.attempts||0)+1,theoryRefs:question.theoryRefs};
+    setChecked({value,correct});
+  }
+  function advance() {
+    if(!checked||(!checked.correct&&!final))return;
+    if(index+1<slide.questions.length){setIndex(index+1);setInput('');setChecked(null);return;}
+    const answers=Object.values(history.current);
+    setComplete(true);onDone({firstTry:answers.filter(answer=>answer.firstTry).length,total:slide.questions.length,answers});
+  }
+  if(complete)return <p className="ml-feedback good">{slide.questions.length} ta vazifa bajarildi. Birinchi urinish: {Object.values(history.current).filter(answer=>answer.firstTry).length} ta to‘g‘ri.</p>;
+  return <><div className="m4-question-meta"><span className="ml-kick">{written?'YOZMA JAVOB':'QAROR'} · {index+1}/{slide.questions.length}</span>{final&&<span className="ml-note">O‘tish: {Math.ceil(slide.questions.length*DATA.threshold)}/{slide.questions.length} · birinchi urinish</span>}</div>
+    {slide.kind==='mission'&&<DecisionScene/>}
+    <p className="ml-lead m4-stem">{question.stem}</p>
+    {written?<div className="m4-written"><label htmlFor={`answer-${index}`}>Javobingiz</label><input id={`answer-${index}`} autoComplete="off" spellCheck={false} value={input} disabled={locked} onChange={event=>{setInput(event.target.value);setChecked(null);}} onKeyDown={event=>{if(event.key==='Enter'&&input.trim())grade(input);}}/><button type="button" className="ml-button primary" disabled={locked||!input.trim()} onClick={()=>grade(input)}>Tekshirish →</button></div>:<div className="ml-options">{orders[index].map((option,position)=><button type="button" key={option.id} disabled={locked} className={`ml-option ${checked?.value===option.id?(checked.correct?'good':'bad'):''}`} onClick={()=>grade(option.id)}><i>{String.fromCharCode(65+position)}</i><span>{option.text}</span></button>)}</div>}
+    {checked&&<p className={`ml-feedback ${checked.correct?'good':'bad'}`} role="status">{checked.correct?`✓ ${question.why}`:final?'Javob saqlandi. Keyingi savolga o‘ting.':written?question.hint:question.hints[checked.value]}</p>}
+    <button type="button" className="ml-button primary" style={{justifySelf:'end'}} disabled={!checked||(!checked.correct&&!final)} onClick={advance}>{index+1<slide.questions.length?'Keyingi savol':'Natijani ko‘rish'} →</button>
+  </>;
+}

@@ -12,7 +12,7 @@ JSX fayl qoidalari alohida hujjatda: `JSX_CONTRACT.md`.
 |---|---|---|
 | Daraja | B1 (kirish testi + Module 1 ni "tez takrorlash + speaking" ruhida) | Tasdiqlangan |
 | Module 1 | Present Perfect va First Conditional qo'shilgan, Present Simple/Continuous bitta darsda | Tasdiqlangan |
-| Reading | Faqat Module 3 da, amaliy vazifaga bog'langan holda | Tasdiqlangan |
+| Reading | Module 3 da alohida urg‘u; Module 4 da professional case uchun yozma manbalarni solishtirish | Module 4 kontenti bilan yangilangan |
 | Ovoz | **Kursda ovoz umuman yo'q**: audio, ovozli sharh (ozvucka), TTS va tovush effektlari ishlatilmaydi. Tinglab tushunish o'rniga matnli dialog (chat, SMS, qo'ng'iroq transkripti, email) | Tasdiqlangan |
 | Intro | 1 ta qisqa dars (5–7 daqiqa), login qilgan barcha o'quvchilar kurs dostupsiz ko'ra oladi (demo) | Tasdiqlangan |
 | Checkpoint | Har modulning 8-darsi oxirida | Tasdiqlangan |
@@ -586,158 +586,31 @@ Maqsad: ishga oid hujjat va vaziyatlarni **o'qish, tushunish, savol berish va yo
 
 ## 8. MODULE 4 — Professional Logistics English
 
-Maqsad: tez, aniq va professional logistika muloqoti. Yangi grammatika yo'q, mavjud bilimni real tezlikda ishlatish.
+**2026-11-05 yangilangan kontent:** yakuniy modul Module 3 dan murakkabroq. Maqsad — bir nechta manba, cheklov va o‘zgarishni hisobga olib professional qaror va inglizcha javob berish. Yangi grammatika majburiy emas; oldingi bilimlar chuqurroq vaziyatlarda birlashtiriladi.
 
-### M4L01 — Talking to Brokers
-**Maqsad:** brokerga ishonchli murojaat qilish.
-**Til:** "I'm calling about your load from X to Y", "Is it still available?", "What's the commodity and weight?", "My MC number is…"
-**Lug'at:** available, covered, authority, MC number, commodity, dims, pickup window.
-**Dialog:** tez gapiradigan amerikalik broker.
+**Asosiy kontent manbasi:** [MODULE4_CONTENT.md](MODULE4_CONTENT.md). Unda har darsning nazariy tushuntirishlari, ishlangan case, p01–p10 topshiriqlari va topshiriq → nazariya xaritasi bor. Eski sodda Module 4 mashq jadvallari shu reja bilan almashtirildi. Learn JSX fayllari yaratildi: jsx-lessons/module-04/README.md. Standalone Practice JSX keyingi bosqichda yaratiladi.
 
-| № | Mex. | Topshiriq |
-|---:|---|---|
-| 1 | MC | Qo'ng'iroqni boshlash uchun eng professional gap |
-| 2 | MATCH | Broker iborasi ↔ ma'nosi (covered, available, tendering) |
-| 3 | READ-MC | Brokerning tez yozilgan xabari (qisqartmalar bilan): yuk hali bormi? |
-| 4 | READ-MC | Broker nima talab qilmoqda: MC raqami, sug'urta yoki hujjat? |
-| 5 | GAP | "I'm calling ___ your load from Dallas to Atlanta." |
-| 6 | ORDER | "Is / still / it / available / the / load / ?" |
-| 7 | FIX | Noto'g'ri yoki qo'pol so'rovni tuzatish |
-| 8 | REPLY | "It's still open, what's your MC?" ga javob |
-| 9 | READ-TYPE | Xabar matnidan lane (shahar–shahar) va rate ni topib yozing |
-| 10 | SCENE | Brokerga qo'ng'iroq: 3 qadamda load haqida to'liq ma'lumot oling |
+| Dars | Mavzu | Nazariya | Yakuniy ko‘nikma |
+|---|---|---:|---|
+| M4L01 | Talking to Brokers | 8 | Availability, load mosligi va booking holatini ajratish |
+| M4L02 | Load Booking Conversations | 9 | Shart, revision va dispatch uchun tayyorlikni tekshirish |
+| M4L03 | Rate Negotiation | 9 | Total va xizmat shartlarini birga solishtirib counteroffer berish |
+| M4L04 | Communicating with Drivers | 9 | Cheklovlarga mos ko‘rsatma va check-back |
+| M4L05 | Pickup and Delivery Coordination | 9 | Bog‘langan jadval, vakolat va appointment tasdig‘i |
+| M4L06 | Handling Delays and Emergencies | 9 | Fakt, estimate va next update’ni ajratish |
+| M4L07 | Resolving Disputes Professionally | 10 | Eligibility, hisob, dalil va approvalni ajratish |
+| M4L08 | Full Logistics Communication Simulation + Final Assessment | 10 | O‘zgaruvchi case bo‘yicha izchil qaror va handover |
 
-### M4L02 — Load Booking Conversations
-**Maqsad:** yukni band qilish jarayonini to'liq boshqarish.
-**Til:** "I can cover that", "Can you send the rate con?", "Please send it to…", "I'll get a truck assigned".
-**Lug'at:** cover, book, assign, rate con, tender, dispatch email, driver info.
-**Dialog:** yuk band qilish.
+### Module 4 uchun majburiy qo‘shimchalar
 
-| № | Mex. | Topshiriq |
-|---:|---|---|
-| 1 | MC | Yukni olishga rozilik bildirish gapi |
-| 2 | MATCH | Bosqich ↔ gap (taklif, rozilik, tasdiq, hujjat) |
-| 3 | READ-MC | Broker nimani tasdiqladi? |
-| 4 | ORDER | Booking bosqichlarini tartiblash |
-| 5 | GAP | "I ___ cover that load." |
-| 6 | TYPE | Rate con yuborishni so'rang (muloyim gap) |
-| 7 | FIX | Muloyim emas yoki noto'g'ri band qilish gapini tuzatish |
-| 8 | REPLY | "Can you send driver info?" ga javob |
-| 9 | READ-TYPE | Xabar matnidan email va PU vaqtini topib yozing |
-| 10 | SCENE | Yukni to'liq band qiling: taklif, shartlar, hujjatlar |
-
-### M4L03 — Rate Negotiation
-**Maqsad:** narxni professional tarzda muzokara qilish.
-**Til:** "The best I can do is…", "That's too low for the miles", "Can you meet me at…?", "Deal.", dalil: fuel, deadhead.
-**Lug'at:** counteroffer, meet, split the difference, firm, flexible, bonus.
-**Dialog:** 3 raundli muzokara.
-
-| № | Mex. | Topshiriq |
-|---:|---|---|
-| 1 | MC | Eng professional qarshi taklif qaysi? |
-| 2 | MATCH | Taktika ↔ ibora (taklif, dalil, murosa, yakun) |
-| 3 | READ-MC | Broker taklifi: summa va shart nima? |
-| 4 | GAP | "The best I can ___ is $2,600." |
-| 5 | ORDER | "meet / you / Can / me / at / $2,700 / ?" |
-| 6 | TYPE | Dalil bilan rad etish gapini yozing (deadhead/fuel) |
-| 7 | FIX | Qo'pol yoki keraksiz kuchli gapni professional shaklga o'tkazish |
-| 8 | REPLY | "That's all I have." ga javob |
-| 9 | READ-TYPE | Xabar matnidan oxirgi summani topib yozing |
-| 10 | SCENE | 3 raundli muzokara: boshlang'ich, qarshi taklif, kelishuv |
-
-### M4L04 — Communicating with Drivers
-**Maqsad:** haydovchiga aniq va qisqa ko'rsatma berish.
-**Til:** buyruq/modal: "Call me when you get there", "Don't forget the POD", HOS, parking, qisqa ko'rsatma.
-**Lug'at:** HOS, parking, POD, check in, call me, hours, break, reefer temp.
-**Dialog:** dispatcher–driver.
-
-| № | Mex. | Topshiriq |
-|---:|---|---|
-| 1 | MC | Eng aniq ko'rsatma qaysi? |
-| 2 | MATCH | Ko'rsatma ↔ maqsad |
-| 3 | READ-MC | Haydovchi nima haqida xabar bermoqda? |
-| 4 | GAP | "___ forget to get the POD." (Don't) |
-| 5 | ORDER | "me / Call / you / when / get / there" |
-| 6 | TYPE | Haydovchiga 2 ta qisqa ko'rsatma yozing |
-| 7 | FIX | Noaniq yoki uzun ko'rsatmani aniqlashtirish |
-| 8 | REPLY | Haydovchi: "I'm out of hours." ga javob |
-| 9 | READ-TYPE | Xabar matnidan joy va qolgan soatlarni topib yozing |
-| 10 | SCENE | Yo'lda muammo: ko'rsatma, tasdiq, keyingi qadam |
-
-### M4L05 — Pickup and Delivery Coordination
-**Maqsad:** shipper va receiver bilan uchrashuvlarni kelishish.
-**Til:** "Can we move the appointment?", "He's at door 12", "Please confirm the time", "We'll be there by…".
-**Lug'at:** reschedule, appointment, door, dock, receiver, shipper, window, hold.
-**Dialog:** appointment o'zgartirish.
-
-| № | Mex. | Topshiriq |
-|---:|---|---|
-| 1 | MC | Appointment ni o'zgartirish uchun mos so'rov |
-| 2 | MATCH | Vaziyat ↔ ibora |
-| 3 | READ-MC | Shipper yangi vaqtni nima dedi? |
-| 4 | GAP | "Can we ___ the appointment to 10 AM?" |
-| 5 | ORDER | "Please / the / time / confirm / new" |
-| 6 | TYPE | Yangi vaqtni tasdiqlovchi gap yozing |
-| 7 | FIX | Noto'g'ri vaqt/sana bilan tasdiqni tuzatish |
-| 8 | REPLY | "We can only take him at 2 PM." ga javob |
-| 9 | READ-TYPE | Xabar matnidan eshik raqami va vaqtni topib yozing |
-| 10 | SCENE | Shipper va receiver bilan ikki appointment ni kelishish |
-
-### M4L06 — Handling Delays and Emergencies
-**Maqsad:** favqulodda vaziyatda xotirjam va tuzilgan xabar berish.
-**Til:** "We have a situation", "Here's what happened", "Here's what we're doing", "I'll update you in 30 minutes".
-**Lug'at:** breakdown, accident, tow, TONU, emergency, safe, escalate, update.
-**Dialog:** breakdown haqida xabar.
-
-| № | Mex. | Topshiriq |
-|---:|---|---|
-| 1 | MC | Favqulodda xabarni boshlash uchun eng mos gap |
-| 2 | MATCH | Vaziyat ↔ birinchi qadam |
-| 3 | READ-MC | Haydovchi: nima yuz berdi va u xavfsizmi? |
-| 4 | ORDER | Xabar tuzilmasini tartiblash: situation → action → update |
-| 5 | GAP | "Here's what we're ___ ." (doing) |
-| 6 | TYPE | 2 gaplik favqulodda xabar yozing |
-| 7 | FIX | Vahimali yoki noaniq xabarni professional shaklga o'tkazish |
-| 8 | REPLY | Broker: "Can you still make it?" ga javob |
-| 9 | READ-TYPE | Xabar matnidan joy va tow vaqtini topib yozing |
-| 10 | SCENE | Breakdown: brokerga, haydovchiga va receiverga 3 xil xabar |
-
-### M4L07 — Resolving Disputes Professionally
-**Maqsad:** kelishmovchilikni xotirjam va professional hal qilish.
-**Til:** "I understand your concern", "Here's what I can do", "Let's find a solution", "According to the rate con…".
-**Lug'at:** dispute, detention, claim, damage, invoice, proof, resolve, compromise.
-**Dialog:** detention to'lovi bo'yicha bahs.
-
-| № | Mex. | Topshiriq |
-|---:|---|---|
-| 1 | MC | Bahsda eng professional boshlanish |
-| 2 | MATCH | Ibora ↔ vazifa (tushunish, dalil, taklif, yakun) |
-| 3 | READ-MC | Broker nimaga e'tiroz bildirmoqda? |
-| 4 | GAP | "According ___ the rate con, detention starts after 2 hours." |
-| 5 | ORDER | "Let's / a / find / solution" |
-| 6 | TYPE | Dalil bilan javob yozing: hujjatga tayanib |
-| 7 | FIX | Hujumkor gapni professional shaklga o'tkazish |
-| 8 | REPLY | "We don't pay detention." ga javob |
-| 9 | READ-TYPE | Xabar matnidan summa va vaqtni topib yozing |
-| 10 | SCENE | Detention bahsi: tushuntirish, dalil, murosa |
-
-### M4L08 — Full Logistics Communication Simulation + Final Assessment
-**Maqsad:** butun kursni bitta uzluksiz stsenariyda sinash.
-**Stsenariy:** broker bilan load → rate muzokarasi → haydovchiga ko'rsatma → kechikish → bahs → tasdiqlovchi email.
-**Final:** M1–M4 bo'yicha kumulyativ baholash (o'tish 70%).
-
-| № | Mex. | Topshiriq |
-|---:|---|---|
-| 1 | SCENE | 1-qism: brokerga qo'ng'iroq, load ma'lumotini oling |
-| 2 | SCENE | 2-qism: rate muzokarasi |
-| 3 | SCENE | 3-qism: haydovchiga ko'rsatma |
-| 4 | SCENE | 4-qism: kechikish haqida xabar |
-| 5 | SCENE | 5-qism: bahs va murosa |
-| 6 | TYPE | Yakuniy tasdiqlovchi email yozing |
-| 7 | READ-MC | Aralash xabarlar: 3 ta vaziyatni aniqlash |
-| 8 | READ-TYPE | Aralash xabarlar: raqam, ism va vaqt topib yozishi |
-| 9 | FIX | 5 ta mintaqaviy xatoni topish va tuzatish |
-| 10 | SCENE | Yakuniy: to'liq muloqot zanjiri (boshidan oxirigacha) |
+- Hookdan keyin 8–10 chuqur nazariya; undan keyin ishlangan case va ichki mashqlar. Har ko‘nikma ishlatilishidan oldin tushuntiriladi. 2-bo‘limdagi 11 ekran ushbu modul uchun cheklov emas; taxminiy oqim 24–30 ekran.
+- Qiyinlik: bir nechta fakt/shart, yangi xabar, ziddiyat va vakolatni hisobga olish. Keraksiz jargon, yashirin qoida yoki noaniq savol orqali qiyinlashtirilmaydi.
+- Barcha tanlovlar grammatik to‘g‘ri va professional. Distractorlar o‘rgatilgan aniq xatolarga asoslanadi; bitta himoya qilinadigan javob bo‘ladi. Variant joyi aralashadi.
+- Taxmin bilan topish ehtimoli variantli savolda nol emas. Shu sabab har Practice to‘plamida kamida 2 ta variantlarsiz TYPE/READ-TYPE va kamida 6 ta ko‘p shartli topshiriq bor.
+- Aynan 10 Practice: kamida 5 mexanika, 2 READ-MC/READ-TYPE, 1 FIX, p10 SCENE. M4L08 ham shu talablarni bajaradi; alohida fayllar bir-birining holatiga bog‘lanmaydi.
+- Oddiy Learn testi 6–8 savol; final 12 savol, shundan kamida 4 tasi variantlarsiz. Amaldagi chegaralar saqlanadi: oddiy Learn 60%, final 70% (12 tadan kamida 9). Aniq savol banki keyingi bosqichda yoziladi.
+- Audiosiz ish dialoglari va case uchun berilgan yozma manbalar ishlatiladi. To‘lov, vaqt va vakolat shartlari o‘quv misoli sifatida aniq ko‘rsatiladi.
+- Tushuntirishni ko‘paytirish bitta ekranni uzunlashtirish degani emas: mazmun bo‘linadi, takroriy sarlavha usti yozuvi bo‘lmaydi, navigatsiya ko‘rinadi.
 
 ---
 
