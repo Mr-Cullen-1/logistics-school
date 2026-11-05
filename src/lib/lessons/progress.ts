@@ -8,5 +8,5 @@ export function learnPassed(code: string, payload: { scorePercent?: number; pass
 
 export function canRecordPractice(seq: number, learnDone: boolean, correctSequences: number[]): boolean {
   if (!learnDone || !Number.isInteger(seq) || seq < 1 || seq > 10) return false;
-  return seq === 1 || correctSequences.includes(seq - 1);
+  return Array.from({ length: seq - 1 }, (_, index) => index + 1).every(previous => correctSequences.includes(previous));
 }

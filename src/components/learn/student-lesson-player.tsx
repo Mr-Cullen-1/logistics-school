@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 import { LessonFrame } from "./lesson-frame";
 import styles from "./student-lesson-player.module.css";
@@ -35,6 +36,7 @@ function PracticeLoading({ lang, saving }: { lang: "uz" | "ru" | "en"; saving: b
 }
 
 export function StudentLessonPlayer({ lessonId, title, code, lang, studentName, nextHref, exitHref }: { lessonId: string; title: string; code: string; lang: "uz" | "ru" | "en"; studentName: string; nextHref: string | null; exitHref: string }) {
+  const router = useRouter();
   const [data, setData] = useState<LessonData | null>(null);
   const [step, setStep] = useState(0);
   const [ready, setReady] = useState(false);
@@ -72,6 +74,7 @@ export function StudentLessonPlayer({ lessonId, title, code, lang, studentName, 
       const response = await fetch(`/api/learn/lessons/${lessonId}/progress`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Natija saqlanmadi");
+      if (result.completed || (code === "INTRO" && result.passed)) router.refresh();
       return result;
     } catch (error) { setMessage(error instanceof Error ? error.message : "Natija saqlanmadi"); return null; }
     finally { setBusy(false); }

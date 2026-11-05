@@ -16,5 +16,7 @@ test("Practice cannot skip a question or run before Learn", () => {
   assert.equal(canRecordPractice(1, true, []), true);
   assert.equal(canRecordPractice(2, true, [1]), true);
   assert.equal(canRecordPractice(3, true, [1]), false);
+  assert.equal(canRecordPractice(10, true, [9]), false);
+  assert.equal(canRecordPractice(10, true, Array.from({ length: 9 }, (_, i) => i + 1)), true);
   assert.equal(canRecordPractice(11, true, Array.from({ length: 10 }, (_, i) => i + 1)), false);
 });

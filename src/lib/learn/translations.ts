@@ -35,6 +35,13 @@ export const learnTranslations = {
 } as const;
 
 export type LearnLocale = keyof typeof learnTranslations;
+const lessonLockTranslations = {
+  uz: { locked: "Yopiq", lockedMessage: "Bu dars hali sizda ochilmagan.", lockedHelp: "Avval Intro darsini, so‘ng oldingi darslarning Learn va barcha Practice topshiriqlarini tugating. Keyingi dars avtomatik ochiladi.", close: "Tushunarli" },
+  ru: { locked: "Закрыто", lockedMessage: "Этот урок вам пока недоступен.", lockedHelp: "Сначала завершите вводный урок, затем теорию и все практические задания предыдущих уроков. Следующий урок откроется автоматически.", close: "Понятно" },
+  en: { locked: "Locked", lockedMessage: "This lesson is not unlocked for you yet.", lockedHelp: "Complete the Intro first, then Learn and all Practice tasks in the preceding lessons. The next lesson will unlock automatically.", close: "Got it" },
+} as const;
 export function getLearnText(locale: string | null | undefined) {
-  return learnTranslations[locale === "ru" || locale === "en" ? locale : "uz"];
+  const key = locale === "ru" || locale === "en" ? locale : "uz";
+  const text = learnTranslations[key];
+  return { ...text, course: { ...text.course, ...lessonLockTranslations[key] } };
 }
