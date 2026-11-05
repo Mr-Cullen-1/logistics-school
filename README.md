@@ -29,6 +29,8 @@ Ishlab turgan lokal server (`npm run dev -- --port 3137`) bilan `npm run test:au
 
 Admin yoki super admin `/admin/students` sahifasida o'quvchilarni qidiradi, yangi akkaunt yaratadi, bloklaydi/faollashtiradi va PINni tiklaydi. Yangi PIN faqat o'sha amal javobida ko'rinadi; keyin bazadan olinmaydi. Har bir o'zgarish `audit_log` ga yoziladi, bloklash va PIN tiklash eski sessiyalarni bekor qiladi. Lokal server 3137-portda ishlayotganida `npm run test:students` vaqtinchalik admin va o'quvchi bilan shu oqimni Supabase'da tekshirib, test yozuvlarini o'chiradi.
 
+Bloklash yonidagi qizil chegarali **O‘chirish** tugmasi ism va telefon ko‘rsatilgan tasdiqlash oynasini ochadi. **Butunlay o‘chirish** akkaunt, profil, kurs dostuplari, Learn/Practice natijalari va telefon bo‘yicha kirish tarixini bitta tranzaksiyada o‘chiradi. Eski sessiyalar ishlamaydi. O‘quvchiga tegishli eski audit yozuvlari o‘rnida faqat admin va o‘chirilgan akkaunt IDsi bilan `student.deleted` qaydi saqlanadi; ism va telefon yozilmaydi. Kurslar va dars kontenti saqlanadi. API faqat admin/super admin uchun, nishon akkaunt esa faqat `student` bo‘lishi mumkin. Fokusli tekshiruv: `node_modules\.bin\tsx.cmd scripts/check-student-delete.ts` (faqat vaqtinchalik test yozuvlari yaratiladi va tozalanadi).
+
 Super admin `/admin/admins` sahifasida admin akkaunt yaratadi. Tizim 6 xonali PINni faqat bir marta ko'rsatadi; yangi admin birinchi kirishda parolini majburiy almashtiradi. Oddiy admin bu sahifa va yaratish API'siga kira olmaydi. `AUTH_BASE_URL` ishlayotgan lokal serverga ko'rsatilganda `npm run test:admins` vaqtinchalik akkauntlar bilan ushbu oqimni tekshiradi va ularni o'chiradi.
 
 ## Dizayn tizimi

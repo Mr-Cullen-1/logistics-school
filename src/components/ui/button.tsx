@@ -1,7 +1,7 @@
 import type { ButtonHTMLAttributes } from "react";
 
 type ButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
-  variant?: "primary" | "secondary" | "tertiary";
+  variant?: "primary" | "secondary" | "tertiary" | "danger";
   size?: "default" | "small";
 };
 
@@ -9,6 +9,7 @@ const variants = {
   primary: "border-gold bg-gold text-charcoal hover:bg-[#E2BF90]",
   secondary: "border-bronze bg-transparent text-ivory hover:bg-bronze/10",
   tertiary: "border-muted bg-transparent text-ivory hover:bg-white/5",
+  danger: "border-alert bg-transparent text-alert hover:bg-alert/10 focus-visible:outline-alert",
 };
 
 export function Button({

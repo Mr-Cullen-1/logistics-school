@@ -19,7 +19,7 @@ type Student = {
   createdAt: string;
 };
 
-type PendingAction = { kind: "reset" | "status"; student: Student };
+type PendingAction = { kind: "reset" | "status" | "delete"; student: Student };
 
 export function StudentManager({ students, search, total }: { students: Student[]; search: string; total: number }) {
   const router = useRouter();
@@ -31,6 +31,12 @@ export function StudentManager({ students, search, total }: { students: Student[
   const [secret, setSecret] = useState<{ name: string; pin: string } | null>(null);
   const [pending, setPending] = useState<PendingAction | null>(null);
   const [toast, setToast] = useState("");
+  const [actionError, setActionError] = useState("");
+
+  function openAction(kind: PendingAction["kind"], student: Student) {
+    setActionError("");
+    setPending({ kind, student });
+  }
 
   function searchStudents(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -63,22 +69,24 @@ export function StudentManager({ students, search, total }: { students: Student[
   }
 
   async function confirmAction() {
-    if (!pending) return;
+    if (!pending || busy) return;
+    setActionError("");
     setBusy(true);
     try {
       const { kind, student } = pending;
       const response = await fetch(
-        kind === "reset" ? `/api/admin/students/${student.id}/reset-pin` : `/api/admin/students/${student.id}/status`,
-        { method: kind === "reset" ? "POST" : "PATCH", ...(kind === "status" ? { headers: { "Content-Type": "application/json" }, body: JSON.stringify({ isActive: !student.isActive }) } : {}) },
+        `/api/admin/students/${student.id}${kind === "delete" ? "" : kind === "reset" ? "/reset-pin" : "/status"}`,
+        { method: kind === "delete" ? "DELETE" : kind === "reset" ? "POST" : "PATCH", ...(kind === "status" ? { headers: { "Content-Type": "application/json" }, body: JSON.stringify({ isActive: !student.isActive }) } : {}) },
       );
       const result = await response.json();
-      if (!response.ok) { setToast(result.error || "Amal bajarilmadi"); return; }
+      if (!response.ok) { setActionError(result.error || "Amal bajarilmadi"); return; }
       setPending(null);
       if (kind === "reset") setSecret({ name: student.fullName, pin: result.pin });
+      else if (kind === "delete") setToast("O‘quvchi tizimdan butunlay o‘chirildi");
       else setToast(student.isActive ? "O'quvchi bloklandi" : "O'quvchi faollashtirildi");
       router.refresh();
     } catch {
-      setToast("Ulanishda xatolik yuz berdi");
+      setActionError("Ulanishda xatolik yuz berdi");
     } finally {
       setBusy(false);
     }
@@ -110,8 +118,9 @@ export function StudentManager({ students, search, total }: { students: Student[
                 <TableCell>
                   <div className="flex flex-wrap gap-2">
                     <Link href={`/admin/students/${student.id}`} className="inline-flex min-h-9 items-center rounded-[8px] border border-bronze px-3 text-sm font-semibold text-ivory hover:bg-bronze/10">Dostup</Link>
-                    <Button size="small" variant="tertiary" onClick={() => setPending({ kind: "reset", student })}>PIN tiklash</Button>
-                    <Button size="small" variant="tertiary" onClick={() => setPending({ kind: "status", student })}>{student.isActive ? "Bloklash" : "Faollashtirish"}</Button>
+                    <Button size="small" variant="tertiary" onClick={() => openAction("reset", student)}>PIN tiklash</Button>
+                    <Button size="small" variant="tertiary" onClick={() => openAction("status", student)}>{student.isActive ? "Bloklash" : "Faollashtirish"}</Button>
+                    <Button size="small" variant="danger" onClick={() => openAction("delete", student)}><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true"><path d="M3 6h18M9 6V3h6v3M5 6l1 15h12l1-15M10 10v7m4-7v7" /></svg>O‘chirish</Button>
                   </div>
                 </TableCell>
               </TableRow>
@@ -135,11 +144,12 @@ export function StudentManager({ students, search, total }: { students: Student[
         <Button className="mt-5 w-full" onClick={() => setSecret(null)}>Tushunarli</Button>
       </Modal>
 
-      <Modal open={!!pending} onClose={() => { if (!busy) setPending(null); }} title={pending?.kind === "reset" ? "PINni tiklash" : pending?.student.isActive ? "O‘quvchini bloklash" : "O‘quvchini faollashtirish"} description={pending?.student.fullName}>
-        <p className="text-steel">{pending?.kind === "reset" ? "Eski PIN/parol va barcha avvalgi sessiyalar bekor bo‘ladi." : pending?.student.isActive ? "O‘quvchi darhol tizimdan chiqadi va kira olmaydi." : "O‘quvchi yana tizimga kira oladi."}</p>
+      <Modal open={!!pending} onClose={() => { if (!busy) setPending(null); }} title={pending?.kind === "delete" ? "O‘quvchini butunlay o‘chirish" : pending?.kind === "reset" ? "PINni tiklash" : pending?.student.isActive ? "O‘quvchini bloklash" : "O‘quvchini faollashtirish"} description={pending ? `${pending.student.fullName} · ${pending.student.phone}` : undefined}>
+        <p className="text-steel">{pending?.kind === "delete" ? "O‘quvchi akkaunti, profili, kurs dostuplari va barcha dars natijalari bazadan butunlay o‘chiriladi. Tizimga kirish bekor qilinadi. Bu amalni ortga qaytarib bo‘lmaydi." : pending?.kind === "reset" ? "Eski PIN/parol va barcha avvalgi sessiyalar bekor bo‘ladi." : pending?.student.isActive ? "O‘quvchi darhol tizimdan chiqadi va kira olmaydi." : "O‘quvchi yana tizimga kira oladi."}</p>
+        {actionError && <p role="alert" className="mt-3 text-alert">{actionError}</p>}
         <div className="mt-6 flex justify-end gap-3">
           <Button variant="tertiary" onClick={() => setPending(null)} disabled={busy}>Bekor qilish</Button>
-          <Button onClick={confirmAction} disabled={busy}>{busy ? "Bajarilmoqda..." : "Tasdiqlash"}</Button>
+          <Button variant={pending?.kind === "delete" ? "danger" : "primary"} onClick={confirmAction} disabled={busy}>{busy ? "Bajarilmoqda..." : pending?.kind === "delete" ? "Butunlay o‘chirish" : "Tasdiqlash"}</Button>
         </div>
       </Modal>
       <Toast open={!!toast} message={toast} variant="info" onClose={() => setToast("")} />

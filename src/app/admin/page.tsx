@@ -40,6 +40,7 @@ function GrowthChart({ days }: { days: number[] }) {
 const actionNames: Record<string, string> = {
   "admin.created": "Admin yaratildi",
   "student.created": "O‘quvchi yaratildi",
+  "student.deleted": "O‘quvchi butunlay o‘chirildi",
   "student.blocked": "O‘quvchi bloklandi",
   "student.unblocked": "O‘quvchi faollashtirildi",
   "student.pin_reset": "PIN tiklandi",
