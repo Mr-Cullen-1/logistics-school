@@ -63,6 +63,6 @@ Tekshiruv alohida lokal iframe ichida ishlaydi; DB, login yoki ishlab turgan Nex
 
 ## Yuklash
 
-Admin panelda tegishli `M2L0x` darsini oching → **Fayl yuklash** → **Learn** → shu koddagi `.learn.jsx` faylini tanlang. Generator manbalarini yuklamang. Bu papkada alohida Practice fayllari yo‘q; dars ichidagi mashqlar Learn tarkibida. Lokal fayl yaratilishi bazadagi darsni avtomatik yuklamaydi yoki nashr qilmaydi.
+Admin panelda tegishli `M2L0x` darsini oching → **Fayl yuklash** → **Learn** → shu koddagi `.learn.jsx` faylini tanlang. Generator manbalarini yuklamang. Dars ichidagi mashqlar Learn tarkibida. Alohida 80 ta Practice fayli `../practice/M2L01/`–`../practice/M2L08/` papkalarida tayyor: [Practice qo‘llanmasi](../practice/MODULE2_PRACTICE.md). Ularni **Practice** turi orqali har darsga 10 tadan yuklang. Lokal fayl yaratilishi bazadagi darsni avtomatik yuklamaydi yoki nashr qilmaydi.
 
-2026-11-05: M2L01–M2L08 Learn fayllari platformaning bazasiga v1 sifatida yuklandi, tasdiqlandi va joriy nashr sifatida saqlandi. Fayl xeshlari lokal JSX bilan tekshirildi. To‘liq darslar hozir draft: har darsning 10 ta alohida Practice fayli tayyor bo‘lgach o‘quvchi uchun nashr talablari bajariladi.
+2026-11-05: M2L01–M2L08 Learn fayllari platformaning bazasiga v1 sifatida yuklandi, tasdiqlandi va joriy nashr sifatida saqlandi. Fayl xeshlari lokal JSX bilan tekshirildi. Shu kuni har darsning 10 ta alohida Practice fayli ham productionga yuklanib nashr qilindi. M2L01–M2L08 ning barchasi `published`: har birida 1 Learn + 10 Practice. Practice xeshlari va production API nashr holati tekshirildi.

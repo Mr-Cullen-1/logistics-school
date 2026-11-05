@@ -1,8 +1,8 @@
 # Learn va Practice ekranlari dizayn etaloni
 
-Bu ko'rinish `INTRO.learn.jsx`, Module 1 va barcha `@coliseum/kit` asosidagi Practice fayllari uchun umumiy qoida. Module 2 Learn uchun quyidagi alohida uslub qo'llanadi; boshqa darslar shu palitradan foydalanadi. Mavjud darslarda dizayn o'zgarishlari dars mazmuni, tekshirish mexanikasi, ekran va asosiy karta o'lchami hamda animatsiya ketma-ketligini o'zgartirmaydi.
+Bu ko'rinish `INTRO.learn.jsx`, Module 1 va `@coliseum/kit` asosidagi Practice fayllari uchun umumiy qoida. Module 2 Learn va Practice uchun quyidagi alohida palitra qo'llanadi; boshqa darslar umumiy palitradan foydalanadi. Mavjud darslarda dizayn o'zgarishlari dars mazmuni, tekshirish mexanikasi, ekran va asosiy karta o'lchami hamda animatsiya ketma-ketligini o'zgartirmaydi.
 
-## Module 2 Learn — alohida uslub
+## Module 2 — alohida uslub
 
 Foydalanuvchi talabiga ko'ra `M2L01`–`M2L08` nazariy darslari Module 1 dan farqlanadi:
 
@@ -11,9 +11,9 @@ Foydalanuvchi talabiga ko'ra `M2L01`–`M2L08` nazariy darslari Module 1 dan far
 - Matn `#f0f6fa`, yordamchi matn `#bacbd8`; to'g'ri/xato javob yashil/qizil va yozma feedback bilan ajratiladi.
 - Marshrutdagi yuk mashinasi o'rnida xabar oqimi va CSS 3D muloqot kartasi. Nazariyadagi ketma-ket yozilish, 2D sxema, flip kartalar, pauza va reduced-motion qo'llanadi.
 - Har dars: Hook → 5 nazariya → etalon asosidagi ichki mashqlar → test → Summary; jami 20 slayd.
-- Uslub faqat Learn JSX ichiga joylanadi. Umumiy runtime, Module 1 yoki Practice komponentlarining ranglari o'zgartirilmaydi.
+- Learn uslubi o‘z JSX fayliga joylanadi. Module 2 Practice shu palitrani faqat `.m2-practice` bilan chegaralangan CSS orqali oladi. Umumiy runtime va Module 1 ranglari o‘zgarmaydi; Practice karta hajmi, mexanika va animatsiyalar etalondan saqlanadi.
 
-Manba: `scripts/module2-theme.css`; to'liq tuzilma va qayta yaratish tartibi: [module-02/README.md](module-02/README.md).
+Manbalar: `scripts/module2-theme.css` va `scripts/module2-practice-theme.css`; qayta yaratish tartibi: [Learn](module-02/README.md) va [Practice](practice/MODULE2_PRACTICE.md).
 
 ## Palitra
 
