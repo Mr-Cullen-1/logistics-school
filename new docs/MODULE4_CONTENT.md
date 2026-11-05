@@ -1,6 +1,6 @@
 # Module 4 — Professional Logistics English: chuqurlashtirilgan kontent
 
-**Holat (2026-11-05):** 8 ta Learn JSX va generator yaratildi: 73 nazariya, 24–26 slayd. Standalone Practice fayllari hali yozilmadi. Quyidagi reja M4L01–M4L08 uchun COURSE.md dagi oldingi sodda mashqlar o‘rnini egallaydi.
+**Holat (2026-11-05):** 8 ta Learn JSX va generator yaratildi: 73 nazariya, 24–26 slayd. 80 ta standalone Practice JSX ham yaratildi; manbalar va qo‘llanma: `jsx-lessons/practice/MODULE4_PRACTICE.md`. Quyidagi reja M4L01–M4L08 uchun COURSE.md dagi oldingi sodda mashqlar o‘rnini egallaydi.
 
 ## 1. Yakuniy modulning talabi
 

@@ -1,6 +1,6 @@
 # Module 4 — Professional Logistics English
 
-8 ta mustaqil, yuklashga tayyor Learn JSX. Jami 73 nazariy slayd; alohida p01–p10 Practice fayllari keyingi bosqichda yaratiladi.
+8 ta mustaqil Learn JSX. Jami 73 nazariy slayd; har dars uchun alohida p01–p10 Practice fayllari ham tayyor: [Practice qo‘llanmasi](../practice/MODULE4_PRACTICE.md).
 
 | Dars | Nazariya | Jami slayd |
 |---|---:|---:|

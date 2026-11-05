@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from "react";
+import { normalizeMeaningfulAnswer } from "./practice-normalize";
 
 type Choice = { label: string; feedback?: string };
 type Step = { prompt: string; options: Choice[]; answer: number };
@@ -20,6 +21,7 @@ export type PracticeDefinition = {
   steps?: Step[];
   success: string;
   hint: string;
+  normalization?: "meaningful";
 };
 
 type Props = { definition: PracticeDefinition; lang?: string; mode?: string; fullScreen?: boolean; onReady?: (ready: boolean) => void; registerCheck?: (check: () => void) => void; onSubmit?: (result: unknown) => void };
@@ -53,6 +55,7 @@ const STYLE = `
 function normalize(value: string) { return value.toLocaleLowerCase().replace(/[.,!?;:]/g, "").replace(/\s+/g, " ").trim(); }
 
 export function PracticeTask({ definition: d, lang = "uz", mode, fullScreen = false, onReady, registerCheck, onSubmit }: Props) {
+  const normalizeField = d.normalization === "meaningful" ? normalizeMeaningfulAnswer : normalize;
   const [selected, setSelected] = useState<number | null>(null);
   const [order, setOrder] = useState<number[]>([]);
   const [matches, setMatches] = useState<Record<number, string>>({});
@@ -102,8 +105,8 @@ export function PracticeTask({ definition: d, lang = "uz", mode, fullScreen = fa
         detail = `«${misplaced?.item || "Gap"}» guruhini qayta tekshiring. Boshida savol so'zi yoki yordamchi fe'l bormi?`;
       }
     } else if (d.kind === "READ-TYPE" || d.kind === "TYPE") {
-      correct = (d.fields || []).every((field, index) => field.answers.some((answer) => normalize(fields[index] || "") === normalize(answer)));
-      if (!correct) detail = (d.fields || []).find((field, index) => !field.answers.some((answer) => normalize(fields[index] || "") === normalize(answer)))?.hint || d.hint;
+      correct = (d.fields || []).every((field, index) => field.answers.some((answer) => normalizeField(fields[index] || "") === normalizeField(answer)));
+      if (!correct) detail = (d.fields || []).find((field, index) => !field.answers.some((answer) => normalizeField(fields[index] || "") === normalizeField(answer)))?.hint || d.hint;
     }
     setAttempts(nextAttempts);
     if (correct && d.kind === "SCENE" && step < (d.steps?.length || 1) - 1) {
@@ -116,7 +119,7 @@ export function PracticeTask({ definition: d, lang = "uz", mode, fullScreen = fa
     if (correct) setLocked(true);
     else { setSelected(null); setShuffle((value) => value + 1); setOrder([]); }
     checking.current = false;
-  }, [ready, attempts, choiceMode, selected, current, d, chosen, order, matches, groups, fields, step, onSubmit]);
+  }, [ready, attempts, choiceMode, selected, current, d, chosen, order, matches, groups, fields, step, onSubmit, normalizeField]);
   useEffect(() => { registerCheck?.(check); }, [registerCheck, check]);
   const taskNumber = d.id.match(/p(\d+)$/)?.[1] || "";
   const sortedItems = d.kind === "SORT" ? (d.groups || []).flatMap((group) => group.items).sort((a, b) => a.localeCompare(b)) : [];

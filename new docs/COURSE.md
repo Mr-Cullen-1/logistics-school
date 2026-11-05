@@ -588,7 +588,7 @@ Maqsad: ishga oid hujjat va vaziyatlarni **o'qish, tushunish, savol berish va yo
 
 **2026-11-05 yangilangan kontent:** yakuniy modul Module 3 dan murakkabroq. Maqsad — bir nechta manba, cheklov va o‘zgarishni hisobga olib professional qaror va inglizcha javob berish. Yangi grammatika majburiy emas; oldingi bilimlar chuqurroq vaziyatlarda birlashtiriladi.
 
-**Asosiy kontent manbasi:** [MODULE4_CONTENT.md](MODULE4_CONTENT.md). Unda har darsning nazariy tushuntirishlari, ishlangan case, p01–p10 topshiriqlari va topshiriq → nazariya xaritasi bor. Eski sodda Module 4 mashq jadvallari shu reja bilan almashtirildi. Learn JSX fayllari yaratildi: jsx-lessons/module-04/README.md. Standalone Practice JSX keyingi bosqichda yaratiladi.
+**Asosiy kontent manbasi:** [MODULE4_CONTENT.md](MODULE4_CONTENT.md). Unda har darsning nazariy tushuntirishlari, ishlangan case, p01–p10 topshiriqlari va topshiriq → nazariya xaritasi bor. Eski sodda Module 4 mashq jadvallari shu reja bilan almashtirildi. Learn JSX fayllari yaratildi: jsx-lessons/module-04/README.md. 80 ta standalone Practice JSX tayyor: jsx-lessons/practice/MODULE4_PRACTICE.md.
 
 | Dars | Mavzu | Nazariya | Yakuniy ko‘nikma |
 |---|---|---:|---|
