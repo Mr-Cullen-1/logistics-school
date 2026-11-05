@@ -43,8 +43,10 @@ Tekshiruvlar faqat lesson sandboxga tegishli; butun platforma buildi talab qilin
 
 Git push bazadagi darsni yangilamaydi. Learn admin API orqali alohida yuklanadi, Preview OK va current/published qilinadi. Darsning umumiy holati 10 ta Practice nashr talablariga javob bermaguncha draft bo‘lib turadi.
 
-## Yuklash holati — 2026-11-05
+## Nazariyaning dastlabki yuklanishi — 2026-11-05
 
 M4L01–M4L08 productionga yuklandi: har birida Learn v1 `published/current`, server xeshi lokal JSX bilan bir xil. Har darsda 0 ta standalone Practice; umumiy lesson holati `draft`. Yuklash mavjud readiness qoidalarini chetlab o‘tmadi.
+
+**Yangilangan holat — Practice yuklangach:** M4L01–M4L08 ning barchasi productionda `published`. Har birida saqlangan Learn v1 + 10 ta Practice v1 `published/current`. Jami 80 Practice faylining xeshlari va mexanikalari tasdiqlandi; Learn fayllari almashtirilmadi.
 
 Tekshiruv: barcha fayllar kompilyatsiyasi; M4L01 va M4L08 sandbox oqimi, 2D/3D harakat, yozma javob, finaldan yiqilish/qayta urinish va natija callbacki; 8 darsning desktop joylashuvi uch o‘lchamda. Aniqlangan 7 px overflow ixcham padding bilan tuzatildi va tegishli slaydlar qayta tekshirildi. Mobil namunada gorizontal overflow yo‘q, navigatsiya ko‘rinadi.

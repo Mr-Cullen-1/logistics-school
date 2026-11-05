@@ -2,6 +2,8 @@
 
 **Module 4 nazariyasi va Practice tayyor:** [module-04/README.md](module-04/README.md) — 8 ta Learn, 73 nazariy slayd, har darsda 24–26 ekran. Zumrad/platina/amber dizayn, CSS 3D konsol va 2D dalil oqimi, murakkab vaziyatlar va yozma javobli yakuniy test. [80 ta Practice qo‘llanmasi](practice/MODULE4_PRACTICE.md) — har darsga 10 ta, kamida 2 yozma, 2 reading va yakunda uch bosqichli SCENE.
 
+2026-11-05: Module 4 ning barcha 8 darsi productionda `published`; har birida current Learn + 10 Practice. Fayl xeshlari va nashr holati tekshirildi.
+
 Bu papka yuklashga tayyor dars manbalarini saqlaydi. Platformaning Next.js kodi va generatsiya qilingan runtime fayli bu yerga qo'yilmaydi.
 
 ```text

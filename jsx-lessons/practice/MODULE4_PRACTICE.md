@@ -38,3 +38,9 @@ node_modules\.bin\tsx.cmd scripts/check-module4-practice.ts
 ```
 
 Admin panelda tegishli darsga p01–p10 birgalikda yuklanadi va nashr qilinadi. Mavjud current Learn saqlanadi. Git push bazaga fayllarni o‘zi yuklamaydi.
+
+## Production nashri — 2026-11-05
+
+80/80 Practice fayli tegishli M4L01–M4L08 darslariga yuklandi va v1 `published/current` qilindi. 8/8 dars `published`: har birida 1 Learn + 10 Practice. Server xeshlari va mexanika metama’lumotlari lokal fayllarga mos; current Learn identifikatori va xeshi saqlandi. Yangi `meaningful` runtime production manzilida yuklashdan oldin tasdiqlandi.
+
+Qisqa tekshiruv: 80 fayl kompilyatsiyasi va 8 to‘plam readiness talablari, har mexanikadan bittadan sandbox namunasi, xato/to‘g‘ri callback, mobil MATCH/TYPE hamda final READ-TYPE. Ikki kichik kit/normalizatsiya testi o‘tdi. Kontent reviewida aniqlangan review va next-update farqi M4L07 p10 matnida aniqlandi.

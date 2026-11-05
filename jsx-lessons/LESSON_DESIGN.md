@@ -2,6 +2,8 @@
 
 ## Module 4 Learn
 
+Module 4 Practice shu zumrad/platina/amber palitrani `.m4-practice` orqali oladi (`scripts/module4-practice-theme.css`). Etalon `PracticeTask` karta o‘lchami, 2D/3D kirish, javob animatsiyalari va reduced-motion saqlanadi. TYPE/READ-TYPE uchun ixtiyoriy `normalization: "meaningful"` raqam, vaqt va birlik ma’nosini saqlaydi; oldingi modullarda bu rejim yoqilmaydi.
+
 Module 4 uchun alohida operatsion panel uslubi: to‘q zumrad `#0b1714`, karta `#233b32` → `#13251f`, platina matn `#eef4ef`, amber `#eab873`. Manba: `scripts/module4-theme.css`. CSS 3D konsol, 2D bosqichlar va signal, ketma-ket matn, dalil kartalari, Y o‘qida flip va yumshoq slayd o‘tishi ishlatiladi. Pause/replay va reduced-motion saqlanadi. Yuqorida takroriy kicker yo‘q; past desktopda bo‘shliqlar ixchamlashadi, mobil mazmun kesilmaydi. Batafsil: [module-04/README.md](module-04/README.md). Bu uslub boshqa modullarni yoki umumiy Practice runtime'ni o‘zgartirmaydi.
 
 Bu ko'rinish `INTRO.learn.jsx`, Module 1 va `@coliseum/kit` asosidagi Practice fayllari uchun umumiy qoida. Module 2 va Module 3 Learn/Practice uchun quyidagi alohida uslublar qo'llanadi. Mavjud darslarda dizayn o'zgarishlari dars mazmuni, tekshirish mexanikasi, ekran va asosiy karta o'lchami hamda animatsiya ketma-ketligini o'zgartirmaydi.
