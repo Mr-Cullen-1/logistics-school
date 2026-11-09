@@ -7,6 +7,7 @@ import { lessonFiles, lessonProgress, practiceAttempts } from "@/db/schema";
 import { currentUser } from "@/lib/auth/current-user";
 import { SESSION_COOKIE } from "@/lib/auth/session";
 import { accessibleLesson } from "@/lib/lessons/access";
+import { courseCycle } from "@/lib/exams/db";
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   const user = await currentUser(request.cookies.get(SESSION_COOKIE)?.value);
@@ -22,5 +23,6 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
     db.select({ learnDoneAt: lessonProgress.learnDoneAt, practiceDoneAt: lessonProgress.practiceDoneAt }).from(lessonProgress).where(and(eq(lessonProgress.studentId, user.id), eq(lessonProgress.lessonId, id))).limit(1),
     db.select({ seq: practiceAttempts.seq, correct: practiceAttempts.correct, attempts: practiceAttempts.attempts }).from(practiceAttempts).where(and(eq(practiceAttempts.studentId, user.id), eq(practiceAttempts.lessonId, id))),
   ]);
-  return NextResponse.json({ lesson, files, progress: progress || null, attempts }, { headers: { "Cache-Control": "private, no-store" } });
+  const cycle = lesson.code === "INTRO" ? 1 : await courseCycle(db, user.id, lesson.courseId);
+  return NextResponse.json({ lesson, cycle, files, progress: progress || null, attempts }, { headers: { "Cache-Control": "private, no-store" } });
 }

@@ -5,8 +5,9 @@ import { createRoot, type Root } from "react-dom/client";
 import * as kit from "./kit";
 import { RiveRoute } from "./rive-route";
 import { PracticeTask } from "./practice-task";
+import { ExamScreen } from "./exam-screen";
 
-type Message = { type: string; nonce: string; compiledJs?: string; kind?: "learn" | "practice"; props?: Record<string, unknown> };
+type Message = { type: string; nonce: string; compiledJs?: string; kind?: "learn" | "practice" | "exam"; props?: Record<string, unknown> };
 type LessonProps = Record<string, unknown>;
 
 class RenderBoundary extends React.Component<{ children: React.ReactNode }, { failed: boolean }> {
@@ -36,11 +37,14 @@ window.addEventListener("unhandledrejection", (event) => {
   if (activeNonce) send("error", event.reason instanceof Error ? event.reason.message : "Dars kodi xato bilan to‘xtadi");
 });
 
-export const modules: Record<string, unknown> = { react: React, "react-dom": ReactDOM, "@coliseum/kit": { ...kit, RiveRoute, PracticeTask } };
+export const modules: Record<string, unknown> = { react: React, "react-dom": ReactDOM, "@coliseum/kit": { ...kit, RiveRoute, PracticeTask, ExamScreen } };
 
-export function mount(Component: React.ComponentType<LessonProps>, kind: "learn" | "practice", props: LessonProps) {
+export function mount(Component: React.ComponentType<LessonProps>, kind: "learn" | "practice" | "exam", props: LessonProps) {
   if (!Component) { send("error", "Default export topilmadi"); return; }
-  const bridge = kind === "learn" ? {
+  const bridge = kind === "exam" ? {
+    onAnswerChange: (payload: unknown) => send("exam_answers", payload),
+    onRequestSubmit: (payload: unknown) => send("exam_submit", payload),
+  } : kind === "learn" ? {
     onFinished: (payload: unknown) => send("finished", payload),
     onProgress: (payload: unknown) => send("progress", payload),
   } : {

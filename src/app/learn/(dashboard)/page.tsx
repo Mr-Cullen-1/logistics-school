@@ -7,6 +7,8 @@ import { courses, enrollments, lessons, modules, progress, studentProfiles } fro
 import { requireReadyUser } from "@/lib/auth/current-user";
 import { activeCourseAccess } from "@/lib/courses/access";
 import { getLearnText } from "@/lib/learn/translations";
+import { lifetimeLessons } from "@/lib/exams/achievements";
+import { studentExams } from "@/lib/exams/queries";
 import styles from "../learn.module.css";
 
 function tashkentDay(date: Date) {
@@ -29,6 +31,7 @@ export default async function LearnPage() {
     id: courses.id,
     title: courses.title,
     level: courses.level,
+    examPolicy: courses.examPolicy,
   }).from(enrollments).innerJoin(courses, eq(enrollments.courseId, courses.id)).where(activeCourseAccess(user.id)).orderBy(asc(courses.order), asc(courses.title)),
   db.select({ locale: studentProfiles.locale, goalTitle: studentProfiles.goalTitle, goalDate: studentProfiles.goalDate }).from(studentProfiles).where(eq(studentProfiles.studentId, user.id)).limit(1)]);
   const locale = studentProfile?.locale === "ru" || studentProfile?.locale === "en" ? studentProfile.locale : "uz";
@@ -45,13 +48,17 @@ export default async function LearnPage() {
     .where(and(inArray(modules.courseId, available.map((course) => course.id)), eq(lessons.status, "published"))) : [];
 
   const completed = lessonRows.filter((lesson) => lesson.completedAt);
+  const earnedLessons = await lifetimeLessons(user.id);
+  const examCompletionText = locale === "ru" ? {done:"Курс завершён",pending:"Для завершения нужен IK"} : locale === "en" ? {done:"Course completed",pending:"Pass IK to complete the course"} : {done:"Kurs yakunlandi",pending:"Kursni yakunlash uchun IKdan o‘ting"};
+  const examRows = await studentExams(user.id);
   const overall = lessonRows.length ? Math.round(completed.length / lessonRows.length * 100) : 0;
   const courseCards = available.map((course) => {
     const items = lessonRows.filter((lesson) => lesson.courseId === course.id);
     const done = items.filter((lesson) => lesson.completedAt).length;
-    return { ...course, lessons: items.length, done, percent: items.length ? Math.round(done / items.length * 100) : 0 };
+    const completedExam=examRows.some(e=>e.courseId===course.id&&e.kind==="ik"&&e.state==="passed");
+    return { ...course, completedExam, lessons: items.length, done, percent: items.length ? Math.round(done / items.length * 100) : 0 };
   });
-  const featured = courseCards.find((course) => course.percent < 100) || courseCards[0];
+  const featured = courseCards.find((course) => course.percent < 100 || (course.examPolicy!=="disabled"&&!course.completedExam)) || courseCards[0];
   const firstName = user.fullName.trim().split(/\s+/)[0] || user.fullName;
   const hour = Number(new Intl.DateTimeFormat("en-US", { timeZone: "Asia/Tashkent", hour: "numeric", hourCycle: "h23" }).format(new Date()));
   const greeting = hour < 11 ? t.morning : hour < 18 ? t.afternoon : t.evening;
@@ -83,7 +90,7 @@ export default async function LearnPage() {
         <div className={styles.panelHeader}><h2 id="my-courses-title">{t.myCourses}</h2><span>{courseCards.length} {t.courseCount}</span></div>
         {courseCards.length ? <div className={styles.courseGrid}>{courseCards.map((course, index) => <Link href={`/learn/${course.id}`} className={styles.courseCard} key={course.id}>
           <span className={styles.courseImage} style={{ backgroundImage: `url('${photos[index % photos.length]}')` }} />
-          <span className={styles.courseDetails}><strong>{course.title}</strong><small>{course.level || t.noLevel}</small><span className={styles.courseProgress}><span style={{ width: `${course.percent}%` }} /></span><span className={styles.courseFoot}><small>{course.done}/{course.lessons} {t.lessonCount}</small><b>{course.percent}%</b></span></span><span className={styles.courseArrow}><LearnIcon name="arrow" size={17} /></span>
+          <span className={styles.courseDetails}><strong>{course.title}</strong>{course.examPolicy!=="disabled"&&<small>{course.completedExam?examCompletionText.done:examCompletionText.pending}</small>}<small>{course.level || t.noLevel}</small><span className={styles.courseProgress}><span style={{ width: `${course.percent}%` }} /></span><span className={styles.courseFoot}><small>{course.done}/{course.lessons} {t.lessonCount}</small><b>{course.percent}%</b></span></span><span className={styles.courseArrow}><LearnIcon name="arrow" size={17} /></span>
         </Link>)}</div> : <p className={styles.empty}>{t.noCoursesPanel}</p>}
       </section>
 
@@ -91,7 +98,7 @@ export default async function LearnPage() {
 
       <section id="weekly-progress" className={`${styles.panel} ${styles.weeklyPanel}`} aria-labelledby="weekly-title"><div className={styles.panelHeader}><h2 id="weekly-title">{t.weekly}</h2><span>{t.thisWeek}</span></div><p className={styles.panelSub}>{weekly.reduce((sum, value) => sum + value, 0)} {t.completedThisWeek}</p><div className={styles.chart} role="img" aria-label={`${weekly.reduce((sum, value) => sum + value, 0)} ${t.completedThisWeek}`}>{days.map((day, index) => <div className={styles.chartColumn} key={day.key}><span className={styles.barTrack}><span className={styles.bar} style={{ height: `${weekly[index] ? Math.max(14, weekly[index] / maxWeekly * 100) : 3}%` }} /></span><small>{day.label}</small></div>)}</div></section>
 
-      <section className={`${styles.panel} ${styles.achievementsPanel}`} aria-labelledby="achievements-title"><div className={styles.panelHeader}><h2 id="achievements-title">{t.achievements}</h2><Link href="/learn/profile#achievements" className={styles.panelAction}>{getLearnText(locale).nav.achievements} →</Link></div><div className={styles.achievementPreview}><LearnIcon name="trophy" size={29} /><strong>{completed.length}</strong><span>{t.completedLessons}</span><p>{t.achievementsHelp}</p></div></section>
+      <section className={`${styles.panel} ${styles.achievementsPanel}`} aria-labelledby="achievements-title"><div className={styles.panelHeader}><h2 id="achievements-title">{t.achievements}</h2><Link href="/learn/profile#achievements" className={styles.panelAction}>{getLearnText(locale).nav.achievements} →</Link></div><div className={styles.achievementPreview}><LearnIcon name="trophy" size={29} /><strong>{earnedLessons}</strong><span>{t.completedLessons}</span><p>{t.achievementsHelp}</p></div></section>
 
       <section className={`${styles.panel} ${styles.activityPanel}`} aria-labelledby="activity-title"><div className={styles.panelHeader}><h2 id="activity-title">{t.recent}</h2><span>{t.lastLessons}</span></div>{recent.length ? <ul className={styles.activityList}>{recent.map((lesson) => <li key={lesson.id}><span className={styles.activityIcon}><LearnIcon name="check" size={18} /></span><span><strong>{lesson.title}</strong><small>{lesson.completedAt!.toLocaleString(recentLocale, { timeZone: "Asia/Tashkent", day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })} · {t.completed}</small></span></li>)}</ul> : <p className={styles.empty}>{t.noActivity}</p>}</section>
 

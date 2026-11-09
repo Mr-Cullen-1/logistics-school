@@ -620,3 +620,12 @@ Maqsad: ishga oid hujjat va vaziyatlarni **o'qish, tushunish, savol berish va yo
 2. Phrase bank (har darsning 5–8 ta iborasi) va lug'at ro'yxati (jami ~250 atama).
 3. Birinchi namunaviy dars (tavsiya: `M1L01`) to'liq tayyorlanadi: 1 Learn + 10 Practice.
 4. Kirish testi (placement) va 3 ta checkpoint testining savol banki.
+
+## Alohida PK / IK baholash (2026-11-09)
+
+Yuqoridagi dars ichidagi checkpointlar Learn tarkibida qoladi. Kurs uchun yangi alohida imtihonlar: har moduldan keyin **PK**, to‘rtala PK va barcha dars/practicelardan keyin **IK**. M4L08dagi “Final Assessment” ichki dars tekshiruvi bo‘lib, yangi IKni almashtirmaydi.
+
+- PK: 30 asosiy + 20 yozma vocabulary; 2 urinish. Keyingi modul PKdan o‘tgach ochiladi. Ikki fail faqat shu kursning progressini M1L01ga qaytaradi; Intro va yutuqlar saqlanadi.
+- IK: 20 reading (2×10) + 15 qisqa writing + 15 grammar + 50 yozma vocabulary. Har modul jami 25 savol. Ikki faildan so‘ng progress saqlanadi, admin har ruxsatda +1 urinish beradi.
+- O‘tish default 80%, har imtihon versiyasida sozlanadi. Darslar 100% bo‘lishi kurs yakunlanganini anglatmaydi: exam policy yoqilgan kurs uchun IK passed talab qilinadi.
+- Tayyor kontent: `jsx-lessons/exams/`. Savollar va source hashlar `scripts/audit-exam-content.ts` bilan tekshiriladi. Asosiy qarorlar, etaplar va release cheklovlari [PK_IK_PLAN.md](PK_IK_PLAN.md)da.

@@ -22,6 +22,20 @@
       "when": 1793435896241,
       "tag": "0002_cold_hannibal_king",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1794220484547,
+      "tag": "0003_greedy_sleeper",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1794232895754,
+      "tag": "0004_misty_the_professor",
+      "breakpoints": true
     }
   ]
 }

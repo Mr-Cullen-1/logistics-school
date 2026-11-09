@@ -1,3 +1,5 @@
+import { guardCurriculum } from "@/lib/exams/admin";
+import { curriculumRequest } from "@/lib/exams/curriculum-http";
 import { and, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -10,7 +12,7 @@ import { parseLessonFilename } from "@/lib/lessons/rules";
 
 const input = z.object({ moduleId: z.uuid(), code: z.string(), title: z.string().trim().min(2).max(160) });
 
-export async function POST(request: NextRequest) {
+async function POSTHandler(request: NextRequest) {
   if (!sameOrigin(request)) return NextResponse.json({ error: "So‘rov rad etildi" }, { status: 403 });
   const access = await superAdminAccess(request);
   if (access.error) return access.error;
@@ -26,9 +28,12 @@ export async function POST(request: NextRequest) {
   const [exists] = await db.select({ id: lessons.id }).from(lessons).where(and(eq(lessons.moduleId, section.id), eq(lessons.code, parsed.data.code))).limit(1);
   if (exists) return NextResponse.json({ error: "Bu dars kodi modulda bor" }, { status: 409 });
   const created = await db.transaction(async (tx) => {
+    await guardCurriculum(tx,"module",parsed.data.moduleId);
     const [lesson] = await tx.insert(lessons).values({ moduleId: section.id, code: parsed.data.code, title: parsed.data.title, order: parsed.data.code === "INTRO" ? 0 : Number(parsed.data.code.slice(-2)), jsxSource: "", compiledJs: "", updatedBy: access.user.id }).returning({ id: lessons.id, code: lessons.code, title: lessons.title });
     await tx.insert(auditLog).values({ actorId: access.user.id, action: "lesson.created", targetType: "lesson", targetId: lesson.id });
     return lesson;
   });
   return NextResponse.json({ lesson: created }, { status: 201, headers: { "Cache-Control": "no-store" } });
 }
+
+export const POST = curriculumRequest(POSTHandler);

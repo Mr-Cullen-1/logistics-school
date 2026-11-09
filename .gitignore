@@ -9,3 +9,5 @@ next-env.d.ts
 npm-debug.log*
 # Generated iframe runtime; built by predev/prebuild.
 /public/lesson-runtime.js
+# Database recovery artifacts contain private application data.
+/.local-backups/

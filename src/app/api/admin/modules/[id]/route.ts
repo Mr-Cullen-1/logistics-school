@@ -1,3 +1,5 @@
+import { guardCurriculum } from "@/lib/exams/admin";
+import { curriculumRequest } from "@/lib/exams/curriculum-http";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -10,7 +12,7 @@ import { moduleInput } from "@/lib/courses/validation";
 
 type Context = { params: Promise<{ id: string }> };
 
-export async function PATCH(request: NextRequest, context: Context) {
+async function PATCHHandler(request: NextRequest, context: Context) {
   if (!sameOrigin(request)) return NextResponse.json({ error: "So'rov rad etildi" }, { status: 403 });
   const access = await superAdminAccess(request);
   if (access.error) return access.error;
@@ -19,6 +21,7 @@ export async function PATCH(request: NextRequest, context: Context) {
   const parsed = moduleInput.safeParse(await request.json().catch(() => null));
   if (!parsed.success) return NextResponse.json({ error: "Modul nomini tekshiring" }, { status: 400 });
   const updated = await getDatabase().transaction(async (tx) => {
+    await guardCurriculum(tx,"module",id);
     const [module] = await tx.update(modules).set(parsed.data).where(eq(modules.id, id)).returning({ id: modules.id, courseId: modules.courseId });
     if (!module) return false;
     await tx.insert(auditLog).values({ actorId: access.user.id, action: "module.updated", targetType: "module", targetId: id, meta: { courseId: module.courseId } });
@@ -28,7 +31,7 @@ export async function PATCH(request: NextRequest, context: Context) {
   return NextResponse.json({ ok: true }, { headers: { "Cache-Control": "no-store" } });
 }
 
-export async function DELETE(request: NextRequest, context: Context) {
+async function DELETEHandler(request: NextRequest, context: Context) {
   if (!sameOrigin(request)) return NextResponse.json({ error: "So'rov rad etildi" }, { status: 403 });
   const access = await superAdminAccess(request);
   if (access.error) return access.error;
@@ -37,6 +40,7 @@ export async function DELETE(request: NextRequest, context: Context) {
   const [lesson] = await getDatabase().select({ id: lessons.id }).from(lessons).where(eq(lessons.moduleId, id)).limit(1);
   if (lesson) return NextResponse.json({ error: "Darslari bor modulni o'chirib bo'lmaydi" }, { status: 409 });
   const deleted = await getDatabase().transaction(async (tx) => {
+    await guardCurriculum(tx,"module",id);
     const [module] = await tx.delete(modules).where(eq(modules.id, id)).returning({ id: modules.id, courseId: modules.courseId });
     if (!module) return false;
     await tx.insert(auditLog).values({ actorId: access.user.id, action: "module.deleted", targetType: "module", targetId: id, meta: { courseId: module.courseId } });
@@ -45,3 +49,7 @@ export async function DELETE(request: NextRequest, context: Context) {
   if (!deleted) return NextResponse.json({ error: "Modul topilmadi" }, { status: 404 });
   return NextResponse.json({ ok: true }, { headers: { "Cache-Control": "no-store" } });
 }
+
+export const PATCH = curriculumRequest(PATCHHandler);
+
+export const DELETE = curriculumRequest(DELETEHandler);

@@ -7,3 +7,7 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## PK va IK imtihonlari
+
+PK/IK kodi, JSX kontenti, migratsiya yoki testlarini yaratishdan oldin `new docs/PK_IK_PLAN.md` faylini o‘qing. Shu fayl PK/IK uchun asosiy amalga oshirish rejasi; keyingi qarorlar va bajarilgan bosqichlarni ham o‘sha yerda yangilang. Alohida reja nusxasini yaratmang. Implementatsiyani faqat foydalanuvchi boshlashni aytgach bajaring.

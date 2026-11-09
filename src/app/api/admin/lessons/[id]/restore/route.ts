@@ -1,3 +1,5 @@
+import { guardCurriculum } from "@/lib/exams/admin";
+import { curriculumRequest } from "@/lib/exams/curriculum-http";
 import { and, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -8,7 +10,7 @@ import { superAdminAccess } from "@/lib/auth/admin";
 import { sameOrigin } from "@/lib/auth/request";
 import { publishReadiness } from "@/lib/lessons/rules";
 
-export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+async function POSTHandler(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   if (!sameOrigin(request)) return NextResponse.json({ error: "So‘rov rad etildi" }, { status: 403 });
   const access = await superAdminAccess(request);
   if (access.error) return access.error;
@@ -17,6 +19,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
   if (!z.uuid().safeParse(id).success || !body.success) return NextResponse.json({ error: "Fayl topilmadi" }, { status: 404 });
   const db = getDatabase();
   const outcome = await db.transaction(async (tx) => {
+    await guardCurriculum(tx,"lesson",id);
     const [lesson] = await tx.select({ id: lessons.id, code: lessons.code, status: lessons.status }).from(lessons).where(eq(lessons.id, id)).for("update").limit(1);
     if (!lesson) return { status: 404, error: "Dars topilmadi" };
     if (lesson.status !== "published" || !lesson.code) return { status: 400, error: "Faqat nashrdagi dars qaytariladi" };
@@ -33,3 +36,5 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
   });
   return NextResponse.json(outcome, { status: outcome.status, headers: { "Cache-Control": "no-store" } });
 }
+
+export const POST = curriculumRequest(POSTHandler);

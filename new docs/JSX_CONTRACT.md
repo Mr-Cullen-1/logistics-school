@@ -301,8 +301,31 @@ Bu to'plam 5-bosqichda (JSX pipeline) avtomatik testlarga aylantiriladi.
 
 ## 8. Ochiq savollar
 
+> PK/IK uchun alohida amaldagi shartnoma quyidagi qo‘shimchada va `PK_IK_PLAN.md`da. Darslarning mavjud Learn/Practice shartnomasi saqlanadi.
+
 1. **Standalone yoki Kit** (2-bo'lim)? Tavsiyam: Kit asosiy, standalone ham qabul qilinadi.
 2. **Learn uchun `onFinished` natijasi**: `passed` bo'lmasa (60% dan past) keyingi bosqich (practice) ochilsinmi yoki Learn ni qayta ko'rish majburiymi?
 3. **Practice xato chegarasi**: cheksiz urinishmi yoki 3 xatodan keyin "yechimni ko'rsatish" izohi chiqsinmi?
 4. **Til**: o'quvchi interfeys tilini o'zi tanlaydimi (profilda) yoki admin belgilaydimi?
 5. **Dizayn qarori:** matematika namunasining och fon va to'q sariq aksenti o'rniga Coliseum'ning to'q fon va tilla uslubi qabul qilingan; aniq palitra va komponent qoidalari `jsx-lessons/LESSON_DESIGN.md` da.
+
+## PK / IK JSX qo‘shimchasi (implementatsiya: 2026-11-09)
+
+Kanonik talablar va release holati: [PK_IK_PLAN.md](PK_IK_PLAN.md). Fayl nomlari `M1.pk.jsx`–`M4.pk.jsx`, `COURSE.ik.jsx`; maksimum 1.5 MB.
+
+```jsx
+export const examDefinition = { /* qat’iy JSON, schemaVersion: 1 */ };
+import React from "react";
+import { ExamScreen } from "@coliseum/kit";
+export default function Exam(props) { return <ExamScreen {...props} />; }
+```
+
+`examDefinition` ichidagi haqiqiy obyekt JSON sintaksisida yoziladi: kalitlar qo‘shtirnoqda; funksiya, spread, expression yoki executable metadata qabul qilinmaydi. Yuqoridagi komment o‘rniga haqiqiy obyekt qo‘yiladi. To‘liq ishlaydigan namunalar `jsx-lessons/exams/`da; generator `scripts/build-exam-content.ts`, validator `src/lib/exams/definition.ts`.
+
+Har savolda `id`, `moduleCode`, `section`, `bloom`, `difficulty`, `type`, `prompt`, `sourceRefs`, `grading` bor. Variantli savolda `options`; vocabularyda yagona `lemma`; readingda `passageId` majburiy. `sourceRefs` dars kodi, slot, SHA-256 va aniq `DATA.slides[index]`, `THEORY[index]` yoki vocabulary atamasini ko‘rsatadi. Writing/vocabulary faqat `typed`.
+
+Super admin: kurs → PK/IK → yaratish (default 80%) → JSX draft yuklash → iframe va javob/Bloom/manbalarni ko‘rish → Preview OK → nashr. Har yangi versiyaning o‘tish foizi alohida saqlanadi. Faol urinish versiya/foiz/orderini o‘zgartirmaydi.
+
+O‘quvchiga original JSX, `grading`, javoblar, source refs yoki Bloom yuborilmaydi. Variantning muallif bergan IDsi ham yashiriladi: server har urinishdagi aralashtirilgan pozitsiyani `choice-1` kabi belgiga aylantiradi va javobni qaytadan ichki IDga o‘girib baholaydi. Renderer faqat javobni yuboradi; score mijozdan olinmaydi. `onAnswerChange` → autosave, `onRequestSubmit` → serverdagi final grading.
+
+Kurs exam policy yoqilgach, tarkib va Learn/Practice publish/restore muzlatiladi. Kontent faylini lokal o‘zgartirish bazadagi nashrni yangilamaydi. Manba dars o‘zgarsa source hashlar va imtihon kontenti qayta tekshiriladi.

@@ -1,5 +1,7 @@
 # Coliseum English Platform — To'liq reja
 
+**PK/IK imtihonlari uchun asosiy reja:** [PK_IK_PLAN.md](PK_IK_PLAN.md). PK/IK kodi, JSX savollari, migratsiya va testlarini yaratishda aynan shu hujjatdan foydalaniladi. Ish faqat foydalanuvchi boshlashni aytgach bajariladi.
+
 Maqsad: Coliseum Logistics School o'quvchilari uchun ingliz tili kursi platformasi.
 Landing sayt (coliseumlogistics-seven.vercel.app) alohida qoladi, platforma **alohida loyiha va alohida domen**da quriladi.
 

@@ -3,6 +3,8 @@ import { notFound, redirect } from "next/navigation";
 import { z } from "zod";
 
 import { AccessManager } from "@/components/admin/access-manager";
+import { StudentExams } from "@/components/admin/student-exams";
+import { adminStudentExams } from "@/lib/exams/queries";
 import { getDatabase } from "@/db";
 import { courses, enrollments, users } from "@/db/schema";
 import { requireReadyUser } from "@/lib/auth/current-user";
@@ -19,5 +21,5 @@ export default async function StudentAccessPage({ params }: { params: Promise<{ 
     getDatabase().select({ courseId: enrollments.courseId, title: courses.title, isPublished: courses.isPublished, isActive: enrollments.isActive, expiresAt: enrollments.expiresAt }).from(enrollments).innerJoin(courses, eq(enrollments.courseId, courses.id)).where(eq(enrollments.studentId, id)).orderBy(asc(courses.order), asc(courses.id)),
   ]);
   const access = grants.map((row) => ({ ...row, expiresAt: row.expiresAt?.toISOString() ?? null }));
-  return <AccessManager student={student} courses={allCourses} grants={access} asOf={new Date().toISOString()} />;
+  return <><AccessManager student={student} courses={allCourses} grants={access} asOf={new Date().toISOString()} /><StudentExams studentId={id} attempts={await adminStudentExams(id)}/></>;
 }

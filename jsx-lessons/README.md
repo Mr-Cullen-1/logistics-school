@@ -49,3 +49,13 @@ Admin paneldagi dars sahifasida **Fayl yuklash** bitta sodda oynani ochadi. Unda
 Yuklangan faylni ko‘rish uchun yonidagi ko‘z ikonasi ishlatiladi. Ptichka draft faylni bir amalda tasdiqlaydi va nashr qiladi. Versiyada bitta to‘liq ro‘yxat bor; hammasi belgilanganda ommaviy nashr tugmasi chiqadi. Preview OK va eski fayllarni o‘chirish amallari ham tanlovdan keyin ko‘rinadi. Oynasiz tasdiq auditda `bulk_approval_without_opening`, iframe ochilgandagi tasdiq esa `iframe_mounted` sifatida ajratiladi. Oddiy dars barcha nashr talablari bajarilgach, Intro esa Learn tayyor bo‘lgach o‘quvchilarga ochiladi.
 
 Manbani o'zgartirgach, yangi holatni o'quvchida ko'rish uchun super admin `/admin/lessons/[id]` da **Fayl yuklash** oynasida tur va JSX faylni tanlab **Saqlash va nashr qilish** tugmasini bosadi. Git commit yoki lokal faylning o'zgarishi bazadagi joriy versiyani almashtirmaydi.
+
+### PK / IK fayllari
+
+`exams/M1.pk.jsx`–`M4.pk.jsx`: har birida 30 asosiy + 20 yozma vocabulary. `exams/COURSE.ik.jsx`: 20 reading + 15 qisqa writing + 15 grammar + 50 yozma vocabulary. Jami 300 savol. Bu fayllar **kursning PK/IK bo‘limiga** yuklanadi; lesson uploadiga emas.
+
+Mualliflik manbalari: `scripts/exam-content-spec.ts`, `scripts/exam-final-spec.ts`; vocabulary joriy Learn materiallaridan olinadi. Qayta yaratish: `node_modules/.bin/tsx.cmd scripts/build-exam-content.ts`. Audit: `node_modules/.bin/tsx.cmd scripts/audit-exam-content.ts`.
+
+`exams/source-corpus.json` — 353 asl JSX faylning SHA-256 va statik matn inventari. AST o‘qiladi, dars kodi bajarilmaydi; maxsus M1L01 va barcha practice fayllar ham qamrab olinadi. Inventarda metadata literalari ham bor, shu sabab u “barcha qatorlari o‘quvchiga ko‘rinadigan matn” deb talqin qilinmaydi. Imtihondagi atamalar aynan bog‘langan darslarda borligi tekshiriladi.
+
+Kontentning yakuniy metodik tasdig‘i super adminning preview/review bosqichida beriladi. Release va cheklovlar uchun `new docs/PK_IK_PLAN.md` §14ga qarang.

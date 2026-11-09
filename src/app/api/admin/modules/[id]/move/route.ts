@@ -1,3 +1,5 @@
+import { guardCurriculum } from "@/lib/exams/admin";
+import { curriculumRequest } from "@/lib/exams/curriculum-http";
 import { asc, eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -8,7 +10,7 @@ import { superAdminAccess } from "@/lib/auth/admin";
 import { sameOrigin } from "@/lib/auth/request";
 import { moveInput } from "@/lib/courses/validation";
 
-export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+async function POSTHandler(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   if (!sameOrigin(request)) return NextResponse.json({ error: "So'rov rad etildi" }, { status: 403 });
   const access = await superAdminAccess(request);
   if (access.error) return access.error;
@@ -16,6 +18,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
   const parsed = moveInput.safeParse(await request.json().catch(() => null));
   if (!z.uuid().safeParse(id).success || !parsed.success) return NextResponse.json({ error: "Tartib noto'g'ri" }, { status: 400 });
   const moved = await getDatabase().transaction(async (tx) => {
+    await guardCurriculum(tx,"module",id);
     const [target] = await tx.select({ courseId: modules.courseId }).from(modules).where(eq(modules.id, id)).limit(1);
     if (!target) return false;
     const rows = await tx.select({ id: modules.id }).from(modules).where(eq(modules.courseId, target.courseId)).orderBy(asc(modules.order), asc(modules.id)).for("update");
@@ -30,3 +33,5 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
   if (!moved) return NextResponse.json({ error: "Modulni ko'chirib bo'lmadi" }, { status: 409 });
   return NextResponse.json({ ok: true }, { headers: { "Cache-Control": "no-store" } });
 }
+
+export const POST = curriculumRequest(POSTHandler);

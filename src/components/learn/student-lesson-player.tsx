@@ -7,7 +7,7 @@ import { useRouter } from "next/navigation";
 import { LessonFrame } from "./lesson-frame";
 import styles from "./student-lesson-player.module.css";
 
-type LessonData = { files: { id: string; kind: string; seq: number; compiledJs: string }[]; progress: { learnDoneAt: string | null; practiceDoneAt: string | null } | null; attempts: { seq: number; correct: boolean }[] };
+type LessonData = { cycle: number; files: { id: string; kind: string; seq: number; compiledJs: string }[]; progress: { learnDoneAt: string | null; practiceDoneAt: string | null } | null; attempts: { seq: number; correct: boolean }[] };
 
 function PracticeLoading({ lang, saving }: { lang: "uz" | "ru" | "en"; saving: boolean }) {
   const copy = {
@@ -71,7 +71,7 @@ export function StudentLessonPlayer({ lessonId, title, code, lang, studentName, 
   async function record(body: object) {
     setBusy(true);
     try {
-      const response = await fetch(`/api/learn/lessons/${lessonId}/progress`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });
+      const response = await fetch(`/api/learn/lessons/${lessonId}/progress`, { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ ...body, cycle: data?.cycle }) });
       const result = await response.json();
       if (!response.ok) throw new Error(result.error || "Natija saqlanmadi");
       if (result.completed || (code === "INTRO" && result.passed)) router.refresh();

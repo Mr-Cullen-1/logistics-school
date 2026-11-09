@@ -1,3 +1,5 @@
+import { guardCurriculum } from "@/lib/exams/admin";
+import { curriculumRequest } from "@/lib/exams/curriculum-http";
 import { and, eq, inArray } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
@@ -10,7 +12,7 @@ import { practiceMechanics, publishReadiness } from "@/lib/lessons/rules";
 
 const requestSchema = z.object({ fileIds: z.array(z.uuid()).min(1).max(11) });
 
-export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+async function POSTHandler(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   if (!sameOrigin(request)) return NextResponse.json({ error: "So‘rov rad etildi" }, { status: 403 });
   const access = await superAdminAccess(request);
   if (access.error) return access.error;
@@ -22,6 +24,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
 
   const db = getDatabase();
   const outcome = await db.transaction(async (tx) => {
+    await guardCurriculum(tx,"lesson",id);
     const [lesson] = await tx.select({ id: lessons.id, code: lessons.code, status: lessons.status }).from(lessons).where(eq(lessons.id, id)).for("update").limit(1);
     if (!lesson?.code) return { status: 404, error: "Dars topilmadi" };
     const files = await tx.select({ id: lessonFiles.id, kind: lessonFiles.kind, seq: lessonFiles.seq, mechanic: lessonFiles.mechanic, status: lessonFiles.status, isCurrent: lessonFiles.isCurrent }).from(lessonFiles).where(eq(lessonFiles.lessonId, id));
@@ -54,3 +57,5 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
   });
   return NextResponse.json(outcome, { status: outcome.status, headers: { "Cache-Control": "no-store" } });
 }
+
+export const POST = curriculumRequest(POSTHandler);

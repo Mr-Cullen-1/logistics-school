@@ -15,7 +15,7 @@ type Group = "courses" | "progress";
 export function LearnNavigation({ locale, introHref, hasLessons }: { locale: LearnLocale; introHref: string | null; hasLessons: boolean }) {
   const t = getLearnText(locale);
   const pathname = usePathname();
-  const [open, setOpen] = useState<Record<Group, boolean>>({ courses: pathname === "/learn/profile" || pathname === "/learn/lessons", progress: pathname === "/learn/profile" });
+  const [open, setOpen] = useState<Record<Group, boolean>>({ courses: pathname === "/learn/profile" || pathname === "/learn/lessons" || pathname.startsWith("/learn/exams"), progress: pathname === "/learn/profile" });
 
   useEffect(() => {
     const frame = requestAnimationFrame(() => {
@@ -32,7 +32,7 @@ export function LearnNavigation({ locale, introHref, hasLessons }: { locale: Lea
   }
 
   function item({ key, icon, href }: NavItem) {
-    const active = key === "dashboard" ? pathname === "/learn" : key === "profile" ? pathname === "/learn/profile" : key === "lessons" && pathname === "/learn/lessons";
+    const active = key === "dashboard" ? pathname === "/learn" : key === "profile" ? pathname === "/learn/profile" : key === "exams" ? pathname.startsWith("/learn/exams") : key === "lessons" && pathname === "/learn/lessons";
     const content = <><LearnIcon name={icon} size={18} /><span>{t.nav[key]}</span>{!href && <small>{t.nav.soon}</small>}</>;
     return href
       ? <Link key={key} href={href} className={active ? styles.navActive : undefined} aria-current={active ? "page" : undefined} onClick={() => navigate(href)}>{content}</Link>
@@ -53,7 +53,7 @@ export function LearnNavigation({ locale, introHref, hasLessons }: { locale: Lea
     {group("courses", "courses", [
       { key: "intro", icon: "play", href: introHref || undefined },
       { key: "lessons", icon: "lessons", href: hasLessons ? "/learn/lessons" : undefined },
-      { key: "exams", icon: "exams" },
+      { key: "exams", icon: "exams", href: "/learn/exams" },
       { key: "resources", icon: "resources" },
     ])}
     {group("progress", "progress", [

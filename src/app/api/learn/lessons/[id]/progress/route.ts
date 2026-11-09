@@ -9,13 +9,21 @@ import { sameOrigin } from "@/lib/auth/request";
 import { SESSION_COOKIE } from "@/lib/auth/session";
 import { accessibleLesson } from "@/lib/lessons/access";
 import { canRecordPractice, learnPassed } from "@/lib/lessons/progress";
+import { assertLessonWrite } from "@/lib/exams/lesson-write";
+import { ExamError } from "@/lib/exams/db";
+import { recordLessonAchievement } from "@/lib/exams/achievements";
 
 const eventInput = z.discriminatedUnion("type", [
-  z.object({ type: z.literal("learn"), payload: z.object({ scorePercent: z.number().min(0).max(100).optional(), passed: z.boolean().optional() }).passthrough() }),
-  z.object({ type: z.literal("practice"), seq: z.number().int().min(1).max(10), correct: z.boolean(), durationMs: z.number().int().min(0).max(3_600_000).default(0) }),
+  z.object({ type: z.literal("learn"), cycle: z.number().int().positive().optional(), payload: z.object({ scorePercent: z.number().min(0).max(100).optional(), passed: z.boolean().optional() }).passthrough() }),
+  z.object({ type: z.literal("practice"), cycle: z.number().int().positive().optional(), seq: z.number().int().min(1).max(10), correct: z.boolean(), durationMs: z.number().int().min(0).max(3_600_000).default(0) }),
 ]);
 
 export async function POST(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+  try { return await recordProgress(request, context); }
+  catch (error) { if (error instanceof ExamError) return NextResponse.json({ error: error.message }, { status: error.status }); throw error; }
+}
+
+async function recordProgress(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   if (!sameOrigin(request)) return NextResponse.json({ error: "So‘rov rad etildi" }, { status: 403 });
   const user = await currentUser(request.cookies.get(SESSION_COOKIE)?.value);
   if (!user) return NextResponse.json({ error: "Kirish talab qilinadi" }, { status: 401 });
@@ -36,16 +44,19 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     const learnEvent = event;
     const passed = learnPassed(lesson.code, learnEvent.payload);
     await db.transaction(async (tx) => {
+      await assertLessonWrite(tx, user.id, lesson, event.cycle);
       const [existing] = await tx.select({ learnDoneAt: lessonProgress.learnDoneAt }).from(lessonProgress).where(and(eq(lessonProgress.studentId, user.id), eq(lessonProgress.lessonId, id))).limit(1);
       const learnDoneAt = existing?.learnDoneAt || (passed ? now : null);
       await tx.insert(lessonProgress).values({ studentId: user.id, lessonId: id, learnDoneAt, learnPayload: learnEvent.payload, practiceDoneAt: lesson.code === "INTRO" && passed ? now : null }).onConflictDoUpdate({ target: [lessonProgress.studentId, lessonProgress.lessonId], set: { learnDoneAt, learnPayload: learnEvent.payload, ...(lesson.code === "INTRO" && passed ? { practiceDoneAt: now } : {}) } });
       if (lesson.code === "INTRO" && passed) await tx.insert(legacyProgress).values({ studentId: user.id, lessonId: id, completedAt: now }).onConflictDoUpdate({ target: [legacyProgress.studentId, legacyProgress.lessonId], set: { completedAt: now } });
+      if (lesson.code === "INTRO" && passed) await recordLessonAchievement(tx, user.id, id);
     });
     return NextResponse.json({ passed }, { headers: { "Cache-Control": "no-store" } });
   }
   if (lesson.code === "INTRO") return NextResponse.json({ error: "Intro da Practice yo‘q" }, { status: 400 });
   const practiceEvent = event;
   const outcome = await db.transaction(async (tx) => {
+    await assertLessonWrite(tx, user.id, lesson, event.cycle);
     const [learn] = await tx.select({ done: lessonProgress.learnDoneAt }).from(lessonProgress).where(and(eq(lessonProgress.studentId, user.id), eq(lessonProgress.lessonId, id))).limit(1);
     const attempts = await tx.select({ seq: practiceAttempts.seq, attempts: practiceAttempts.attempts, correct: practiceAttempts.correct, firstTryCorrect: practiceAttempts.firstTryCorrect, durationMs: practiceAttempts.durationMs }).from(practiceAttempts).where(and(eq(practiceAttempts.studentId, user.id), eq(practiceAttempts.lessonId, id)));
     if (!canRecordPractice(practiceEvent.seq, !!learn?.done, attempts.filter((item) => item.correct).map((item) => item.seq))) return { status: 409, error: "Oldingi topshiriq tugatilmagan" };
@@ -57,6 +68,7 @@ export async function POST(request: NextRequest, context: { params: Promise<{ id
     if (practiceEvent.seq === 10 && practiceEvent.correct) {
       await tx.update(lessonProgress).set({ practiceDoneAt: now }).where(and(eq(lessonProgress.studentId, user.id), eq(lessonProgress.lessonId, id)));
       await tx.insert(legacyProgress).values({ studentId: user.id, lessonId: id, completedAt: now }).onConflictDoUpdate({ target: [legacyProgress.studentId, legacyProgress.lessonId], set: { completedAt: now } });
+      await recordLessonAchievement(tx, user.id, id);
     }
     return { status: 200, correct: practiceEvent.correct, attempts: count, completed: practiceEvent.seq === 10 && practiceEvent.correct };
   });
